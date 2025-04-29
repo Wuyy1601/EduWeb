@@ -1,0 +1,11 @@
+@import '@styles/variables.module.scss';
+.wrapLayout {
+  display: flex;
+  justify-content: center;
+}
+
+.container{
+  background-color: $primary-color; ;
+  height: auto;
+    width: 100%;
+}

@@ -1,0 +1,82 @@
+@import '@styles/mixins.module.scss';
+@import '@styles/variables.module.scss';
+
+.container {
+    @include flex_box_custom(center, center, 0px);
+    background-color: $secondary-color;
+    left: 0;
+    right: 0;
+}
+
+
+.topHeader {
+   position: absolute;
+    top: 0;
+
+    z-index: 1000;
+  }
+
+  .fixedHeader {
+    position: fixed;
+    top: -75px; /* Đẩy lên trên một chút */
+    transform: translateY(75px); /* vẫn là 0 */
+    transition: transform 1s ease; /* Transition mượt */
+  }
+  
+
+.containerHeader {
+    display: flex;
+    width: 80%;
+    align-items: center;
+    justify-content: space-between;
+
+}
+
+// .fixedHeader {
+//     position: fixed;
+//     top: 0;
+//     left: 0;
+//     right: 0;
+//     z-index: 1000;
+// }
+
+.containerMenu {
+    @include flex_box_custom(center, center, 40px)
+}
+
+button{
+    background-color: $button-primary-color;
+    color: #000 !important;
+}
+
+.signUpButton::after{
+   content: unset !important;
+}
+
+.menu {
+    font-size: 22px;
+    font-family: poppins;
+    color: white;
+}
+.menu:hover{
+    cursor: pointer;
+}
+.menu::after {
+    content:'';
+    display: block;
+    height: 3px;
+    background-color: $primary-color;
+    opacity: 0;
+    transform-origin: right;
+    transform:scale(0) ;
+    transition: transform 500ms ,opacity 500ms;
+}
+
+.menu:hover::after {
+    opacity: 1;
+    transform: scale(1);
+}
+.logo {
+    width: 136px;
+    height: 83px;
+}

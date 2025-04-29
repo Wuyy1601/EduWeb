@@ -1,0 +1,17 @@
+@import '@styles/mixins.module.scss';
+@import '@styles/variables.module.scss';
+.button {
+  background-color: $button-primary-color;
+  color: black;
+  padding: 10px 20px;
+  border: none;
+  border-radius: 8px;
+  font-size: 18px;
+  transition: all 0.3s ease; 
+  position: relative;
+  z-index: 2;
+
+  &:hover {
+    transform: scale(0.95); 
+  }
+}

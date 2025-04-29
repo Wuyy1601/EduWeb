@@ -1,0 +1,80 @@
+@import '@styles/mixins.module.scss';
+@import '@styles/variables.module.scss';
+
+.container {
+  width: 100%;
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  height: 160vh;
+}
+
+
+.container1{
+  width: 100%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  background-color: #205295;
+}
+
+.bannerTop {
+
+  width: 75%;
+  height: 75vh;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 50px;
+}
+
+.contentLeft {
+  flex: 1;
+  color: white;
+}
+
+.title {
+  font-size: 64px;
+  font-weight: 700;
+  margin-bottom: 20px;
+  font-family: Preahvihear, sans-serif;
+}
+
+.description {
+  font-size: 18px;
+  line-height: 1.6;
+  margin-bottom: 30px;
+  font-family: podvodka;
+}
+
+
+
+.contentRight {
+  flex: 1;
+  display: flex;
+  justify-content: flex-end;
+  align-items: center;
+}
+
+.catImage {
+  width: 280px;
+  height: auto;
+  object-fit: contain;
+}
+
+
+
+.bannerBottom {
+  width: 75%;
+  position: absolute;
+  bottom: 0;
+  z-index: 1;
+  img {
+    width: 100%;
+    height: auto;
+    object-fit: cover;
+    border-radius: 12px;
+  }
+}
+

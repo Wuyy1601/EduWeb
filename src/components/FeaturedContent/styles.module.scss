@@ -1,0 +1,147 @@
+@import '@styles/global.module.scss';
+@import '@styles/mixins.module.scss';
+@import '@styles/variables.module.scss';
+
+.featuredContent {
+  width: 100%;
+  background-color: $third-color  ;
+}
+
+
+.container {
+    width: 80%;
+    margin: 0 auto;
+    padding: 60px 0;
+
+  }
+  
+  .header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 40px;
+  
+    h2 {
+      font-size: 24px;
+      color: #f9f3c2;
+    }
+  
+    a {
+      font-size: 16px;
+      color: #f9f3c2;
+      text-decoration: none;
+      font-weight: bold;
+    }
+  }
+  
+  .contentWrapper {
+    display: flex;
+    gap: 40px;
+    flex-wrap: wrap;
+  }
+  
+  .card {
+    background: white;
+    border-radius: 16px;
+    overflow: hidden;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+    width: calc(50% - 20px);
+    display: flex;
+    flex-direction: column;
+  }
+  
+  .img{
+    padding: 20px;
+  }
+  .cardImage {
+    width: 100%;
+    height: 200px;
+    object-fit: cover;
+    border-radius: 10px;
+  }
+  
+  .cardBody {
+    padding: 20px;
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+  }
+  
+  .cardTitle {
+    font-size: 18px;
+    font-weight: bold;
+    color: #00bcd4;
+    text-decoration: none;
+    &:hover {
+      text-decoration: underline;
+    }
+  }
+  
+  .cardAuthor {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+  
+    img {
+      width: 32px;
+      height: 32px;
+      border-radius: 50%;
+    }
+  
+    span {
+      font-size: 14px;
+      font-weight: 500;
+      color: #333;
+    }
+  }
+  
+  .cardDescription {
+    font-size: 14px;
+    color: #555;
+    line-height: 1.5;
+  }
+  
+  .cardFooter {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    font-size: 14px;
+    color: #00bcd4;
+  
+    a {
+      text-decoration: none;
+    }
+  
+    .cardViews {
+      display: flex;
+      align-items: center;
+      gap: 6px;
+    }
+  }
+  
+  .sliderButtons {
+    margin-top: 30px;
+    display: flex;
+    justify-content: flex-end;
+    gap: 12px;
+  }
+  
+  .sliderButton {
+    width: 36px;
+    height: 36px;
+    background: $button-primary-color;
+    border: none;
+    border-radius: 6px;
+    font-size: 20px;
+    font-weight: bold;
+    cursor: pointer;
+    transition: background 0.3s;
+    display: flex;
+  justify-content: center; /* căn giữa ngang */
+  align-items: center;     /* căn giữa dọc nếu cần */
+  
+    &:hover {
+      background: #f1e9a8;
+    }
+  }
+  
