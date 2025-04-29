@@ -16,7 +16,7 @@ const routers = [
     },
     {
         path: '/signup',
-        component: lazy(() => import('@pages/Profile/Profile'))
+        component: lazy(() => import('@pages/FullViewDocument/FullViewDocument'))
     }
 
 ];

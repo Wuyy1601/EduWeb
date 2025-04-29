@@ -7,7 +7,7 @@ function Profile() {
     return (   <MainLayout>
         <MyHeader />
             <div className="huongdan">
-                làm Html vào đây
+                làm Html vào đây - Profile
             </div>
         <MyFooter />
     </MainLayout> );
