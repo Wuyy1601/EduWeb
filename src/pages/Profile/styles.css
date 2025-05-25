@@ -1,3 +1,208 @@
 .huongdan {
     height: 1200px;
 }
+@import url('https://fonts.googleapis.com/css2?family=Poppins:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&display=swap');
+
+:root {
+    --primary-color: #3674B5;
+    --secondary-color: #a1e3f9;
+    --tertiary-color: #578FCA;
+    --button-color: #FBF3B9;
+    --button-color-inactive: #BBBBBB80;
+}
+
+* {
+    font-family: "Poppins";
+}
+
+main {
+    width: 100%;
+    display: flex;
+    justify-content: center;
+    background-color: var(--secondary-color);
+}
+
+.btn {
+    user-select: none;
+    text-align: center;
+    display: inline-block;
+    min-width: 108px;
+    cursor: pointer;
+    border: none;
+    border-radius: 8px;
+    background-color: var(--button-color);
+    font-weight: bold;
+    padding: 12px;
+}
+
+#content {
+    margin-top: 80px;
+    width: 80%;
+    max-width: 1680px;
+}
+
+.profile-banner {
+    background-image: url('../images/bg.jpg');
+    background-size: cover;
+    background-position: center;
+    background-repeat: no-repeat;
+
+    display: flex;
+
+    padding: 28px;
+
+    border-radius: 20px;
+}
+
+.profile-avatar {
+    cursor: pointer;
+    width: 256px;
+    height: 256px;
+    border-radius: 50%;
+    object-fit: cover;
+    border: 8px solid #fff;
+}
+
+.profile-banner__content {
+    background-color: #ffffffcc;
+    margin-left: 32px;
+    border-radius: 20px;
+    padding: 32px;
+    backdrop-filter: blur(2px);
+    display: flex;
+    flex-direction: column;
+    /* align-self: start; */
+}
+
+.profile-banner__header {
+    display: flex;
+    justify-content: space-between;
+}
+
+.profile-name {
+    font-weight: 500;
+    font-size: 24px;
+}
+
+.profile-title {
+    font-size: 12px;
+    opacity: 0.6;
+}
+
+.profile-description {
+    font-size: 16px;
+    opacity: 0.8;
+}
+
+.show-more {
+    text-decoration: underline;
+    cursor: pointer;
+
+}
+
+.follow-button {
+    align-self: flex-start;
+}
+
+.profile-banner__footer {
+    margin-top: auto;
+    display: flex;
+    justify-content: space-between;
+}
+
+.profile-rating {
+    display: flex;
+    gap: 64px;
+    opacity: 0.8;
+    font-size: 12px;
+}
+
+.social {
+    display: flex;
+    gap: 16px;
+}
+
+.social__link {
+    text-decoration: none;
+    background-color: var(--button-color);
+    color: #000;
+    font-size: 12px;
+    width: 24px;
+    height: 24px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.profile-navigate {
+    display: flex;
+    gap: 16px;
+    margin-top: 48px;
+}
+
+.profile-navigate input[name="profile-selector"] {
+    display: none;
+}
+
+#description:checked~label[for="description"] {
+    background-color: var(--button-color);
+}
+
+#post:checked~label[for="post"] {
+    background-color: var(--button-color);
+}
+
+#document:checked~label[for="document"] {
+    background-color: var(--button-color);
+}
+
+.profile-navigate label {
+    cursor: pointer;
+    background-color: var(--button-color-inactive);
+    border-radius: 8px;
+    font-weight: bold;
+    color: #000;
+}
+
+.profile-content {
+    display: flex;
+    margin-top: 32px;
+    background-color: var(--tertiary-color);
+    padding: 48px 32px;
+}
+
+/* .pagination {
+    display: flex;
+    justify-content: center;
+    margin-top: 32px;
+} */
+
+.pagination__list {
+    display: flex;
+    justify-content: center;
+    list-style-type: none;
+    margin-top: 32px;
+    margin-bottom: 48px;
+}
+
+.pagination__item button {
+    font-weight: thin;
+    background-color: #FFFFFF33;
+    cursor: pointer;
+    height: 48px;
+    width: 48px;
+    border-radius: 0;
+    border: none;
+    font-weight: bold;
+}
+
+.pagination__item button.pagination__button--active {
+    background-color: var(--button-color);
+}
+
+.pagination__item button.pagination__arrow {
+    background-color: #FBF3B933;
+    color: #FBF3B9;
+    font-size: 24px;
+}
