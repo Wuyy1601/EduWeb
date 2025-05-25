@@ -12,11 +12,11 @@ const routers = [
     },
     {
         path: '/search',
-        component: lazy(() => import('@pages/Search/Search'))   
+        component: lazy(() => import('@pages/Search/Search'))
     },
     {
         path: '/signup',
-        component: lazy(() => import('@pages/FullViewDocument/FullViewDocument'))
+        component: lazy(() => import('@pages/Profile/Profile'))
     }
 
 ];
