@@ -8,9 +8,11 @@ import com.example.first_pj.dto.request.UserUpdateRequest;
 import com.example.first_pj.dto.response.UserResponse;
 import com.example.first_pj.exception.AppException;
 import com.example.first_pj.exception.ErrorCode;
+import com.example.first_pj.mapper.ProfileMapper;
 import com.example.first_pj.mapper.UserMapper;
 import com.example.first_pj.repository.RoleRepository;
 import com.example.first_pj.repository.UserRepository;
+import com.example.first_pj.repository.httpclient.ProfileClient;
 import lombok.AccessLevel;
 import lombok.RequiredArgsConstructor;
 import lombok.experimental.FieldDefaults;
@@ -35,6 +37,8 @@ public class UserService {
     UserRepository userRepository;
     UserMapper userMapper;
     RoleRepository roleRepository;
+    ProfileClient profileClient;
+    ProfileMapper profileMapper;
 
     public UserResponse createUser (UserCreationRequest request) {
         log.info("User Service Create" );
@@ -45,7 +49,14 @@ public class UserService {
         HashSet<Role> role= new HashSet<>();
         roleRepository.findById(PredefinedRole.USER_ROLE).ifPresent(role::add);
         user.setRoles(role);
-        return userMapper.toUserResponse(userRepository.save(user));
+
+        user = userRepository.save(user);
+        var profileRequest = profileMapper.toProfileCreationRequest(request);
+        profileRequest.setUserId(user.getId());
+        var profileResponse = profileClient.createProfile(profileRequest);
+
+
+        return userMapper.toUserResponse(user);
     }
     @PostAuthorize("returnObject.username == authentication.name")
     public UserResponse getMyInfo ()
