@@ -173,11 +173,11 @@ main {
     padding: 48px 32px;
 }
 
-/* .pagination {
+.pagination {
     display: flex;
     justify-content: center;
     margin-top: 32px;
-} */
+}
 
 .pagination__list {
     display: flex;
