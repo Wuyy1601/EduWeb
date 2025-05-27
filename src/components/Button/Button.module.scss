@@ -14,4 +14,7 @@
   &:hover {
     transform: scale(0.95); 
   }
+  &:focus {
+    outline: none;
+  }
 }

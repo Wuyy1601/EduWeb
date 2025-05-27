@@ -1,111 +1,92 @@
+import { useState } from "react";
 import MyFooter from "@components/Footer/Footer";
 import MyHeader from "@components/Header/Header";
 import MainLayout from "@components/Layout/Layout";
-import "./styles.css";
+
+import profilePicture from "@images/profile-picture.png";
+import profileBackground from "@images/profile-background.jpg";
+import UserProfile from "./contents/UserProfile";
+
+import ProfileBanner from "./components/ProfileBanner";
+import ProfileNavigation from "./components/ProfileNavigation";
+
+import classNames from "classnames/bind";
+import styles from "./styles.module.scss";
+import Posts from "./contents/Posts";
+import Documents from "./contents/Documents";
+
+const cx = classNames.bind(styles);
+
+function ProfileContent({ activeTab }) {
+  switch (activeTab) {
+    case "description":
+      return <UserProfile />;
+    case "post":
+      return <Posts />;
+    case "document":
+      return <Documents />;
+    default:
+      return null;
+  }
+}
 
 function Profile() {
-    return (
-        <MainLayout>
-            <MyHeader />
-            <div className="huongdan">
-                <main>
-                    <div id="content">
-                        <section className="profile-banner">
-                            <img src="./assets/images/avatar.png" alt="John Anderson" className="profile-avatar" />
+  const [activeTab, setActiveTab] = useState("description");
+  const [isFollowing, setIsFollowing] = useState(false);
+  const [showFullDescription, setShowFullDescription] = useState(false);
 
-                            <div className="profile-banner__content">
-                                <div className="profile-banner__header">
-                                    <div className="profile-banner_information">
-                                        <h1 className="profile-name">John Anderson</h1>
-                                        <p className="profile-title">Assistant Professor at McMaster University</p>
-                                    </div>
-                                    <button className="follow-button btn">Theo dõi</button>
-                                </div>
+  const profileData = {
+    name: "John Anderson",
+    title: "Assistant Professor at McMaster University",
+    description:
+      "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt utlabore et dolore magna aliqua. Ut enum ad minim veniam, quis",
+    rating: "4.9",
+    followers: "1.2k",
+  };
 
-                                <p className="profile-banner__description">
-                                    Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt
-                                    utlabore et dolore magna aliqua. Ut enum ad minim veniam, quis
-                                    <i className="show-more">...Xem thêm</i>
-                                </p>
+  const handleFollow = () => {
+    setIsFollowing(!isFollowing);
+    // Thêm logic xử lý follow/unfollow ở đây
+  };
 
-                                <div className="profile-banner__footer">
-                                    <div className="profile-rating">
-                                        <div className="rating">
-                                            <i className="fa-regular fa-star"></i>
-                                            <span>4.9</span>
-                                            <span>Đánh giá</span>
-                                        </div>
-                                        <div className="follower">
-                                            <i className="fa-solid fa-eye"></i>
-                                            <span>1.2k</span>
-                                            <span>Theo dõi</span>
-                                        </div>
-                                    </div>
-                                    <div className="social">
-                                        <a href="#" className="social__link" aria-label="Twitter">
-                                            <i className="fa-brands fa-twitter"></i>
-                                        </a>
-                                        <a href="#" className="social__link" aria-label="Youtube">
-                                            <i className="fa-brands fa-youtube"></i>
-                                        </a>
-                                        <a href="#" className="social__link" aria-label="Instagram">
-                                            <i className="fa-brands fa-instagram"></i>
-                                        </a>
-                                    </div>
-                                </div>
-                            </div>
-                        </section>
+  const handleShowMore = () => {
+    setShowFullDescription(!showFullDescription);
+    // Thêm logic để hiển thị full description
+  };
 
-                        <form className="profile-navigate">
-                            <input name="profile-selector" value="description" type="radio" id="description" defaultChecked />
-                            <input name="profile-selector" value="post" type="radio" id="post" />
-                            <input name="profile-selector" value="document" type="radio" id="document" />
+  const handleTabChange = (tab) => {
+    setActiveTab(tab);
+  };
 
-                            <label htmlFor="description" className="profile-navigate__button btn">
-                                Giới thiệu
-                            </label>
-                            <label htmlFor="post" className="profile-navigate__button btn">
-                                Bài đăng
-                            </label>
-                            <label htmlFor="document" className="profile-navigate__button btn">
-                                Tài liệu
-                            </label>
-                        </form>
+  return (
+    <MainLayout>
+      <MyHeader />
 
-                        <section className="profile-content">
-                            <div className="card">reusable card</div>
-                            <div className="card">reusable card</div>
-                            <div className="card">reusable card</div>
-                            <div className="card">reusable card</div>
-                        </section>
+      <div id={cx("content")}>
+        <ProfileBanner
+          profilePicture={profilePicture}
+          backgroundImage={profileBackground}
+          name={profileData.name}
+          title={profileData.title}
+          description={profileData.description}
+          rating={profileData.rating}
+          followers={profileData.followers}
+          onFollow={handleFollow}
+          onShowMore={handleShowMore}
+          isFollowing={isFollowing}
+        />
 
-                        <nav className="pagination" aria-label="Page navigation">
-                            <ul className="pagination__list">
-                                <li className="pagination__item">
-                                    <button className="pagination__arrow" aria-label="Previous page">
-                                        <i className="fa-solid fa-angle-left"></i>
-                                    </button>
-                                </li>
-                                <li className="pagination__item"><button className="pagination__button">1</button></li>
-                                <li className="pagination__item"><button className="pagination__button">2</button></li>
-                                <li className="pagination__item">
-                                    <button className="pagination__button pagination__button--active">3</button>
-                                </li>
-                                <li className="pagination__item"><button className="pagination__button">4</button></li>
-                                <li className="pagination__item"><button className="pagination__button">5</button></li>
-                                <li className="pagination__item">
-                                    <button className="pagination__arrow" aria-label="Next page">
-                                        <i className="fa-solid fa-angle-right"></i>
-                                    </button>
-                                </li>
-                            </ul>
-                        </nav>
-                    </div>
-                </main>
-            </div>
-            <MyFooter />
-        </MainLayout>
-    );
+        <ProfileNavigation
+          activeTab={activeTab}
+          onTabChange={handleTabChange}
+        />
+
+        <ProfileContent activeTab={activeTab} />
+      </div>
+
+      <MyFooter />
+    </MainLayout>
+  );
 }
 
 export default Profile;

@@ -1,14 +1,12 @@
-import styles from './Button.module.scss';
+import styles from "./Button.module.scss";
 
-function Button({ content }) {
-    const { button } = styles;
+function Button({ content, ...props }) {
+  const { button } = styles;
   return (
-    <button className={button}>
+    <button {...props} className={`${props.className} ${button}`}>
       {content}
     </button>
   );
 }
 
 export default Button;
-
-  
