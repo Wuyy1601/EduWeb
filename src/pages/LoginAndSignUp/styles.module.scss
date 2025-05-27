@@ -1,0 +1,141 @@
+@import '@styles/variables.module';
+@import '@styles/mixins.module';
+@import '@styles/global.module';
+
+.auth-container {
+    display: flex;
+    height: 100vh;
+    align-items: center;
+    justify-content: center;
+    gap: 50px;
+    padding: 0 40px;
+}
+
+.auth-left {
+    flex: 1;
+    display: flex;
+    justify-content: center;
+
+    .auth-image {
+        height: 500px;
+    }
+}
+
+.auth-right {
+    background: white;
+    padding: 30px 40px;
+    border-radius: 15px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+    width: 350px;
+    text-align: center;
+
+    h2 {
+        margin-bottom: 20px;
+        color: $secondary-color;
+    }
+
+    .auth-toggle {
+        display: flex;
+        justify-content: center;
+        margin-bottom: 20px;
+
+        .toggle-group {
+            position: relative;
+            display: flex;
+            background: $third-color;
+            border-radius: 20px;
+            width: 220px;
+            height: 40px;
+            align-items: center;
+            box-sizing: border-box;
+        }
+
+        .toggle-indicator {
+            position: absolute;
+            top: 4px;
+            left: 4px;
+            width: 104px;
+            height: 32px;
+            background: $secondary-color;
+            border-radius: 16px;
+            transition: transform 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            z-index: 1;
+            border: none;
+            box-shadow: none;
+        }
+
+        button {
+            flex: 1;
+            background: transparent;
+            color: white;
+            border: none;
+            z-index: 2;
+            font-weight: bold;
+            font-size: 16px;
+            border-radius: 20px;
+            cursor: pointer;
+            height: 40px;
+            transition: color 0.2s;
+            position: relative;
+
+            &.active {
+                color: #fff;
+            }
+
+            outline: none;
+            box-shadow: none;
+        }
+    }
+
+    .auth-form {
+        .form-group {
+            margin-bottom: 15px;
+            text-align: left;
+
+            label {
+                display: block;
+                margin-bottom: 5px;
+                font-weight: bold;
+            }
+
+            input {
+                width: 100%;
+                padding: 8px;
+                border-radius: 8px;
+                border: 1px solid #ccc;
+            }
+        }
+
+        .password-input {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+
+            input {
+                flex: 1;
+                margin-right: 8px;
+            }
+        }
+
+        .form-bottom {
+            display: flex;
+            justify-content: space-between;
+            font-size: 14px;
+        }
+
+        .submit-btn {
+            width: 100%;
+            background: $button-primary-color;
+            color: #000;
+            padding: 10px;
+            border: none;
+            border-radius: 10px;
+            cursor: pointer;
+            font-weight: bold;
+
+            &:hover {
+                background: darken($button-primary-color, 5%);
+            }
+        }
+    }
+}
