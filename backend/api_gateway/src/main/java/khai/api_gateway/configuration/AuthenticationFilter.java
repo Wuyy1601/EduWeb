@@ -39,22 +39,25 @@ public class AuthenticationFilter implements GlobalFilter, Ordered {
     ObjectMapper objectMapper;
 
     @NonFinal
-    public String[] PUBLIC_ENDPOINT= {"identity/auth/.*","identity/users/registration"};
+    public String[] PUBLIC_ENDPOINTS= {"/auth/.*",
+            "/users/registration"};
 
     @NonFinal
     @Value("${app.api-prefix}")
     private String apiPrefix;
+
     @Override
     public Mono<Void> filter(ServerWebExchange exchange, GatewayFilterChain chain) {
 
+        log.info("Enter authentication filter....");
         if(isPublicEndpoint(exchange.getRequest()))
-            chain.filter(exchange);
+           return chain.filter(exchange);
         //Get token from  authentication header
         List<String> authHeader = exchange.getRequest().getHeaders().get(HttpHeaders.AUTHORIZATION);
         if (CollectionUtils.isEmpty(authHeader))
             return unauthenticated(exchange.getResponse());
 
-        String token = authHeader.getFirst().replace("Bearer", "");
+        String token = authHeader.getFirst().replace("Bearer ", "");
 
         //Verify token
         //Delegate identity_service
@@ -67,11 +70,9 @@ public class AuthenticationFilter implements GlobalFilter, Ordered {
         }).onErrorResume(throwable -> unauthenticated(exchange.getResponse()));
     }
 
-    private boolean isPublicEndpoint(ServerHttpRequest request)
-    {
-        return Arrays.stream(PUBLIC_ENDPOINT).anyMatch(s -> request.getURI().getPath().matches(apiPrefix + s));
-
-
+    private boolean isPublicEndpoint(ServerHttpRequest request){
+        return Arrays.stream(PUBLIC_ENDPOINTS)
+                .anyMatch(s -> request.getURI().getPath().matches(apiPrefix + s));
     }
     @Override
     public int getOrder() {
@@ -83,6 +84,7 @@ public class AuthenticationFilter implements GlobalFilter, Ordered {
                 .code(1401)
                 .message("Unauthenticated")
                 .build();
+
         String body = null;
         try {
             body = objectMapper.writeValueAsString(apiResponse);

@@ -27,26 +27,24 @@ import javax.crypto.spec.SecretKeySpec;
 @EnableMethodSecurity
 public class SecurityConfig {
 
-    public final String[]PUBLIC_ENDPOINT={"/users/registration","/auth/token","/auth/introspect","auth/logout"};
+    public final String[]PUBLIC_ENDPOINT={ "/users/registration", "/auth/token", "/auth/introspect", "/auth/logout", "/auth/refresh" };
         @Autowired
         private CustomJwtDecoder customJwtDecoder;
-        @Bean
-        public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
-            http.authorizeHttpRequests(request ->
-                    request.requestMatchers(HttpMethod.POST, PUBLIC_ENDPOINT).permitAll()
-                            .anyRequest().
-                            authenticated());
-            // Chi co admin moi co the lay tat ca
-            http.oauth2ResourceServer(oauth2 ->
-                    oauth2.jwt(jwtConfigurer ->
-                        jwtConfigurer.decoder(customJwtDecoder)
-                                .jwtAuthenticationConverter(jwtAuthenticationConverter()))
-                        .authenticationEntryPoint(new JwtAuthenticationEntryPoint())
-            );
+    @Bean
+    public SecurityFilterChain filterChain(HttpSecurity httpSecurity) throws Exception {
+        httpSecurity.authorizeHttpRequests(request -> request.requestMatchers(HttpMethod.POST, PUBLIC_ENDPOINT)
+                .permitAll()
+                .anyRequest()
+                .authenticated());
 
-            http.csrf(AbstractHttpConfigurer::disable);
-            return http.build();
-        }
+        httpSecurity.oauth2ResourceServer(oauth2 -> oauth2.jwt(jwtConfigurer -> jwtConfigurer
+                        .decoder(customJwtDecoder)
+                        .jwtAuthenticationConverter(jwtAuthenticationConverter()))
+                .authenticationEntryPoint(new JwtAuthenticationEntryPoint()));
+        httpSecurity.csrf(AbstractHttpConfigurer::disable);
+
+        return httpSecurity.build();
+    }
         // ERROR 401 kh the  xu li o GEH vi no nam tren cac filter truoc khi vao service khac 403
 
         @Bean
