@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import { useParams, useSearchParams } from 'react-router-dom';
+import { useParams } from 'react-router-dom';
 
 import MyFooter from '@components/Footer/Footer';
 import MyHeader from '@components/Header/Header';
@@ -19,6 +19,15 @@ import Documents from './contents/Documents';
 
 const cx = classNames.bind(styles);
 
+const profileData = {
+    name: 'John Anderson',
+    title: 'Assistant Professor at McMaster University',
+    description:
+        'Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt utlabore et dolore magna aliqua. Ut enum ad minim veniam, quis',
+    rating: '4.9',
+    followers: '1.2k',
+};
+
 function ProfileContent({ activeTab }) {
     switch (activeTab) {
         case '':
@@ -36,25 +45,10 @@ function Profile() {
     let { id: activeTab } = useParams();
     activeTab = activeTab || '';
     const [isFollowing, setIsFollowing] = useState(false);
-    const [showFullDescription, setShowFullDescription] = useState(false);
-
-    const profileData = {
-        name: 'John Anderson',
-        title: 'Assistant Professor at McMaster University',
-        description:
-            'Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt utlabore et dolore magna aliqua. Ut enum ad minim veniam, quis',
-        rating: '4.9',
-        followers: '1.2k',
-    };
 
     const handleFollow = () => {
         setIsFollowing(!isFollowing);
         // Thêm logic xử lý follow/unfollow ở đây
-    };
-
-    const handleShowMore = () => {
-        setShowFullDescription(!showFullDescription);
-        // Thêm logic để hiển thị full description
     };
 
     return (
@@ -71,7 +65,6 @@ function Profile() {
                     rating={profileData.rating}
                     followers={profileData.followers}
                     onFollow={handleFollow}
-                    onShowMore={handleShowMore}
                     isFollowing={isFollowing}
                 />
 
