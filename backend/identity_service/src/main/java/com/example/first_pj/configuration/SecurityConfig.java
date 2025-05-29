@@ -27,7 +27,7 @@ import javax.crypto.spec.SecretKeySpec;
 @EnableMethodSecurity
 public class SecurityConfig {
 
-    public final String[]PUBLIC_ENDPOINT={ "/users/registration", "/auth/token", "/auth/introspect", "/auth/logout", "/auth/refresh" };
+    public final String[]PUBLIC_ENDPOINT={ "/users/registration","/auth/token", "/auth/introspect", "/auth/logout", "/auth/refresh" };
         @Autowired
         private CustomJwtDecoder customJwtDecoder;
     @Bean

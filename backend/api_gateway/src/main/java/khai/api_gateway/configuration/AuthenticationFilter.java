@@ -39,8 +39,11 @@ public class AuthenticationFilter implements GlobalFilter, Ordered {
     ObjectMapper objectMapper;
 
     @NonFinal
-    public String[] PUBLIC_ENDPOINTS= {"/auth/.*",
-            "/users/registration"};
+    public String[] PUBLIC_ENDPOINTS = { "/identity/auth/.*",
+            "/identity/users/registration",
+            "/chat/send",
+            "/chat/my-chat",
+            "/chat/all" };
 
     @NonFinal
     @Value("${app.api-prefix}")
@@ -50,30 +53,32 @@ public class AuthenticationFilter implements GlobalFilter, Ordered {
     public Mono<Void> filter(ServerWebExchange exchange, GatewayFilterChain chain) {
 
         log.info("Enter authentication filter....");
-        if(isPublicEndpoint(exchange.getRequest()))
-           return chain.filter(exchange);
-        //Get token from  authentication header
+        if (isPublicEndpoint(exchange.getRequest()))
+            return chain.filter(exchange);
+        // Get token from authentication header
+
         List<String> authHeader = exchange.getRequest().getHeaders().get(HttpHeaders.AUTHORIZATION);
         if (CollectionUtils.isEmpty(authHeader))
             return unauthenticated(exchange.getResponse());
 
         String token = authHeader.getFirst().replace("Bearer ", "");
-
-        //Verify token
-        //Delegate identity_service
-        return  identityService.Introspect(token).flatMap(introspectResponseApiResponse -> {
+        log.info("Token: {}" + token);
+        // Verify token
+        // Delegate identity_service
+        return identityService.Introspect(token).flatMap(introspectResponseApiResponse -> {
             if (introspectResponseApiResponse.getResult().isValid())
                 return chain.filter(exchange);
             else
                 return unauthenticated(exchange.getResponse());
-            //Chan luon request neu co loi khac trong qua trinh request
+            // Chan luon request neu co loi khac trong qua trinh request
         }).onErrorResume(throwable -> unauthenticated(exchange.getResponse()));
     }
 
-    private boolean isPublicEndpoint(ServerHttpRequest request){
+    private boolean isPublicEndpoint(ServerHttpRequest request) {
         return Arrays.stream(PUBLIC_ENDPOINTS)
                 .anyMatch(s -> request.getURI().getPath().matches(apiPrefix + s));
     }
+
     @Override
     public int getOrder() {
         return -1;

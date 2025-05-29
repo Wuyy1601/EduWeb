@@ -1,4 +1,4 @@
-package khai.profile_service.dto.request;
+package khai.post_service.dto.response;
 
 import lombok.*;
 import lombok.experimental.FieldDefaults;
@@ -10,7 +10,7 @@ import java.time.LocalDate;
 @NoArgsConstructor
 @Builder
 @FieldDefaults(level = AccessLevel.PRIVATE)
-public class UserProfileRequest {
+public class UserProfileResponse {
     String id;
     String username;
     String firstName;
