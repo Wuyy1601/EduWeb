@@ -19,7 +19,6 @@ function ProfileBanner({
     rating,
     followers,
     onFollow,
-    onShowMore,
     isFollowing,
 }) {
     return (
