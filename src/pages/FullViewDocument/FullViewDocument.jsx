@@ -1,19 +1,16 @@
-import MyHeader from "@components/Header/Header";
-import "./styles.css"
-import MainLayout from "@components/Layout/Layout";
-import MyFooter from "@components/Footer/Footer";
+import MyHeader from '@components/Header/Header';
+import styles from './styles.module.css';
+import MainLayout from '@components/Layout/Layout';
+import MyFooter from '@components/Footer/Footer';
 
 function FullViewDocument() {
-    return ( 
-<MainLayout>
+    return (
+        <MainLayout>
+            <MyHeader />
 
-    <MyHeader/>
-        <div className="huongdan">
-            FullViewDocument Page
-        </div>
-    <MyFooter/>
-</MainLayout>
-     );
+            <MyFooter />
+        </MainLayout>
+    );
 }
 
 export default FullViewDocument;
