@@ -1,11 +1,18 @@
 import styles from "../styles.module.scss";
 import avatar from "@images/avatar.jpg";
 import courseImage from "@images/course.png";
+import { useNavigate } from "react-router-dom";
 
 
-function CourseCard() {
+function CourseCard({ id = 1 }) {
+  const navigate = useNavigate();
+
   return (
-    <div className={styles.courseCard}>
+    <div
+      className={styles.courseCard}
+      onClick={() => navigate(`/reviewdocument/${id}`)}
+      style={{ cursor: "pointer" }}
+    >
       <div className={styles.imageWrapper}>
         <img src={courseImage} alt="Course" />
       </div>

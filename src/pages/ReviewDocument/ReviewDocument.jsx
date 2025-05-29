@@ -1,16 +1,18 @@
 import MyFooter from "@components/Footer/Footer";
 import MyHeader from "@components/Header/Header";
 import MainLayout from "@components/Layout/Layout";
-import  "./styles.css";
+import styles from "./styles.module.scss";
+import { useParams } from "react-router-dom";
 
 
 
 function ReviewDocument() {
-    return ( <MainLayout>
+    const { id } = useParams();
+    return (<MainLayout>
         <MyHeader />
-            <div className="huongdan">
-                làm Html vào đây
-            </div>
+        <div className="huongdan">
+            làm Html vào đây
+        </div>
         <MyFooter />
     </MainLayout>);
 }
