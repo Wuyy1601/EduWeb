@@ -467,3 +467,59 @@ a {
         }
     }
 }
+.featuredCard {
+    position: relative;
+    border-radius: 12px;
+    overflow: hidden;
+    width: 100%;
+    max-width: 300px;
+    cursor: pointer;
+    transition: transform 0.3s ease;
+
+    &:hover {
+        transform: translateY(-4px);
+    }
+
+    img {
+        width: 100%;
+        height: auto;
+        display: block;
+        object-fit: cover;
+    }
+
+    .overlay {
+        position: absolute;
+        top: 0;
+        left: 0;
+        padding: 1rem;
+        width: 100%;
+        height: 100%;
+        background: rgba(12, 12, 12, 0.4); // overlay tối
+        color: #fff;
+        display: flex;
+        flex-direction: column;
+        justify-content: flex-start;
+        border-radius: 12px;
+
+        .discount {
+            background-color: #f44;
+            color: white;
+            font-size: 0.9rem;
+            padding: 0.3rem 0.7rem;
+            border-radius: 8px;
+            font-weight: bold;
+            width: fit-content;
+        }
+
+        h4 {
+            font-size: 1rem;
+            font-weight: 600;
+            margin-top: 0.8rem;
+        }
+
+        p {
+            font-size: 0.85rem;
+            line-height: 1.4;
+        }
+    }
+}

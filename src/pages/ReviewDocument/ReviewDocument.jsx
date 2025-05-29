@@ -1,9 +1,11 @@
+import featuredCards from '@data/featuredCards';
+import FeaturedCard from './FeaturedCard';
 import MyFooter from '@components/Footer/Footer';
 import MyHeader from '@components/Header/Header';
 import MainLayout from '@components/Layout/Layout';
 import styles from './styles.module.scss';
 import { useParams } from 'react-router-dom';
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import courseImage from '@images/course.png';
 import slide from '@images/slide.png';
 import avatar from '@images/avatar.jpg';
@@ -28,6 +30,11 @@ import {
 function ReviewDocument() {
     const { id } = useParams();
     const [showVideo, setShowVideo] = useState(false);
+    const [cards, setCards] = useState([]);
+    useEffect(() => {
+        setCards(featuredCards);
+    }, []);
+
     return (
         <MainLayout>
             <MyHeader />
@@ -176,25 +183,11 @@ function ReviewDocument() {
                 </div>
             </section>
 
-            <section className={styles.featuredSection}>
-                <div className={styles.header}>
-                    <h3>Top tài liệu nên đọc</h3>
-                    <a href="#">See all</a>
-                </div>
-                <div className={styles.cardList}>
-                    {[1, 2, 3].map((item) => (
-                        <div key={item} className={styles.card}>
-                            <div className={styles.discountTag}>50%</div>
-                            <img src={exampleMustReadDoc} alt="Instructor" />
-                            <h4>FOR INSTRUCTORS</h4>
-                            <p>
-                                TOTC’s school management software helps traditional and online schools manage
-                                scheduling.
-                            </p>
-                        </div>
-                    ))}
-                </div>
-            </section>
+            <div className="grid">
+                {cards.map((card) => (
+                    <FeaturedCard key={card.id} {...card} />
+                ))}
+            </div>
 
             <MyFooter />
         </MainLayout>
