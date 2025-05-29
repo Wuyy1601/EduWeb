@@ -14,7 +14,7 @@ const routers = [
         component: lazy(() => import('@pages/Search/Search')),
     },
     {
-        path: '/signup',
+        path: '/login',
         component: lazy(() => import('@pages/LoginAndSignUp/Login')),
     },
     {
