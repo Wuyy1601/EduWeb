@@ -161,6 +161,103 @@
     }
 }
 
+.result-container {
+    display: flex;
+    justify-content: center;
+    width: 100%;
+    margin: 48px auto;
+    .result {
+        box-sizing: border-box;
+        display: grid;
+        grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
+        gap: 2rem;
+        width: 80%;
+        max-width: 1680px;
+        padding: 0 28px;
+    }
+}
+
+.highlight-container {
+    width: 100%;
+    display: flex;
+    justify-content: center;
+    margin: 48px auto;
+
+    .highlight {
+        box-sizing: border-box;
+        width: 80%;
+        max-width: 1680px;
+        display: flex;
+        gap: 8px;
+        padding: 24px;
+        justify-content: space-around;
+        align-items: center;
+        background-color: rgba($third-color, 0.2);
+        border-radius: 16px;
+
+        &-list {
+            color: $text-primary-color;
+
+            h2 {
+                margin: 0;
+            }
+            ul {
+                list-style-type: none;
+                padding: 0;
+                padding: 0;
+
+                li {
+                    line-height: 2.2;
+                }
+            }
+
+            .start-btn {
+                width: 100%;
+                font-weight: bold;
+            }
+        }
+    }
+}
+
+.recommend-container {
+    font-family: 'Poppins', sans-serif;
+    width: 100%;
+    display: flex;
+    justify-content: center;
+    margin: 48px auto 0;
+    padding: 2rem 0 4rem;
+    background-color: rgba($secondary-color, 0.2);
+
+    .recommend {
+        box-sizing: border-box;
+        width: 80%;
+        max-width: 1680px;
+        display: flex;
+        flex-direction: column;
+
+        .course-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 2rem;
+
+            h2 {
+                color: $text-primary-color;
+            }
+
+            a {
+                color: $button-primary-color;
+            }
+        }
+
+        .course-list {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
+            gap: 2rem;
+        }
+    }
+}
+
 .hidden {
     display: none;
 }

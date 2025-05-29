@@ -71,7 +71,7 @@
 .profile-name {
     font-weight: 500;
     font-size: 24px;
-    color:$text-primary-color;
+    color: $text-primary-color;
 }
 
 .profile-title {
@@ -120,7 +120,7 @@
 
     &__link {
         text-decoration: none;
-        background-color:$button-primary-color;
+        background-color: $button-primary-color;
         color: $text-primary-color;
         font-size: 14px;
         width: 32px;
@@ -149,7 +149,7 @@
         font-weight: bold;
         color: $text-primary-color;
         transition: background-color 0.2s ease;
-        
+
         &.active {
             background-color: $button-primary-color;
             color: #000;
@@ -157,7 +157,8 @@
     }
 }
 
-#posts-container, #documents-container {
+#posts-container,
+#documents-container {
     display: grid;
     grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
     gap: 2rem;
@@ -176,7 +177,7 @@
 }
 
 .pagination {
-    margin:32px 0  48px;
+    margin: 32px 0 48px;
 
     &__list {
         display: flex;
@@ -184,7 +185,7 @@
         list-style-type: none;
         margin: 0;
     }
-    
+
     &__item button {
         border-radius: 0;
         height: 48px;
@@ -193,7 +194,7 @@
         transition: all 0.2s ease;
         padding: 0;
         &:hover:not(:disabled) {
-            background-color:$button-primary-color;
+            background-color: $button-primary-color;
         }
 
         &:disabled {
@@ -207,17 +208,16 @@
 
     &__button {
         font-weight: 500;
-        background-color: rgba(255, 255, 255, 0.2);   
+        background-color: rgba(255, 255, 255, 0.2);
         color: #000;
         &.active {
-            background-color:$button-primary-color !important;
+            background-color: $button-primary-color !important;
         }
     }
 
-
     &__arrow {
         background-color: rgba($button-primary-color, 0.4) !important;
-        color:$button-primary-color !important;
+        color: $button-primary-color !important;
         font-size: 24px;
     }
 }

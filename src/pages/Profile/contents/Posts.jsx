@@ -1,7 +1,7 @@
 import { useState } from 'react';
 import { useSearchParams } from 'react-router-dom';
 import Pagination from '../components/Pagination';
-import CourseCard from '@pages/Document/components/CourseCard';
+import CourseCard from '../components/CourseCard';
 
 import classNames from 'classnames/bind';
 import styles from '../styles.module.scss';
