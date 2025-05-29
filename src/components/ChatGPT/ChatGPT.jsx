@@ -59,6 +59,7 @@ function ChatGPT() {
                 }),
             });
             const data = await res.json();
+            console.log('🧪 Phản hồi từ API:', data);
             setResponse(data.choices?.[0]?.message?.content || 'Không có phản hồi');
         } catch (err) {
             setResponse('⚠️ Đã xảy ra lỗi');
