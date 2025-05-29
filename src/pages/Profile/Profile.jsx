@@ -1,5 +1,7 @@
 import { useState } from 'react';
 import { useParams } from 'react-router-dom';
+import axios from 'axios';
+
 
 import MyFooter from '@components/Footer/Footer';
 import MyHeader from '@components/Header/Header';
@@ -54,6 +56,18 @@ function Profile() {
     return (
         <MainLayout>
             <MyHeader />
+
+
+            const [profileData, setProfileData] = useState(null);
+
+            {/* useEffect(() => {
+  const token = localStorage.getItem('token');
+            axios.get('http://localhost:8081/profile/me', {
+                headers: {Authorization: `Bearer ${token}` }
+  })
+  .then(res => setProfileData(res.data))
+  .catch(err => console.error(err));
+}, []); */}
 
             <div id={cx('content')}>
                 <ProfileBanner
