@@ -5,6 +5,7 @@ import SearchBar from './components/SearchBar';
 import Result from './components/Result';
 import Highlight from './components/Highlight';
 import Recommend from './components/Recommend';
+import ChatGPT from '@components/ChatGPT/ChatGPT';
 
 import img from '@images/search-highlight.png';
 const searchResults = [
@@ -26,6 +27,7 @@ function Search() {
             <Result courses={searchResults} />
             <Highlight img={img} />
             <Recommend title={'Gợi ý cho bạn'} />
+            <ChatGPT />
             <MyFooter />
         </MainLayout>
     );

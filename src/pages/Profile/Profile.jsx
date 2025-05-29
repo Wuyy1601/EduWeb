@@ -4,6 +4,7 @@ import { useParams } from 'react-router-dom';
 import MyFooter from '@components/Footer/Footer';
 import MyHeader from '@components/Header/Header';
 import MainLayout from '@components/Layout/Layout';
+import ChatGPT from '@components/ChatGPT/ChatGPT';
 
 import profilePicture from '@images/profile-picture.png';
 import profileBackground from '@images/profile-background.jpg';
@@ -80,6 +81,7 @@ function Profile() {
 
                 <ProfileContent activeTab={activeTab} />
             </div>
+            <ChatGPT />
             <MyFooter />
         </MainLayout>
     );

@@ -4,6 +4,7 @@ import MyHeader from '@components/Header/Header';
 import MainLayout from '@components/Layout/Layout';
 import MyFooter from '@components/Footer/Footer';
 import Courses from './Course';
+import ChatGPT from '@components/ChatGPT/ChatGPT';
 
 function FullViewDocument() {
     const [activeLesson, setActiveLesson] = useState(0);
@@ -102,6 +103,7 @@ function FullViewDocument() {
                     </div>
                 </main>
             </div>
+            <ChatGPT />
             <MyFooter />
         </MainLayout>
     );

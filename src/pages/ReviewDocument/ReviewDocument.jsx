@@ -8,6 +8,7 @@ import FeaturedCard from './FeaturedCard';
 import MyFooter from '@components/Footer/Footer';
 import MyHeader from '@components/Header/Header';
 import MainLayout from '@components/Layout/Layout';
+import ChatGPT from '@components/ChatGPT/ChatGPT';
 
 import courseImage from '@images/course.png';
 import slide from '@images/slide.png';
@@ -200,6 +201,7 @@ function ReviewDocument() {
                     <FeaturedCard key={card.id} {...card} />
                 ))}
             </div>
+            <ChatGPT />
             <MyFooter />
         </MainLayout>
     );
