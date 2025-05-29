@@ -8,7 +8,7 @@ function Search() {
         <MainLayout>
             <MyHeader />
             <SearchBar />
-
+            <div className="result"></div>
             <MyFooter />
         </MainLayout>
     );
