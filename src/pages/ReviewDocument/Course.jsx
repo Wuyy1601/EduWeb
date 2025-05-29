@@ -1,9 +1,9 @@
-import styles from "./styles.module.scss";
-import CourseCard from "./CourseCard";
+import styles from './styles.module.scss';
+import CourseCard from './CourseCard';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faAngleLeft } from '@fortawesome/free-solid-svg-icons';
 import { faAngleRight } from '@fortawesome/free-solid-svg-icons';
-import Button from "@components/Button/Button";
+import Button from '@components/Button/Button';
 
 function Courses({ title }) {
     const { courseContainer, sliderButtons, sliderButton } = styles;
@@ -12,13 +12,17 @@ function Courses({ title }) {
             <section className={styles.courses}>
                 <div className={styles.courseHeader}>
                     <h2>{title}</h2>
-                    <a href="#">Xem tất cả</a>
+                    <a style={{ borderRadius: 'none' }} href="#">
+                        Xem tất cả
+                    </a>
                 </div>
 
                 <div className={styles.courseGrid}>
-                    {Array(4).fill().map((_, index) => (
-                        <CourseCard key={index} id={index + 1} />
-                    ))}
+                    {Array(4)
+                        .fill()
+                        .map((_, index) => (
+                            <CourseCard key={index} id={index + 1} />
+                        ))}
                 </div>
                 <div className={sliderButtons}>
                     <Button className={sliderButton} content={<FontAwesomeIcon icon={faAngleLeft} />}></Button>
