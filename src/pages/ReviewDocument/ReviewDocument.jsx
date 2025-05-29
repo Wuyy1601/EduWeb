@@ -1,11 +1,14 @@
+import { useParams } from 'react-router-dom';
+import { useState, useEffect } from 'react';
+
+import styles from './styles.module.scss';
+
 import featuredCards from '@data/featuredCards';
 import FeaturedCard from './FeaturedCard';
 import MyFooter from '@components/Footer/Footer';
 import MyHeader from '@components/Header/Header';
 import MainLayout from '@components/Layout/Layout';
-import styles from './styles.module.scss';
-import { useParams } from 'react-router-dom';
-import { useState, useEffect } from 'react';
+
 import courseImage from '@images/course.png';
 import slide from '@images/slide.png';
 import avatar from '@images/avatar.jpg';
