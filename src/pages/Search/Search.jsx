@@ -1,18 +1,17 @@
-import MyFooter from "@components/Footer/Footer";
-import MyHeader from "@components/Header/Header";
-import MainLayout from "@components/Layout/Layout";
-import "./styles.css";
+import MyFooter from '@components/Footer/Footer';
+import MyHeader from '@components/Header/Header';
+import MainLayout from '@components/Layout/Layout';
+import SearchBar from './components/SearchBar';
 
 function Search() {
-    return ( 
+    return (
         <MainLayout>
             <MyHeader />
-                <div className="huongdan">
-                    làm Html vào đây
-                </div>
+            <SearchBar />
+
             <MyFooter />
         </MainLayout>
-     );
+    );
 }
 
 export default Search;
