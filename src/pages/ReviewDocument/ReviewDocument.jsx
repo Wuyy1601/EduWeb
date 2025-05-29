@@ -34,7 +34,7 @@ function ReviewDocument() {
     useEffect(() => {
         setCards(featuredCards);
     }, []);
-
+    if (!cards.length) return <p>Loading...</p>;
     return (
         <MainLayout>
             <MyHeader />
@@ -183,7 +183,16 @@ function ReviewDocument() {
                 </div>
             </section>
 
-            <div className="grid">
+            <div
+                style={{
+                    alignItems: 'center',
+                    display: 'grid',
+                    gridTemplateColumns: 'repeat(auto-fit, minmax(250px, 1fr))',
+                    padding: '2rem',
+                    maxWidth: '1200px',
+                    margin: '0 auto',
+                }}
+            >
                 {cards.map((card) => (
                     <FeaturedCard key={card.id} {...card} />
                 ))}
