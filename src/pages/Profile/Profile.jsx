@@ -17,6 +17,7 @@ import classNames from 'classnames/bind';
 import styles from './styles.module.scss';
 import Posts from './contents/Posts';
 import Documents from './contents/Documents';
+import ChatBot from '@components/ChatBot/ChatBot';
 
 const cx = classNames.bind(styles);
 
@@ -81,7 +82,7 @@ function Profile() {
 
                 <ProfileContent activeTab={activeTab} />
             </div>
-            <ChatGPT />
+            <ChatBot />
             <MyFooter />
         </MainLayout>
     );

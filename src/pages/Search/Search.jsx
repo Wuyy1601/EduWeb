@@ -5,9 +5,9 @@ import SearchBar from './components/SearchBar';
 import Result from './components/Result';
 import Highlight from './components/Highlight';
 import Recommend from './components/Recommend';
-import ChatGPT from '@components/ChatGPT/ChatGPT';
 
 import img from '@images/search-highlight.png';
+import ChatBot from '@components/ChatBot/ChatBot';
 const searchResults = [
     { id: 1, title: 'Course 1', description: 'Description for Course 1' },
     { id: 2, title: 'Course 2', description: 'Description for Course 2' },
@@ -27,7 +27,7 @@ function Search() {
             <Result courses={searchResults} />
             <Highlight img={img} />
             <Recommend title={'Gợi ý cho bạn'} />
-            <ChatGPT />
+            <ChatBot />
             <MyFooter />
         </MainLayout>
     );

@@ -4,7 +4,7 @@ import MyFooter from '@components/Footer/Footer';
 import MyHeader from '@components/Header/Header';
 import MainLayout from '@components/Layout/Layout';
 import RecommendedDocuments from '@components/Recommend/Recommend';
-import ChatGPT from '@components/ChatGPT/ChatGPT';
+import ChatBot from '@components/ChatBot/ChatBot';
 
 function HomePage() {
     return (
@@ -18,7 +18,7 @@ function HomePage() {
 
                 <RecommendedDocuments />
 
-                <ChatGPT />
+                <ChatBot />
 
                 <MyFooter />
             </MainLayout>

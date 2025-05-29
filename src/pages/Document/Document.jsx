@@ -6,7 +6,7 @@ import Banner from '@pages/Document/components/Banner';
 import Categories from '@pages/Document/components/Categories';
 import Courses from '@pages/Document/components/Courses';
 import UpDocument from '@pages/Document/components/UpDocument';
-import ChatGPT from '@components/ChatGPT/ChatGPT';
+import ChatBot from '@components/ChatBot/ChatBot';
 
 function Document() {
     return (
@@ -17,7 +17,7 @@ function Document() {
             <Courses title="Gợi ý cho bạn" />
             <Courses title="Tài liệu của bạn" />
             <UpDocument />
-            <ChatGPT />
+            <ChatBot />
             <MyFooter />
         </MainLayout>
     );
