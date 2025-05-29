@@ -38,7 +38,6 @@ function ReviewDocument() {
     return (
         <MainLayout>
             <MyHeader />
-
             <div className={styles.courseDetailWrapper}>
                 <div className={styles.bannerSection}>
                     <img src={BannerReviewDoc} alt="Course Banner" className={styles.bannerImage} />
@@ -182,11 +181,12 @@ function ReviewDocument() {
                     {showVideo && <VideoModal src={introVideo} onClose={() => setShowVideo(false)} />}
                 </div>
             </section>
-
+            <h3 style={{ textAlign: 'center' }}>Top tài liệu nên đọc</h3>
             <div
                 style={{
                     alignItems: 'center',
                     display: 'grid',
+                    gap: '7rem',
                     gridTemplateColumns: 'repeat(auto-fit, minmax(250px, 1fr))',
                     padding: '2rem',
                     maxWidth: '1200px',
@@ -197,7 +197,6 @@ function ReviewDocument() {
                     <FeaturedCard key={card.id} {...card} />
                 ))}
             </div>
-
             <MyFooter />
         </MainLayout>
     );
