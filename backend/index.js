@@ -136,6 +136,16 @@ app.get('/uploads/:filename', async (req, res) => {
     });
 });
 
+// Thêm sau phần khai báo Document model
+app.get('/api/documents', async (req, res) => {
+    try {
+        const docs = await Document.find({});
+        res.json(docs);
+    } catch (error) {
+        res.status(500).json({ error: 'Lỗi khi lấy danh sách tài liệu' });
+    }
+});
+
 // Middleware debug routes (thêm vào cuối index.js)
 app.use((req, res, next) => {
     console.log(`Route không tìm thấy: ${req.method} ${req.url}`);
