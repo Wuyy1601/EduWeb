@@ -136,13 +136,40 @@ app.get('/uploads/:filename', async (req, res) => {
     });
 });
 
-// Thêm sau phần khai báo Document model
+// Lấy danh sách tài liệu, có thể filter theo query
 app.get('/api/documents', async (req, res) => {
     try {
-        const docs = await Document.find({});
+        const { subject, major, language, level } = req.query;
+        const filter = {};
+        if (subject) filter.subject = subject;
+        if (major) filter.major = major;
+        if (language) filter.language = language;
+        if (level) filter.level = level;
+        const docs = await Document.find(filter);
         res.json(docs);
     } catch (error) {
         res.status(500).json({ error: 'Lỗi khi lấy danh sách tài liệu' });
+    }
+});
+
+// Xóa tài liệu theo id
+app.delete('/api/documents/:id', async (req, res) => {
+    try {
+        await Document.findByIdAndDelete(req.params.id);
+        res.json({ success: true });
+    } catch (error) {
+        res.status(500).json({ error: 'Lỗi khi xóa tài liệu' });
+    }
+});
+
+// Sửa thông tin tài liệu
+app.put('/api/documents/:id', async (req, res) => {
+    try {
+        const update = req.body;
+        const doc = await Document.findByIdAndUpdate(req.params.id, update, { new: true });
+        res.json({ success: true, document: doc });
+    } catch (error) {
+        res.status(500).json({ error: 'Lỗi khi cập nhật tài liệu' });
     }
 });
 
