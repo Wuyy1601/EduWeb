@@ -4,8 +4,11 @@ import Menu from './Menu/Menu';
 import Logo from './Logo/Logo';
 import { useEffect, useState } from 'react';
 import useScrollHandling from '@/hooks/useScrollHandling';
+import { useLocation } from 'react-router-dom';
 
 function MyHeader() {
+
+    const location = useLocation();
     const {
         container,
         containerHeader,
@@ -55,7 +58,8 @@ function MyHeader() {
                 {/* Desktop Menu */}
                 <div className={containerMenu}>
                     {dataMenu.map((item, index) => (
-                        <Menu key={index} content={item.content} href={item.href} />
+                        <Menu key={index} content={item.content} href={item.href}
+                            active={location.pathname === item.href} />
                     ))}
                 </div>
 
@@ -116,6 +120,7 @@ function MyHeader() {
                                 content={item.content}
                                 href={item.href}
                                 onClick={toggleMenu}
+                                active={location.pathname === item.href}
                             />
                         ))}
                     </div>
