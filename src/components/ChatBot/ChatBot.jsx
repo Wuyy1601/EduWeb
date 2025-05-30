@@ -1,12 +1,10 @@
 import { useState, useRef, useEffect } from 'react';
 
-// --- Chat bubble ---
 function ChatBot({ onClose, position, onDrag, onDragEnd }) {
     // DRAG LOGIC
     const bubbleRef = useRef(null);
     const dragData = useRef({ x: 0, y: 0, dragging: false, offsetX: 0, offsetY: 0 });
 
-    // Mouse events for dragging
     useEffect(() => {
         function onMouseMove(e) {
             if (!dragData.current.dragging) return;
@@ -28,7 +26,6 @@ function ChatBot({ onClose, position, onDrag, onDragEnd }) {
         };
     }, [onDrag, onDragEnd]);
 
-    // Start drag
     function handleDragStart(e) {
         dragData.current.dragging = true;
         const rect = bubbleRef.current.getBoundingClientRect();
@@ -36,7 +33,6 @@ function ChatBot({ onClose, position, onDrag, onDragEnd }) {
         dragData.current.offsetY = e.clientY - rect.top;
     }
 
-    // ---- ChatBot logic như cũ ----
     const [msg, setMsg] = useState('');
     const [history, setHistory] = useState([]);
     const [loading, setLoading] = useState(false);
@@ -239,7 +235,7 @@ function ChatBot({ onClose, position, onDrag, onDragEnd }) {
 }
 
 // --- Container quản lý mở/tắt và vị trí ---
-export default function ChatBotFloating() {
+export default function ChatBotFloatTing() {
     const [open, setOpen] = useState(false);
     // Bubble mặc định ở góc phải dưới, cách mép 40px
     const [position, setPosition] = useState({

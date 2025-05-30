@@ -37,6 +37,10 @@ const routers = [
         path: '/reviewdocument/:id',
         component: lazy(() => import('@pages/ReviewDocument/ReviewDocument')),
     },
+    {
+        path: '/upfile',
+        component: lazy(() => import('@pages/UpFile/UpFile')),
+    },
 ];
 
 export default routers;

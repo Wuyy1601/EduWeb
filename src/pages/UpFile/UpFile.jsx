@@ -1,0 +1,118 @@
+import { useState } from 'react';
+import { useParams } from 'react-router-dom';
+
+import MyFooter from '@components/Footer/Footer';
+import MyHeader from '@components/Header/Header';
+import MainLayout from '@components/Layout/Layout';
+import ChatBot from '@components/ChatBot/ChatBot';
+import Button from '@components/Button/Button';
+import imgCat from '@images/cat.png';
+
+import styles from './styles.module.scss';
+
+function UpFile() {
+    const [desc, setDesc] = useState('');
+    const maxDesc = 120;
+    const [file, setFile] = useState(null);
+
+    return (
+        <MainLayout>
+            <MyHeader />
+            <div className={styles.uploadPage}>
+                {/* Section 1: Upload + Mascot */}
+                <div className={styles.uploadSection}>
+                    <div className={styles.uploadBox}>
+                        <div className={styles.uploadLeft}>
+                            <h2 className={styles.title}>Tải tài liệu lên</h2>
+                            <div className={styles.filePreview}>
+                                {file ? (
+                                    <img src={URL.createObjectURL(file)} alt="preview" />
+                                ) : (
+                                    <div className={styles.imgPlaceholder}>
+                                        <svg width="48" height="48" fill="#b3b3b3"><rect x="8" y="12" width="32" height="24" rx="4" fill="#f5f6fa" /><path d="M13 29l8-8 8 8 7-7" stroke="#b3b3b3" strokeWidth="2" fill="none" /></svg>
+                                        <div>Chưa chọn file</div>
+                                    </div>
+                                )}
+                            </div>
+                            <input
+                                type="file"
+                                onChange={e => setFile(e.target.files[0])}
+                                accept=".pdf,.doc,.docx,.jpg,.png"
+                                className={styles.inputFile}
+                            />
+                        </div>
+                        <div className={styles.uploadRight}>
+                            <img src={imgCat} alt="Mascot" className={styles.mascot} />
+                            <div className={styles.tip}>
+                                <span>Tips:</span> Tải file rõ ràng, đúng định dạng!
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                {/* Section 2: Form nhập thông tin tài liệu */}
+                <div className={styles.infoSection}>
+                    <div className={styles.infoHeader}>
+                        <span>Thông tin tài liệu</span>
+                        <Button content={'Lưu'}></Button>
+                    </div>
+                    <form className={styles.infoForm}>
+                        <div className={styles.formRow}>
+                            <div className={styles.formCol}>
+                                <label>Tiêu đề</label>
+                                <input type="text" placeholder="Tiêu đề tài liệu của bạn" maxLength={80} />
+                            </div>
+                            <div className={styles.formCol}>
+                                <label>Mô tả</label>
+                                <input type="text" placeholder="Mô tả tài liệu của bạn" maxLength={120} />
+                            </div>
+                        </div>
+                        <div className={styles.formRow}>
+                            <div className={styles.formCol}>
+                                <label>Chuyên ngành</label>
+                                <select><option>Chọn</option></select>
+                            </div>
+                            <div className={styles.formCol}>
+                                <label>Môn học</label>
+                                <select><option>Chọn...</option></select>
+                            </div>
+                        </div>
+                        <div className={styles.formRow}>
+                            <div className={styles.formCol}>
+                                <label>Chủ đề tài liệu</label>
+                                <input type="text" placeholder="Nội dung chính của tài liệu bạn là gì" />
+                            </div>
+                        </div>
+                        <div className={styles.formRow}>
+                            <div className={styles.formCol}>
+                                <label>Ngôn ngữ</label>
+                                <select><option>Chọn</option></select>
+                            </div>
+                            <div className={styles.formCol}>
+                                <label>Ngôn Ngữ phụ</label>
+                                <select><option>Chọn</option></select>
+                            </div>
+                            <div className={styles.formCol}>
+                                <label>Cấp học</label>
+                                <select><option>Chọn...</option></select>
+                            </div>
+                            <div className={styles.formCol}>
+                                <label>Ghi chú</label>
+                                <input type="text" placeholder="Ghi chú" />
+                            </div>
+                        </div>
+                        <div className={styles.formActions}>
+                            <Button content={'Hủy'}></Button>
+                            <Button content={'Đăng Bài'}></Button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+
+
+            <ChatBot />
+            <MyFooter />
+        </MainLayout>
+    );
+}
+
+export default UpFile;
