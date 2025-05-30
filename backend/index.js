@@ -4,6 +4,7 @@ require('dotenv').config();
 const OpenAI = require('openai');
 const mongoose = require('mongoose');
 const multer = require('multer');
+const path = require('path');
 
 const openai = new OpenAI({
     apiKey: process.env.OPENAI_API_KEY,
@@ -41,6 +42,7 @@ const DocumentSchema = new mongoose.Schema({
     level: String,
     note: String,
     filename: String,
+    originalname: String,
     createdAt: { type: Date, default: Date.now }
 });
 const Document = mongoose.model('datadocs', DocumentSchema);
@@ -108,7 +110,8 @@ app.post('/api/documents', upload.single('file'), async (req, res) => {
 
         const doc = await Document.create({
             title, description, subject, major, language, subLanguage, level, note,
-            filename: req.file ? req.file.filename : null
+            filename: req.file ? req.file.filename : null,
+            originalname: req.file ? req.file.originalname : null
         });
 
         console.log("Đã lưu vào MongoDB:", doc);
@@ -119,12 +122,13 @@ app.post('/api/documents', upload.single('file'), async (req, res) => {
     }
 });
 
-const path = require('path');
-
 // API trả file download
-app.get('/uploads/:filename', (req, res) => {
+app.get('/uploads/:filename', async (req, res) => {
     const filePath = path.join(__dirname, 'uploads', req.params.filename);
-    res.download(filePath, (err) => {
+    // Tìm document theo filename
+    const doc = await Document.findOne({ filename: req.params.filename });
+    if (!doc) return res.status(404).send('Không tìm thấy file');
+    res.download(filePath, doc.originalname || req.params.filename, (err) => {
         if (err) {
             console.log('Download error:', err);
             res.status(404).send('Không tìm thấy file');

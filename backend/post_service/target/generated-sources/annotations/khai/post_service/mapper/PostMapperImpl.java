@@ -7,8 +7,8 @@ import org.springframework.stereotype.Component;
 
 @Generated(
     value = "org.mapstruct.ap.MappingProcessor",
-    date = "2025-05-30T01:35:17+0700",
-    comments = "version: 1.6.3, compiler: javac, environment: Java 23.0.1 (Oracle Corporation)"
+    date = "2025-05-31T00:17:57+0700",
+    comments = "version: 1.6.3, compiler: Eclipse JDT (IDE) 3.42.0.v20250514-1000, environment: Java 21.0.7 (Eclipse Adoptium)"
 )
 @Component
 public class PostMapperImpl implements PostMapper {
@@ -21,11 +21,11 @@ public class PostMapperImpl implements PostMapper {
 
         PostResponse.PostResponseBuilder postResponse = PostResponse.builder();
 
-        postResponse.id( post.getId() );
         postResponse.content( post.getContent() );
-        postResponse.userId( post.getUserId() );
         postResponse.createdDate( post.getCreatedDate() );
+        postResponse.id( post.getId() );
         postResponse.modifiedDate( post.getModifiedDate() );
+        postResponse.userId( post.getUserId() );
 
         return postResponse.build();
     }
