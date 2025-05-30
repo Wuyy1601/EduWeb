@@ -2,105 +2,126 @@
 @import '@styles/variables.module.scss';
 
 .footer {
-    background-color: $secondary-color;
-    color: #ccc;
-    padding: 60px 20px 30px 20px;
-    text-align: center;
+  background-color: $secondary-color;
+  color: #ccc;
+  padding: 60px 20px 30px 20px;
+  text-align: center;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.topSection {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 30px;
+}
+
+.logoBox {
+  display: flex;
+  align-items: center;
+  gap: 20px;
+
+  img {
+    width: 60px;
+    height: auto;
+  }
+
+  .slogan {
+    color: white;
+    text-align: left;
+
+    p {
+      margin: 0;
+      font-weight: bold;
+    }
+  }
+}
+
+.newsletter {
+  h3 {
+    color: white;
+    margin-bottom: 16px;
+    font-weight: 500;
+  }
+
+  .subscribeForm {
     display: flex;
-    flex-direction: column;
     align-items: center;
+    gap: 12px;
+
+    @media (max-width: 480px) {
+      flex-direction: column;
+      width: 100%;
+    }
+
+    input {
+      padding: 12px 20px;
+      border: 1px solid #ccc;
+      border-radius: 30px;
+      outline: none;
+      width: 250px;
+      font-size: 14px;
+
+      @media (max-width: 480px) {
+        width: 100%;
+        max-width: 280px;
+      }
+
+      &:focus {
+        border-color: #f9f3c2;
+      }
+    }
+
+    button {
+      background-color: #f9f3c2;
+      padding: 12px 24px;
+      border: none;
+      border-radius: 30px;
+      cursor: pointer;
+      font-weight: bold;
+      transition: all 0.3s ease;
+      white-space: nowrap;
+
+      @media (max-width: 480px) {
+        width: fit-content;
+        min-width: 120px;
+        padding: 12px 32px;
+      }
+
+      &:hover {
+        background-color: #f1e9a8;
+        transform: translateY(-2px);
+      }
+    }
   }
-  
-  .topSection {
+}
+
+.bottomSection {
+  margin-top: 40px;
+  text-align: center;
+  color: #bbb;
+  font-size: 14px;
+
+  .links {
+    margin-bottom: 16px;
     display: flex;
-    flex-direction: column;
+    gap: 16px;
+    justify-content: center;
     align-items: center;
-    gap: 30px;
-  }
-  
-  .logoBox {
-    display: flex;
-    align-items: center;
-    gap: 20px;
-  
-    img {
-      width: 60px;
-      height: auto;
-    }
-  
-    .slogan {
-      color: white;
-      text-align: left;
-  
-      p {
-        margin: 0;
-        font-weight: bold;
+
+    a {
+      color: #bbb;
+      text-decoration: none;
+
+      &:hover {
+        text-decoration: underline;
       }
+    }
+
+    span {
+      color: #888;
     }
   }
-  
-  .newsletter {
-    h3 {
-      color: white;
-      margin-bottom: 16px;
-      font-weight: 500;
-    }
-  
-    .subscribeForm {
-      display: flex;
-      align-items: center;
-      gap: 12px;
-  
-      input {
-        padding: 12px 20px;
-        border: 1px solid #ccc;
-        border-radius: 30px;
-        outline: none;
-        width: 250px;
-        font-size: 14px;
-      }
-  
-      button {
-        background-color: #f9f3c2;
-        padding: 12px 24px;
-        border: none;
-        border-radius: 30px;
-        cursor: pointer;
-        font-weight: bold;
-        transition: all 0.3s ease;
-  
-        &:hover {
-          background-color: #f1e9a8;
-        }
-      }
-    }
-  }
-  
-  .bottomSection {
-    margin-top: 40px;
-    text-align: center;
-    color: #bbb;
-    font-size: 14px;
-  
-    .links {
-      margin-bottom: 16px;
-      display: flex;
-      gap: 16px;
-      justify-content: center;
-      align-items: center;
-  
-      a {
-        color: #bbb;
-        text-decoration: none;
-  
-        &:hover {
-          text-decoration: underline;
-        }
-      }
-  
-      span {
-        color: #888;
-      }
-    }
-  }
-  
+}
