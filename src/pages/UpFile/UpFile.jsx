@@ -15,6 +15,27 @@ function UpFile() {
     const maxDesc = 120;
     const [file, setFile] = useState(null);
 
+    const majors = ["CNTT", "Kinh tế", "Y dược"];
+    const subjects = ["Toán", "Lý", "Hóa"];
+    const languages = ["Tiếng Việt", "Tiếng Anh"];
+    const levels = ["Đại học", "Cao đẳng", "THPT"];
+
+    const handleSubmit = async (e) => {
+        e.preventDefault();
+        const formData = new FormData(e.target);
+        if (file) formData.append('file', file);
+
+        const res = await fetch('http://localhost:8000/api/documents', {
+            method: 'POST',
+            body: formData
+        });
+        const data = await res.json();
+        if (data.success) {
+            alert('Tải tài liệu thành công!');
+            // Reset form nếu muốn
+        }
+    };
+
     return (
         <MainLayout>
             <MyHeader />
@@ -36,10 +57,13 @@ function UpFile() {
                             </div>
                             <input
                                 type="file"
+                                id="fileInput"
+                                name="file"
+                                style={{ display: 'none' }}
                                 onChange={e => setFile(e.target.files[0])}
                                 accept=".pdf,.doc,.docx,.jpg,.png"
-                                className={styles.inputFile}
                             />
+                            <Button content="Chọn file" onClick={() => document.getElementById('fileInput').click()} />
                         </div>
                         <div className={styles.uploadRight}>
                             <img src={imgCat} alt="Mascot" className={styles.mascot} />
@@ -55,25 +79,30 @@ function UpFile() {
                         <span>Thông tin tài liệu</span>
                         <Button content={'Lưu'}></Button>
                     </div>
-                    <form className={styles.infoForm}>
+                    <form className={styles.infoForm} onSubmit={handleSubmit}>
                         <div className={styles.formRow}>
                             <div className={styles.formCol}>
                                 <label>Tiêu đề</label>
-                                <input type="text" placeholder="Tiêu đề tài liệu của bạn" maxLength={80} />
+                                <input type="text" placeholder="Tiêu đề tài liệu của bạn" maxLength={80} name="title" />
                             </div>
                             <div className={styles.formCol}>
                                 <label>Mô tả</label>
-                                <input type="text" placeholder="Mô tả tài liệu của bạn" maxLength={120} />
+                                <input type="text" placeholder="Mô tả tài liệu của bạn" maxLength={120} name="description" />
                             </div>
                         </div>
                         <div className={styles.formRow}>
                             <div className={styles.formCol}>
                                 <label>Chuyên ngành</label>
-                                <select><option>Chọn</option></select>
+                                <select name="major">
+                                    <option value="">Chọn</option>
+                                    {majors.map(m => <option key={m} value={m}>{m}</option>)}
+                                </select>
                             </div>
                             <div className={styles.formCol}>
                                 <label>Môn học</label>
-                                <select><option>Chọn...</option></select>
+                                <select name='subject'><option>Chọn</option>
+                                    {subjects.map(m => <option key={m} value={m}>{m}</option>)}
+                                </select>
                             </div>
                         </div>
                         <div className={styles.formRow}>
@@ -85,24 +114,29 @@ function UpFile() {
                         <div className={styles.formRow}>
                             <div className={styles.formCol}>
                                 <label>Ngôn ngữ</label>
-                                <select><option>Chọn</option></select>
+                                <select name='language'><option>Chọn</option>
+                                    {languages.map(m => <option key={m} value={m}>{m}</option>)}
+                                </select>
                             </div>
                             <div className={styles.formCol}>
                                 <label>Ngôn Ngữ phụ</label>
-                                <select><option>Chọn</option></select>
+                                <select name='subLanguage'><option>Chọn</option>
+                                    {languages.map(m => <option key={m} value={m}>{m}</option>)}
+                                </select>
                             </div>
                             <div className={styles.formCol}>
                                 <label>Cấp học</label>
-                                <select><option>Chọn...</option></select>
+                                <select name='level'><option>Chọn</option>
+                                    {levels.map(m => <option key={m} value={m}>{m}</option>)}</select>
                             </div>
                             <div className={styles.formCol}>
                                 <label>Ghi chú</label>
-                                <input type="text" placeholder="Ghi chú" />
+                                <input type="text" placeholder="Ghi chú" name="note" />
                             </div>
                         </div>
                         <div className={styles.formActions}>
-                            <Button content={'Hủy'}></Button>
-                            <Button content={'Đăng Bài'}></Button>
+                            <Button content={'Hủy'} ></Button>
+                            <Button content={'Đăng Bài'} type='sumbit'></Button>
                         </div>
                     </form>
                 </div>

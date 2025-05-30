@@ -2,6 +2,8 @@ const express = require('express');
 const cors = require('cors');
 require('dotenv').config();
 const OpenAI = require('openai');
+const mongoose = require('mongoose');
+const multer = require('multer');
 
 const openai = new OpenAI({
     apiKey: process.env.OPENAI_API_KEY,
@@ -27,21 +29,41 @@ Course 1: Lập trình Python cơ bản - 10 bài, có quiz cuối khoá.
 Course 2: ReactJS chuyên sâu - 15 bài, project thực tế.
 `;
 
+mongoose.connect('mongodb://localhost:27017/DataChatBot', { useNewUrlParser: true, useUnifiedTopology: true });
+
+const DocumentSchema = new mongoose.Schema({
+    title: String,
+    description: String,
+    subject: String,
+    major: String,
+    language: String,
+    subLanguage: String,
+    level: String,
+    note: String,
+    filename: String,
+    createdAt: { type: Date, default: Date.now }
+});
+const Document = mongoose.model('DataDocs', DocumentSchema);
+
+const upload = multer({ dest: 'uploads/' });
+
 app.post('/chat', async (req, res) => {
     const { message } = req.body;
-    // Kiểm tra nếu message chứa từ khoá tài liệu thì trả về link luôn
-    const foundDoc = DOCS.find(
-        (doc) =>
-            message.toLowerCase().includes(doc.name.toLowerCase()) ||
-            (message.toLowerCase().includes('file tải') && message.toLowerCase().includes('reactjs')),
-    );
+    // Tìm tài liệu liên quan trong DB
+    const foundDoc = await Document.findOne({
+        $or: [
+            { title: new RegExp(message, 'i') },
+            { description: new RegExp(message, 'i') },
+            { subject: new RegExp(message, 'i') }
+        ]
+    });
     if (foundDoc) {
+        // Trả về mô tả hoặc nội dung tài liệu, KHÔNG trả link
         return res.json({
-            reply: `Bạn có thể tải "${foundDoc.name}" tại đây: /${foundDoc.filename}`,
+            reply: `Tài liệu "${foundDoc.title}": ${foundDoc.description || "Không có mô tả"}`
         });
     }
-
-    // Nếu không phải hỏi tài liệu thì mới gọi OpenAI API
+    // Nếu không có, gọi OpenAI như cũ
     const systemPrompt = `
     Bạn là chatbot tư vấn khoá học. Khi người dùng hỏi tài liệu, hãy nói rõ: "File tải về tại: /[filename].docx"
     Nếu không có file, chỉ cung cấp thông tin tổng quan.
@@ -63,6 +85,35 @@ app.post('/chat', async (req, res) => {
         console.error(err);
         res.status(500).json({ reply: 'Có lỗi khi gọi OpenAI API.' });
     }
+});
+
+app.post('/api/documents', upload.single('file'), async (req, res) => {
+    try {
+        const { title, description, subject, major, language, subLanguage, level, note } = req.body;
+
+        if (!req.file) {
+            console.log("Không nhận được file upload từ frontend.");
+        } else {
+            console.log("File nhận được:", req.file);
+        }
+
+        const doc = await Document.create({
+            title, description, subject, major, language, subLanguage, level, note,
+            filename: req.file ? req.file.filename : null
+        });
+
+        console.log("Đã lưu vào MongoDB:", doc);
+        res.json({ success: true, document: doc });
+    } catch (error) {
+        console.error("Lỗi khi lưu vào DB:", error);
+        res.status(500).json({ success: false, error: error.message });
+    }
+});
+
+// Middleware debug routes (thêm vào cuối index.js)
+app.use((req, res, next) => {
+    console.log(`Route không tìm thấy: ${req.method} ${req.url}`);
+    res.status(404).json({ error: "Route không tìm thấy", url: req.url });
 });
 
 const PORT = 8000;
