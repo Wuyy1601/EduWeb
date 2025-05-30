@@ -17,7 +17,8 @@ import org.springframework.security.web.SecurityFilterChain;
 @EnableMethodSecurity
 public class SecurityConfig {
 
-    public final String[] PUBLIC_ENDPOINT = {"/media/upload"
+    public final String[] PUBLIC_ENDPOINT = {
+            "/media/download/**"
 
     };
     private final CustomJwtDecoder customJwtDecoder;
@@ -30,7 +31,7 @@ public class SecurityConfig {
     @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
         http.authorizeHttpRequests(request ->
-                request.requestMatchers(HttpMethod.POST, PUBLIC_ENDPOINT).permitAll()
+                request.requestMatchers(HttpMethod.GET, PUBLIC_ENDPOINT).permitAll()
                         .anyRequest().
                         authenticated());
         // Chi co admin moi co the lay tat ca
