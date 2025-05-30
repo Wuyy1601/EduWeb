@@ -41,6 +41,10 @@ const routers = [
         path: '/upfile',
         component: lazy(() => import('@pages/UpFile/UpFile')),
     },
+    {
+        path: '/admin',
+        component: lazy(() => import('@pages/Admin/AdminDashboard')),
+    },
 ];
 
 export default routers;

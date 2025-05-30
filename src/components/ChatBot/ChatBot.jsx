@@ -81,7 +81,7 @@ function ChatBot({ onClose, position, onDrag, onDragEnd }) {
             const before = text.substring(lastIndex, match.index);
             if (before) parts.push(<span key={idx++}>{before}</span>);
             parts.push(
-                <a key={idx++} href={match[2]} target="_blank" rel="noopener noreferrer" style={{ color: '#0a6ebd', textDecoration: 'underline', fontWeight: 500 }}>
+                <a key={idx++} href={`http://localhost:8000${match[2]}`} target="_blank" rel="noopener noreferrer" style={{ color: '#0a6ebd', textDecoration: 'underline', fontWeight: 500 }}>
                     {match[1]}
                 </a>
             );
