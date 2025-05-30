@@ -7,6 +7,14 @@ import MyHeader from "@components/Header/Header";
 export default function LoginRegister() {
     const [isLogin, setIsLogin] = useState(true);
 
+    const formValidation = (data) => {
+
+    }
+
+    const handleSubmit = (data) => {
+        formValidation(data);
+    }
+
     return (
         <MainLayout>
             <MyHeader />
@@ -50,37 +58,37 @@ export default function LoginRegister() {
                             {!isLogin && (
                                 <>
                                     <div className={styles["form-group"]}>
-                                        <label>First Name</label>
-                                        <input type="text" placeholder="Enter your First Name" />
+                                        <label for="fname">First Name</label>
+                                        <input id="fname" type="text" placeholder="Enter your First Name" />
                                     </div>
                                     <div className={styles["form-group"]}>
-                                        <label>Last Name</label>
-                                        <input type="text" placeholder="Enter your Last Name" />
+                                        <label for="lname">Last Name</label>
+                                        <input id="lname" type="text" placeholder="Enter your Last Name" />
                                     </div>
                                     <div className={styles["form-group"]}>
-                                        <label>Birthday</label>
-                                        <input type="date" />
+                                        <label for="bday">Birthday</label>
+                                        <input id="bday" type="date" />
                                     </div>
                                     <div className={styles["form-group"]}>
-                                        <label>City</label>
-                                        <input type="text" placeholder="Enter your City" />
+                                        <label for="city">City</label>
+                                        <input id="city" type="text" placeholder="Enter your City" />
                                     </div>
                                     <div className={styles["form-group"]}>
-                                        <label>Email Address</label>
-                                        <input type="email" placeholder="Enter your Email Address" />
+                                        <label for="email">Email Address</label>
+                                        <input id="email" type="email" placeholder="Enter your Email Address" />
                                     </div>
                                 </>
                             )}
 
                             <div className={styles["form-group"]}>
-                                <label>User name</label>
-                                <input type="text" placeholder="Enter your User name" />
+                                <label for="uname">User name</label>
+                                <input id='uname' type="text" placeholder="Enter your User name" />
                             </div>
 
                             <div className={styles["form-group"]}>
-                                <label>Password</label>
+                                <label for="password">Password</label>
                                 <div className={styles["password-input"]}>
-                                    <input type="password" placeholder="Enter your Password" />
+                                    <input id="password" type="password" placeholder="Enter your Password" />
                                 </div>
                             </div>
 
