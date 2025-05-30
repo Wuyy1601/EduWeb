@@ -6,10 +6,24 @@ import { useEffect, useState } from 'react';
 import useScrollHandling from '@/hooks/useScrollHandling';
 
 function MyHeader() {
-    const { container, containerHeader, logo, containerMenu, fixedHeader, topHeader } = styles;
+    const {
+        container,
+        containerHeader,
+        logo,
+        containerMenu,
+        fixedHeader,
+        topHeader,
+        mobileMenuBtn,
+        mobileMenu,
+        mobileMenuActive,
+        overlay,
+        desktopAuth
+    } = styles;
+
     const { scrollPosition } = useScrollHandling();
     const [fixedPosition, setFixedPosition] = useState(false);
-    const [username, setUsername] = useState(null);
+    const [isMenuOpen, setIsMenuOpen] = useState(false);
+    const [currentUser, setCurrentUser] = useState(null);
 
     useEffect(() => {
         if (scrollPosition > 100) {
