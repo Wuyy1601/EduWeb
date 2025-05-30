@@ -1,0 +1,179 @@
+.uploadPage {
+    margin-top: 180px;
+    width: 100%;
+    min-height: 100vh;
+    background: #e0f4fd;
+    padding: 32px 0 48px 0;
+}
+
+.uploadSection {
+    width: 90%;
+    margin: 0 auto;
+    background: #fff;
+    border-radius: 18px 18px 0 0;
+    box-shadow: 0 2px 12px #c1eaff44;
+    display: flex;
+    justify-content: center;
+    align-items: stretch;
+    padding: 36px 40px 20px 40px;
+}
+
+.uploadBox {
+    display: flex;
+    width: 100%;
+    gap: 48px;
+    justify-content: center;
+}
+
+.uploadLeft {
+    flex: 1.2;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    border-right: 2px solid #cbe8ff;
+    padding-right: 48px;
+    min-width: 320px;
+}
+
+.uploadRight {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: flex-start;
+}
+
+.title {
+    font-size: 1.5rem;
+    font-weight: bold;
+    color: #1571be;
+    margin-bottom: 24px;
+}
+
+.filePreview {
+    width: 300px;
+    height: 180px;
+    background: #f5f6fa;
+    border: 2px dashed #b3b3b3;
+    border-radius: 10px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin-bottom: 16px;
+    overflow: hidden;
+}
+
+.imgPlaceholder {
+    text-align: center;
+    color: #aaa;
+}
+
+.inputFile {
+    margin-bottom: 14px;
+}
+
+.mascot {
+    width: 150px;
+    margin-bottom: 16px;
+}
+
+.tip {
+    background: #e6f7ff;
+    border-radius: 8px;
+    padding: 8px 18px;
+    color: #1571be;
+    font-size: 1rem;
+    margin-top: 6px;
+    box-shadow: 0 2px 8px #d6f4ff66;
+}
+
+/* Section 2 - Info form */
+.infoSection {
+    width: 90%;
+    margin: 0 auto 0 auto;
+    background: #f0f7fc;
+    border-radius: 0 0 18px 18px;
+    box-shadow: 0 2px 12px #c1eaff33;
+    margin-top: 0px;
+    padding-bottom: 40px;
+}
+
+.infoHeader {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 16px 28px;
+    background: #3498db;
+    color: #fff;
+    font-size: 1.13rem;
+    font-weight: bold;
+    border-radius: 0 0 0 0;
+}
+
+.saveBtn {
+    background: #f7c873;
+    color: #323232;
+    padding: 8px 16px;
+    border: none;
+    border-radius: 7px;
+    font-weight: bold;
+    cursor: pointer;
+}
+
+.infoForm {
+    padding: 32px 48px 8px 48px;
+}
+
+.formRow {
+    display: flex;
+    gap: 24px;
+    margin-bottom: 18px;
+}
+
+.formCol {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+}
+
+.formCol label {
+    font-size: 0.98rem;
+    font-weight: 500;
+    margin-bottom: 6px;
+    color: #236fab;
+}
+
+.formCol input,
+.formCol select {
+    padding: 8px 12px;
+    border: 1px solid #d0e1fa;
+    border-radius: 5px;
+    background: #fff;
+    font-size: 1rem;
+}
+
+.formActions {
+    display: flex;
+    justify-content: space-between;
+    margin-top: 28px;
+    gap: 18px;
+}
+
+.cancelBtn {
+    background: #fff;
+    border: 1.5px solid #ddd;
+    color: #1571be;
+    padding: 8px 32px;
+    border-radius: 7px;
+    cursor: pointer;
+}
+
+.submitBtn {
+    background: #f7c873;
+    color: #323232;
+    font-weight: bold;
+    padding: 8px 32px;
+    border: none;
+    border-radius: 7px;
+    cursor: pointer;
+}
