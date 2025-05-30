@@ -102,15 +102,17 @@ function ChatBot({ onClose, position, onDrag, onDragEnd }) {
                 maxWidth: 420,
                 position: 'fixed',
                 zIndex: 9999,
-                left: position.x,
-                top: position.y,
+                left: 'auto',
+                right: position.x,
+                bottom: position.y,
                 margin: 0,
                 padding: 0,
-                borderRadius: 24,
+                borderRadius: 16,
                 background: '#f8fafc',
                 boxShadow: '0 2px 16px #e0e7ef',
                 width: '90vw',
-                minWidth: 320,
+                minWidth: 280,
+                maxHeight: '80vh',
                 cursor: 'grab',
                 userSelect: 'none',
             }}
@@ -123,10 +125,11 @@ function ChatBot({ onClose, position, onDrag, onDragEnd }) {
                     justifyContent: 'space-between',
                     background: '#0366d6',
                     color: '#fff',
-                    borderRadius: '24px 24px 0 0',
-                    padding: '12px 18px',
+                    borderRadius: '16px 16px 0 0',
+                    padding: '8px 12px',
                     cursor: 'grab',
                     userSelect: 'none',
+                    fontSize: '14px',
                 }}
                 onMouseDown={handleDragStart}
                 title="Kéo để di chuyển chat"
@@ -138,9 +141,10 @@ function ChatBot({ onClose, position, onDrag, onDragEnd }) {
                         background: 'transparent',
                         border: 'none',
                         color: '#fff',
-                        fontSize: 22,
+                        fontSize: 20,
                         fontWeight: 'bold',
                         cursor: 'pointer',
+                        padding: '0 4px',
                     }}
                     aria-label="Đóng"
                 >
@@ -150,15 +154,15 @@ function ChatBot({ onClose, position, onDrag, onDragEnd }) {
             <div
                 ref={chatRef}
                 style={{
-                    minHeight: 220,
-                    maxHeight: 340,
+                    minHeight: 180,
+                    maxHeight: 'calc(80vh - 120px)',
                     overflowY: 'auto',
-                    padding: 18,
+                    padding: '12px',
                     background: '#f6f8fa',
                     borderRadius: 0,
                     display: 'flex',
                     flexDirection: 'column',
-                    gap: 12,
+                    gap: 8,
                 }}
             >
                 {history.length === 0 && (
@@ -215,26 +219,39 @@ function ChatBot({ onClose, position, onDrag, onDragEnd }) {
                     </div>
                 )}
             </div>
-            <div style={{ display: 'flex', gap: 8, padding: 16, background: '#f6f8fa', borderRadius: '0 0 24px 24px' }}>
+            <div style={{
+                display: 'flex',
+                gap: 8,
+                padding: '8px 12px',
+                background: '#f6f8fa',
+                borderRadius: '0 0 16px 16px'
+            }}>
                 <input
                     value={msg}
                     onChange={(e) => setMsg(e.target.value)}
                     onKeyDown={handleKeyDown}
                     placeholder="Nhập câu hỏi về khoá học hoặc tài liệu..."
-                    style={{ flex: 1, padding: 10, borderRadius: 14, border: '1px solid #bbb' }}
+                    style={{
+                        flex: 1,
+                        padding: '8px 12px',
+                        borderRadius: 12,
+                        border: '1px solid #bbb',
+                        fontSize: '14px'
+                    }}
                     disabled={loading}
                 />
                 <button
                     onClick={sendMsg}
                     style={{
-                        padding: '10px 22px',
-                        borderRadius: 14,
+                        padding: '8px 16px',
+                        borderRadius: 12,
                         background: '#0366d6',
                         color: '#fff',
                         border: 'none',
                         fontWeight: 'bold',
                         letterSpacing: 0.5,
                         boxShadow: '0 1px 3px #e0e7ef',
+                        fontSize: '14px'
                     }}
                     disabled={loading}
                 >
@@ -248,23 +265,62 @@ function ChatBot({ onClose, position, onDrag, onDragEnd }) {
 // --- Container quản lý mở/tắt và vị trí ---
 export default function ChatBotFloatTing() {
     const [open, setOpen] = useState(false);
-    // Bubble mặc định ở góc phải dưới, cách mép 40px
-    const [position, setPosition] = useState({
-        x: window.innerWidth - 420 - 40,
-        y: window.innerHeight - 420,
+    const [position, setPosition] = useState(() => {
+        const padding = 16;
+        const width = Math.min(420, window.innerWidth - (padding * 2));
+
+        return {
+            x: padding,  // Khoảng cách từ bên phải
+            y: padding   // Khoảng cách từ dưới lên
+        };
     });
 
-    // Cập nhật lại vị trí khi resize màn hình (để không bị lệch khỏi khung)
     useEffect(() => {
         function handleResize() {
-            setPosition((pos) => ({
-                x: Math.min(pos.x, window.innerWidth - 340),
-                y: Math.min(pos.y, window.innerHeight - 200),
-            }));
+            const padding = 16;
+            const width = Math.min(420, window.innerWidth - (padding * 2));
+            const height = Math.min(520, window.innerHeight - (padding * 2));
+
+            setPosition(pos => {
+                const newX = Math.min(
+                    Math.max(padding, pos.x),
+                    window.innerWidth - width - padding
+                );
+
+                const newY = Math.min(
+                    Math.max(padding, pos.y),
+                    window.innerHeight - height - padding
+                );
+
+                return { x: newX, y: newY };
+            });
         }
+
         window.addEventListener('resize', handleResize);
         return () => window.removeEventListener('resize', handleResize);
     }, []);
+
+    const handleDrag = (newPosition) => {
+        const padding = 16;
+        const width = Math.min(420, window.innerWidth - (padding * 2));
+        const height = Math.min(520, window.innerHeight - (padding * 2));
+
+        // Tính toán vị trí dựa trên khoảng cách từ mép phải và dưới
+        const x = window.innerWidth - (newPosition.x + width);
+        const y = window.innerHeight - (newPosition.y + height);
+
+        // Giới hạn trong phạm vi màn hình
+        const boundedX = Math.min(
+            Math.max(padding, x),
+            window.innerWidth - width - padding
+        );
+        const boundedY = Math.min(
+            Math.max(padding, y),
+            window.innerHeight - height - padding
+        );
+
+        setPosition({ x: boundedX, y: boundedY });
+    };
 
     return (
         <>
@@ -273,11 +329,11 @@ export default function ChatBotFloatTing() {
                     onClick={() => setOpen(true)}
                     style={{
                         position: 'fixed',
-                        bottom: 40,
-                        right: 40,
+                        bottom: 20,
+                        right: 20,
                         zIndex: 9999,
-                        width: 64,
-                        height: 64,
+                        width: 48,
+                        height: 48,
                         borderRadius: '50%',
                         background: '#0366d6',
                         color: '#fff',
@@ -286,7 +342,7 @@ export default function ChatBotFloatTing() {
                         display: 'flex',
                         alignItems: 'center',
                         justifyContent: 'center',
-                        fontSize: 32,
+                        fontSize: 24,
                         cursor: 'pointer',
                         padding: 0,
                     }}
@@ -296,7 +352,12 @@ export default function ChatBotFloatTing() {
                 </button>
             )}
 
-            {open && <ChatBot position={position} onClose={() => setOpen(false)} onDrag={setPosition} />}
+            {open && <ChatBot
+                position={position}
+                onClose={() => setOpen(false)}
+                onDrag={handleDrag}
+                onDragEnd={() => { }}
+            />}
         </>
     );
 }
