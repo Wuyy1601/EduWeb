@@ -3,7 +3,6 @@ package com.example.first_pj.configuration;
 import com.example.first_pj.dto.ApiResponse;
 import com.example.first_pj.exception.ErrorCode;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import org.springframework.http.MediaType;
