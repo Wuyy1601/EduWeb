@@ -14,7 +14,7 @@ import org.springframework.web.service.invoker.HttpServiceProxyFactory;
 import java.util.List;
 
 @Configuration
-public class WebClientConfiguration {
+public class  WebClientConfiguration {
 
 
     //Cai dat CORS

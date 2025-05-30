@@ -27,9 +27,10 @@ import javax.crypto.spec.SecretKeySpec;
 @EnableMethodSecurity
 public class SecurityConfig {
 
-    public final String[]PUBLIC_ENDPOINT={ "/users/registration","/auth/token", "/auth/introspect", "/auth/logout", "/auth/refresh" };
-        @Autowired
-        private CustomJwtDecoder customJwtDecoder;
+    public final String[] PUBLIC_ENDPOINT = {"/users/registration", "/auth/token", "/auth/introspect", "/auth/logout", "/auth/refresh"};
+    @Autowired
+    private CustomJwtDecoder customJwtDecoder;
+
     @Bean
     public SecurityFilterChain filterChain(HttpSecurity httpSecurity) throws Exception {
         httpSecurity.authorizeHttpRequests(request -> request.requestMatchers(HttpMethod.POST, PUBLIC_ENDPOINT)
@@ -45,10 +46,10 @@ public class SecurityConfig {
 
         return httpSecurity.build();
     }
-        // ERROR 401 kh the  xu li o GEH vi no nam tren cac filter truoc khi vao service khac 403
+    // ERROR 401 kh the  xu li o GEH vi no nam tren cac filter truoc khi vao service khac 403
 
-        @Bean
-        JwtAuthenticationConverter jwtAuthenticationConverter(){
+    @Bean
+    JwtAuthenticationConverter jwtAuthenticationConverter() {
         JwtGrantedAuthoritiesConverter jwtGrantedAuthoritiesConverter = new JwtGrantedAuthoritiesConverter();
         jwtGrantedAuthoritiesConverter.setAuthorityPrefix("");
 
@@ -56,11 +57,10 @@ public class SecurityConfig {
         jwtAuthenticationConverter.setJwtGrantedAuthoritiesConverter(jwtGrantedAuthoritiesConverter);
 
         return jwtAuthenticationConverter;
-        }
+    }
 
-        @Bean
-        PasswordEncoder passwordEncoder()
-        {
-            return new BCryptPasswordEncoder(10);
-        }
+    @Bean
+    PasswordEncoder passwordEncoder() {
+        return new BCryptPasswordEncoder(10);
+    }
 }

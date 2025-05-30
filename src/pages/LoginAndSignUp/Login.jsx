@@ -6,42 +6,132 @@ import MyHeader from "@components/Header/Header";
 
 export default function LoginRegister() {
     const [isLogin, setIsLogin] = useState(true);
+    const [formData, setFormData] = useState({
+        username: '',
+        password: '',
+        firstName: '',
+        lastName: '',
+        dob: '',
+        city: ''
+    });
+    const [loading, setLoading] = useState(false);
+    const [error, setError] = useState('');
+
+    const handleInputChange = (e) => {
+        const { name, value } = e.target;
+        setFormData(prev => ({
+            ...prev,
+            [name]: value
+        }));
+        if (error) setError('');
+    };
 
     const formValidation = (data) => {
-
-    }
-
-    const handleSubmit = (data) => {
-        formValidation(data);
-    }
-
-    const handleRegister = async (formData) => {
-        const res = await fetch('http://localhost:8080/auth/register', {
-            method: 'POST',
-            headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify(formData)
-        });
-        const data = await res.json();
-        if (res.ok) {
-            alert('Đăng ký thành công!');
-            // Chuyển sang trang đăng nhập hoặc tự động đăng nhập
+        if (isLogin) {
+            if (!data.username || !data.password) {
+                setError('Vui lòng nhập đầy đủ tên đăng nhập và mật khẩu');
+                return false;
+            }
         } else {
-            alert(data.message || 'Đăng ký thất bại');
+            if (!data.username || !data.password || !data.firstName || !data.lastName) {
+                setError('Vui lòng nhập đầy đủ thông tin bắt buộc');
+                return false;
+            }
+            if (data.password.length < 6) {
+                setError('Mật khẩu phải có ít nhất 6 ký tự');
+                return false;
+            }
+        }
+        return true;
+    };
+
+    const handleLogin = async (loginData) => {
+        try {
+            setLoading(true);
+            const res = await fetch('http://localhost:8888/api/v1/identity/auth/token', {
+                method: 'POST',
+                headers: { 
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify({
+                    username: loginData.username,
+                    password: loginData.password
+                })
+            });
+
+            const data = await res.json();
+            console.log('Login response:', data);
+            
+            if (res.ok && data.result && data.result.token) {
+                localStorage.setItem('token', data.result.token);
+                localStorage.setItem('user', JSON.stringify(data.result));
+                alert('Đăng nhập thành công!');
+                window.location.href = '/';
+            } else {
+                setError(data.message || 'Đăng nhập thất bại');
+            }
+        } catch (error) {
+            console.error('Login error:', error);
+            setError('Có lỗi xảy ra khi đăng nhập. Vui lòng thử lại.');
+        } finally {
+            setLoading(false);
         }
     };
 
-    const handleLogin = async (formData) => {
-        const res = await fetch('http://localhost:8080/auth/login', {
-            method: 'POST',
-            headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify(formData)
-        });
-        const data = await res.json();
-        if (res.ok && data.token) {
-            localStorage.setItem('token', data.token);
-            // Cập nhật trạng thái đăng nhập, chuyển sang trang chính
+    const handleRegister = async (registerData) => {
+        try {
+            setLoading(true);
+            const res = await fetch('http://localhost:8888/api/v1/identity/users/registration', {
+                method: 'POST',
+                headers: { 
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify({
+                    username: registerData.username,
+                    password: registerData.password,
+                    firstName: registerData.firstName,
+                    lastName: registerData.lastName,
+                    dob: registerData.dob || null,
+                    city: registerData.city || null
+                })
+            });
+
+            const data = await res.json();
+            console.log('Register response:', data);
+            
+            if (res.ok) {
+                alert('Đăng ký thành công! Vui lòng đăng nhập.');
+                setIsLogin(true);
+                setFormData({
+                    username: '',
+                    password: '',
+                    firstName: '',
+                    lastName: '',
+                    dob: '',
+                    city: ''
+                });
+            } else {
+                setError(data.message || 'Đăng ký thất bại');
+            }
+        } catch (error) {
+            console.error('Register error:', error);
+            setError('Không thể kết nối đến server. Vui lòng kiểm tra kết nối mạng.');
+        } finally {
+            setLoading(false);
+        }
+    };
+
+    const handleSubmit = async (e) => {
+        e.preventDefault();
+        
+        if (!formValidation(formData)) {
+            return;
+        }
+
+        if (isLogin) {
+            await handleLogin(formData);
         } else {
-            alert(data.message || 'Đăng nhập thất bại');
+            await handleRegister(formData);
         }
     };
 
@@ -69,14 +159,20 @@ export default function LoginRegister() {
                                 />
                                 <button
                                     className={isLogin ? styles.active : ""}
-                                    onClick={() => setIsLogin(true)}
+                                    onClick={() => {
+                                        setIsLogin(true);
+                                        setError('');
+                                    }}
                                     type="button"
                                 >
                                     Login
                                 </button>
                                 <button
                                     className={!isLogin ? styles.active : ""}
-                                    onClick={() => setIsLogin(false)}
+                                    onClick={() => {
+                                        setIsLogin(false);
+                                        setError('');
+                                    }}
                                     type="button"
                                 >
                                     Register
@@ -84,41 +180,95 @@ export default function LoginRegister() {
                             </div>
                         </div>
 
-                        <form className={styles["auth-form"]}>
+                        {error && (
+                            <div style={{ 
+                                color: 'red', 
+                                marginBottom: '15px', 
+                                padding: '10px', 
+                                backgroundColor: '#ffebee',
+                                borderRadius: '5px',
+                                border: '1px solid #ffcdd2'
+                            }}>
+                                {error}
+                            </div>
+                        )}
+
+                        <form className={styles["auth-form"]} onSubmit={handleSubmit}>
                             {!isLogin && (
                                 <>
                                     <div className={styles["form-group"]}>
-                                        <label for="fname">First Name</label>
-                                        <input id="fname" type="text" placeholder="Enter your First Name" />
+                                        <label htmlFor="firstName">First Name *</label>
+                                        <input 
+                                            id="firstName" 
+                                            name="firstName"
+                                            type="text" 
+                                            placeholder="Enter your First Name"
+                                            value={formData.firstName}
+                                            onChange={handleInputChange}
+                                            required={!isLogin}
+                                        />
                                     </div>
                                     <div className={styles["form-group"]}>
-                                        <label for="lname">Last Name</label>
-                                        <input id="lname" type="text" placeholder="Enter your Last Name" />
+                                        <label htmlFor="lastName">Last Name *</label>
+                                        <input 
+                                            id="lastName" 
+                                            name="lastName"
+                                            type="text" 
+                                            placeholder="Enter your Last Name"
+                                            value={formData.lastName}
+                                            onChange={handleInputChange}
+                                            required={!isLogin}
+                                        />
                                     </div>
                                     <div className={styles["form-group"]}>
-                                        <label for="bday">Birthday</label>
-                                        <input id="bday" type="date" />
+                                        <label htmlFor="dob">Birthday</label>
+                                        <input 
+                                            id="dob" 
+                                            name="dob"
+                                            type="date"
+                                            value={formData.dob}
+                                            onChange={handleInputChange}
+                                        />
                                     </div>
                                     <div className={styles["form-group"]}>
-                                        <label for="city">City</label>
-                                        <input id="city" type="text" placeholder="Enter your City" />
-                                    </div>
-                                    <div className={styles["form-group"]}>
-                                        <label for="email">Email Address</label>
-                                        <input id="email" type="email" placeholder="Enter your Email Address" />
+                                        <label htmlFor="city">City</label>
+                                        <input 
+                                            id="city" 
+                                            name="city"
+                                            type="text" 
+                                            placeholder="Enter your City"
+                                            value={formData.city}
+                                            onChange={handleInputChange}
+                                        />
                                     </div>
                                 </>
                             )}
 
                             <div className={styles["form-group"]}>
-                                <label for="uname">User name</label>
-                                <input id='uname' type="text" placeholder="Enter your User name" />
+                                <label htmlFor="username">User name *</label>
+                                <input 
+                                    id="username" 
+                                    name="username"
+                                    type="text" 
+                                    placeholder="Enter your User name"
+                                    value={formData.username}
+                                    onChange={handleInputChange}
+                                    required
+                                />
                             </div>
 
                             <div className={styles["form-group"]}>
-                                <label for="password">Password</label>
+                                <label htmlFor="password">Password *</label>
                                 <div className={styles["password-input"]}>
-                                    <input id="password" type="password" placeholder="Enter your Password" />
+                                    <input 
+                                        id="password" 
+                                        name="password"
+                                        type="password" 
+                                        placeholder="Enter your Password"
+                                        value={formData.password}
+                                        onChange={handleInputChange}
+                                        required
+                                    />
                                 </div>
                             </div>
 
@@ -131,8 +281,12 @@ export default function LoginRegister() {
                                 </div>
                             )}
 
-                            <button className={styles["submit-btn"]}>
-                                {isLogin ? "Login" : "Register"}
+                            <button 
+                                className={styles["submit-btn"]}
+                                type="submit"
+                                disabled={loading}
+                            >
+                                {loading ? 'Đang xử lý...' : (isLogin ? "Login" : "Register")}
                             </button>
                         </form>
                     </div>
@@ -140,4 +294,4 @@ export default function LoginRegister() {
             </div>
         </MainLayout>
     );
-} 
+}
