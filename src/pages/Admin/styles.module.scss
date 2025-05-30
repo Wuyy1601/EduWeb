@@ -59,3 +59,73 @@
         padding: 8px 6px;
     }
 }
+
+.modalOverlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: rgba(0, 0, 0, 0.25);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    z-index: 1000;
+}
+
+.modalContent {
+    background: #f0f7fc;
+    border-radius: 12px;
+    padding: 32px 32px 24px 32px;
+    min-width: 600px;
+    position: relative;
+    box-shadow: 0 4px 32px #0002;
+}
+
+.closeBtn {
+    position: absolute;
+    top: 12px;
+    right: 16px;
+    background: none;
+    border: none;
+    font-size: 2rem;
+    color: #3498db;
+    cursor: pointer;
+}
+
+.addForm {
+    margin-top: 12px;
+}
+
+.formRow {
+    display: flex;
+    gap: 24px;
+    margin-bottom: 18px;
+}
+
+.formCol {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+}
+
+.formCol label {
+    font-size: 0.98rem;
+    font-weight: 500;
+    margin-bottom: 6px;
+    color: #236fab;
+}
+
+.formCol input {
+    padding: 8px 12px;
+    border: 1px solid #d0e1fa;
+    border-radius: 5px;
+    background: #fff;
+    font-size: 1rem;
+}
+
+.adminTable input {
+    max-width: 180px;
+    width: 100%;
+    box-sizing: border-box;
+}
