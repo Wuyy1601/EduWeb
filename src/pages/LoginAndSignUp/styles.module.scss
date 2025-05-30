@@ -4,20 +4,37 @@
 
 .auth-container {
     display: flex;
-    height: 100vh;
+    min-height: 100vh;
     align-items: center;
     justify-content: center;
     gap: 50px;
-    padding: 0 40px;
+    padding: 20px;
+    flex-wrap: wrap;
+
+    @media (max-width: 768px) {
+        gap: 20px;
+        padding: 15px;
+    }
 }
 
 .auth-left {
     flex: 1;
     display: flex;
     justify-content: center;
+    min-width: 300px;
+
+    @media (max-width: 768px) {
+        display: none; // Ẩn hình ảnh trên mobile
+    }
 
     .auth-image {
         height: 500px;
+        max-width: 100%;
+        object-fit: contain;
+
+        @media (max-width: 1024px) {
+            height: 400px;
+        }
     }
 }
 
@@ -29,9 +46,21 @@
     width: 350px;
     text-align: center;
 
+    @media (max-width: 768px) {
+        width: 100%;
+        max-width: 350px;
+        padding: 20px;
+        margin: 0 auto;
+    }
+
     h2 {
         margin-bottom: 20px;
         color: $secondary-color;
+        font-size: 24px;
+
+        @media (max-width: 768px) {
+            font-size: 20px;
+        }
     }
 
     .auth-toggle {
@@ -48,6 +77,11 @@
             height: 40px;
             align-items: center;
             box-sizing: border-box;
+
+            @media (max-width: 768px) {
+                width: 200px;
+                height: 36px;
+            }
         }
 
         .toggle-indicator {
@@ -62,6 +96,11 @@
             z-index: 1;
             border: none;
             box-shadow: none;
+
+            @media (max-width: 768px) {
+                width: 94px;
+                height: 28px;
+            }
         }
 
         button {
@@ -77,6 +116,11 @@
             height: 40px;
             transition: color 0.2s;
             position: relative;
+
+            @media (max-width: 768px) {
+                font-size: 14px;
+                height: 36px;
+            }
 
             &.active {
                 color: #fff;
@@ -96,13 +140,20 @@
                 display: block;
                 margin-bottom: 5px;
                 font-weight: bold;
+                font-size: 14px;
             }
 
             input {
                 width: 100%;
-                padding: 8px;
+                padding: 10px;
                 border-radius: 8px;
                 border: 1px solid #ccc;
+                font-size: 14px;
+
+                &:focus {
+                    border-color: $secondary-color;
+                    outline: none;
+                }
             }
         }
 
@@ -121,20 +172,56 @@
             display: flex;
             justify-content: space-between;
             font-size: 14px;
+            margin-bottom: 20px;
+            flex-wrap: wrap;
+            gap: 10px;
+
+            @media (max-width: 768px) {
+                font-size: 13px;
+            }
+
+            label {
+                display: flex;
+                align-items: center;
+                gap: 5px;
+            }
+
+            a {
+                color: $secondary-color;
+                text-decoration: none;
+
+                &:hover {
+                    text-decoration: underline;
+                }
+            }
         }
 
         .submit-btn {
             width: 100%;
             background: $button-primary-color;
             color: #000;
-            padding: 10px;
+            padding: 12px;
             border: none;
             border-radius: 10px;
             cursor: pointer;
             font-weight: bold;
+            font-size: 16px;
+            transition: all 0.3s ease;
+
+            @media (max-width: 768px) {
+                padding: 10px;
+                font-size: 14px;
+            }
 
             &:hover {
                 background: darken($button-primary-color, 5%);
+                transform: translateY(-2px);
+            }
+
+            &:disabled {
+                opacity: 0.7;
+                cursor: not-allowed;
+                transform: none;
             }
         }
     }
