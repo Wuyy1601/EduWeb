@@ -1,0 +1,61 @@
+.adminPage {
+    margin-top: 100px;
+    width: 100%;
+    min-height: 100vh;
+    background: #e0f4fd;
+    padding: 32px 0 48px 0;
+}
+
+.adminSection {
+    width: 90%;
+    margin: 0 auto 32px auto;
+    background: #fff;
+    border-radius: 18px;
+    box-shadow: 0 2px 12px #c1eaff44;
+    padding: 36px 40px 20px 40px;
+}
+
+.adminTitle {
+    font-size: 2rem;
+    font-weight: bold;
+    color: #1571be;
+    margin-bottom: 24px;
+    text-align: center;
+}
+
+.adminTable {
+    width: 100%;
+    border-collapse: collapse;
+    background: #f0f7fc;
+    border-radius: 10px;
+    overflow: hidden;
+    margin-bottom: 24px;
+}
+
+.adminTable th,
+.adminTable td {
+    padding: 12px 16px;
+    border-bottom: 1px solid #d0e1fa;
+    text-align: left;
+}
+
+.adminTable th {
+    background: #3498db;
+    color: #fff;
+    font-weight: bold;
+}
+
+.adminTable tr:last-child td {
+    border-bottom: none;
+}
+
+@media (max-width: 900px) {
+    .adminSection {
+        padding: 16px 8px;
+    }
+
+    .adminTable th,
+    .adminTable td {
+        padding: 8px 6px;
+    }
+}

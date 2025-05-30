@@ -15,6 +15,36 @@ export default function LoginRegister() {
         formValidation(data);
     }
 
+    const handleRegister = async (formData) => {
+        const res = await fetch('http://localhost:8080/auth/register', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify(formData)
+        });
+        const data = await res.json();
+        if (res.ok) {
+            alert('Đăng ký thành công!');
+            // Chuyển sang trang đăng nhập hoặc tự động đăng nhập
+        } else {
+            alert(data.message || 'Đăng ký thất bại');
+        }
+    };
+
+    const handleLogin = async (formData) => {
+        const res = await fetch('http://localhost:8080/auth/login', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify(formData)
+        });
+        const data = await res.json();
+        if (res.ok && data.token) {
+            localStorage.setItem('token', data.token);
+            // Cập nhật trạng thái đăng nhập, chuyển sang trang chính
+        } else {
+            alert(data.message || 'Đăng nhập thất bại');
+        }
+    };
+
     return (
         <MainLayout>
             <MyHeader />
