@@ -43,33 +43,41 @@ const DocumentSchema = new mongoose.Schema({
     filename: String,
     createdAt: { type: Date, default: Date.now }
 });
-const Document = mongoose.model('DataDocs', DocumentSchema);
+const Document = mongoose.model('datadocs', DocumentSchema);
 
 const upload = multer({ dest: 'uploads/' });
 
+function normalize(str) {
+    return str.toLowerCase().replace(/[\s\-_.]/g, '');
+}
+
 app.post('/chat', async (req, res) => {
     const { message } = req.body;
-    // Tìm tài liệu liên quan trong DB
-    const foundDoc = await Document.findOne({
-        $or: [
-            { title: new RegExp(message, 'i') },
-            { description: new RegExp(message, 'i') },
-            { subject: new RegExp(message, 'i') }
-        ]
-    });
+    const docs = await Document.find({});
+    const foundDoc = docs.find(doc =>
+        normalize(doc.title).includes(normalize(message)) ||
+        normalize(doc.description).includes(normalize(message)) ||
+        normalize(doc.subject).includes(normalize(message))
+    );
     if (foundDoc) {
-        // Trả về mô tả hoặc nội dung tài liệu, KHÔNG trả link
-        return res.json({
-            reply: `Tài liệu "${foundDoc.title}": ${foundDoc.description || "Không có mô tả"}`
-        });
+        // Nếu có file, trả về link download dạng Markdown
+        if (foundDoc.filename) {
+            return res.json({
+                reply: `Tài liệu "${foundDoc.title}": ${foundDoc.description || "Không có mô tả"}\n[Download file](/uploads/${foundDoc.filename})`
+            });
+        } else {
+            return res.json({
+                reply: `Tài liệu "${foundDoc.title}": ${foundDoc.description || "Không có mô tả"}`
+            });
+        }
     }
-    // Nếu không có, gọi OpenAI như cũ
+    // Nếu không có, gọi OpenAI như cũ (giữ nguyên phần này)
     const systemPrompt = `
     Bạn là chatbot tư vấn khoá học. Khi người dùng hỏi tài liệu, hãy nói rõ: "File tải về tại: /[filename].docx"
     Nếu không có file, chỉ cung cấp thông tin tổng quan.
     Dữ liệu khoá học:
     ${COURSE_CONTEXT}
-  `;
+    `;
     try {
         const completion = await openai.chat.completions.create({
             model: 'gpt-4o-mini',
@@ -86,6 +94,7 @@ app.post('/chat', async (req, res) => {
         res.status(500).json({ reply: 'Có lỗi khi gọi OpenAI API.' });
     }
 });
+
 
 app.post('/api/documents', upload.single('file'), async (req, res) => {
     try {
@@ -108,6 +117,19 @@ app.post('/api/documents', upload.single('file'), async (req, res) => {
         console.error("Lỗi khi lưu vào DB:", error);
         res.status(500).json({ success: false, error: error.message });
     }
+});
+
+const path = require('path');
+
+// API trả file download
+app.get('/uploads/:filename', (req, res) => {
+    const filePath = path.join(__dirname, 'uploads', req.params.filename);
+    res.download(filePath, (err) => {
+        if (err) {
+            console.log('Download error:', err);
+            res.status(404).send('Không tìm thấy file');
+        }
+    });
 });
 
 // Middleware debug routes (thêm vào cuối index.js)

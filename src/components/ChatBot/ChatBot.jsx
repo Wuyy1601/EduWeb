@@ -71,20 +71,29 @@ function ChatBot({ onClose, position, onDrag, onDragEnd }) {
     };
 
     function renderMessage(text) {
-        const match = text.match(/\/[^\s]+\.docx/);
-        if (match) {
-            return (
-                <span>
-                    {text.split(match[0])[0]}
-                    <a href={match[0]} target="_blank" rel="noopener noreferrer" style={{ color: '#0a6ebd' }}>
-                        {match[0]}
-                    </a>
-                    {text.split(match[0])[1]}
-                </span>
+        // Nhận diện Markdown link [Download file](/uploads/xxxx.pdf)
+        const mdLink = /\[([^\]]+)\]\((\/uploads\/[^\)]+)\)/g;
+        const parts = [];
+        let lastIndex = 0;
+        let match;
+        let idx = 0;
+        while ((match = mdLink.exec(text)) !== null) {
+            const before = text.substring(lastIndex, match.index);
+            if (before) parts.push(<span key={idx++}>{before}</span>);
+            parts.push(
+                <a key={idx++} href={match[2]} target="_blank" rel="noopener noreferrer" style={{ color: '#0a6ebd', textDecoration: 'underline', fontWeight: 500 }}>
+                    {match[1]}
+                </a>
             );
+            lastIndex = match.index + match[0].length;
         }
-        return text;
+        if (lastIndex < text.length) {
+            parts.push(<span key={idx++}>{text.substring(lastIndex)}</span>);
+        }
+        // Nếu không match, trả về text thường
+        return parts.length > 0 ? parts : text;
     }
+
 
     return (
         <div
