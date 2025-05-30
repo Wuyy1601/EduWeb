@@ -1,4 +1,6 @@
 import { useState, useRef, useEffect } from 'react';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { faComment } from '@fortawesome/free-solid-svg-icons';
 
 function ChatBot({ onClose, position, onDrag, onDragEnd }) {
     // DRAG LOGIC
@@ -277,10 +279,11 @@ export default function ChatBotFloatTing() {
                         justifyContent: 'center',
                         fontSize: 32,
                         cursor: 'pointer',
+                        padding: 0,
                     }}
                     aria-label="Mở ChatBot"
                 >
-                    💬
+                    <FontAwesomeIcon style={{ color: '#fff' }} icon={faComment} />
                 </button>
             )}
 

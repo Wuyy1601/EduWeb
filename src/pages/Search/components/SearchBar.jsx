@@ -19,7 +19,6 @@ const filterOptions = [
 
 function SearchBar() {
     const [filterValue, setFilterValue] = useState({});
-    console.log('Filter Value:', filterValue);
     return (
         <div className={cx('search-container')}>
             <div className={cx('search')}>
