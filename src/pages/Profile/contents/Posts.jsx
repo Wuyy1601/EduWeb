@@ -29,7 +29,7 @@ function RenderPosts({ posts, currentPage }) {
     const endIndex = startIndex + 8;
     return posts
         .slice(startIndex, endIndex)
-        .map((post) => <CourseCard key={post.id} title={post.title} content={post.content} id={post.id} />);
+        .map((post) => <CourseCard key={post.id} title={post.title} content={post.content} id={post.id} className={cx('card')} />);
 }
 
 function Posts() {

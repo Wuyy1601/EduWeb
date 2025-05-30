@@ -9,7 +9,7 @@ function Result({ courses }) {
         <section className={cx('result-container')}>
             <div className={cx('result')}>
                 {courses.map((course, index) => (
-                    <CourseCard key={index} course={course} />
+                    <CourseCard key={index} course={course} id={index + 1} className={cx('card')} />
                 ))}
             </div>
         </section>

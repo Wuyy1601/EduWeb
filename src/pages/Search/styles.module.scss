@@ -169,11 +169,24 @@
     .result {
         box-sizing: border-box;
         display: grid;
-        grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
+        grid-template-columns: repeat(4, minmax(260px, 1fr));
         gap: 2rem;
         width: 80%;
         max-width: 1680px;
         padding: 0 28px;
+        @media  screen and (max-width: 1420px) {
+            width: 95%;
+            padding: 0;
+            gap: 1rem;
+        }
+        @media  screen and (max-width: 1150px) {
+            gap: 1.5rem;
+            grid-template-columns: repeat(2, minmax(260px, 1fr));
+            .card {
+                max-width: none;
+            }
+        }
+
     }
 }
 
@@ -194,6 +207,9 @@
         align-items: center;
         background-color: rgba($third-color, 0.2);
         border-radius: 16px;
+        @media  screen and (max-width: 1420px) {
+            width: 95%;
+        }
 
         &-list {
             color: $text-primary-color;
@@ -227,14 +243,23 @@
     margin: 48px auto 0;
     padding: 2rem 0 4rem;
     background-color: rgba($secondary-color, 0.2);
-
     .recommend {
         box-sizing: border-box;
         width: 80%;
         max-width: 1680px;
         display: flex;
         flex-direction: column;
-
+        
+        @media  screen and (max-width: 1420px) {
+            width: 95%;
+        }
+        @media  screen and (max-width: 1150px) {
+            gap: 1.5rem;
+            grid-template-columns: repeat(2, minmax(260px, 1fr));
+            .card {
+                max-width: none;
+            }
+        }
         .course-header {
             display: flex;
             justify-content: space-between;
@@ -252,8 +277,18 @@
 
         .course-list {
             display: grid;
-            grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
+            grid-template-columns: repeat(4, minmax(260px, 1fr));
             gap: 2rem;
+            @media  screen and (max-width: 1420px) {
+                gap: 1rem;
+            }
+            @media  screen and (max-width: 1150px) {
+                gap: 1.5rem;
+                grid-template-columns: repeat(2, minmax(260px, 1fr));
+                .card {
+                    max-width: none;
+                }
+            }
         }
     }
 }
