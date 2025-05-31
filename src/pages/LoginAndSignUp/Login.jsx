@@ -64,6 +64,8 @@ export default function LoginRegister() {
             const data = await res.json();
             if (res.ok && data?.result?.token) {
                 localStorage.setItem('token', data.result.token);
+                localStorage.setItem('user', JSON.stringify(data.result));
+                // alert('Đăng nhập thành công!');
                 navigate('/'); // chuyển hướng
             } else {
                 setError(data?.message || 'Đăng nhập thất bại');

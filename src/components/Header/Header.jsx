@@ -38,16 +38,18 @@ function MyHeader() {
             const user = localStorage.getItem('user');
             if (user) {
                 const userData = JSON.parse(user);
+                // Kiểm tra nhiều trường có thể chứa tên
                 setCurrentUser(userData.username || userData.name || userData.firstName || 'User');
             }
         } catch (error) {
             console.error('Error parsing user data:', error);
-            localStorage.removeItem('user');
+            localStorage.removeItem('user'); // Xóa data lỗi
         }
     }, []);
 
     const toggleMenu = () => {
         setIsMenuOpen(!isMenuOpen);
+        // Prevent body scroll when menu is open
         if (typeof document !== 'undefined') {
             document.body.style.overflow = !isMenuOpen ? 'hidden' : '';
         }
@@ -79,7 +81,7 @@ function MyHeader() {
                 <div className={`${desktopAuth} hidden md:block`}>
                     {currentUser ? (
                         <div className="flex items-center space-x-4">
-                            <span className="text-white">Xin chào, {currentUser}</span>
+                            <span className="text-white">Xin chào {currentUser.name}</span>
                             <button
                                 onClick={handleLogout}
                                 className="text-white hover:text-gray-300 text-sm"
@@ -127,7 +129,7 @@ function MyHeader() {
                     <div className="mb-6 px-4">
                         {currentUser ? (
                             <div className="space-y-2">
-                                <span className="text-white text-lg block">Xin chào, {currentUser}</span>
+                                <span className="text-white text-lg block">Xin chào {currentUser.name}</span>
                                 <button
                                     onClick={handleLogout}
                                     className="text-white hover:text-gray-300 text-sm"
