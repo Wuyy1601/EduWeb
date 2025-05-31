@@ -25,7 +25,6 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
-
 import java.util.HashSet;
 import java.util.List;
 
@@ -44,7 +43,8 @@ public class UserService {
 
     public UserResponse createUser(UserCreationRequest request) {
         log.info("User Service Create");
-        if (userRepository.existsByUsername(request.getUsername())) throw new AppException(ErrorCode.USER_EXISITED);
+        if (userRepository.existsByUsername(request.getUsername()))
+            throw new AppException(ErrorCode.USER_EXISITED);
         User user = userMapper.toUser(request);
 
         user.setPassword(passwordEncoder.encode(request.getPassword()));
@@ -61,11 +61,11 @@ public class UserService {
         return userMapper.toUserResponse(user);
     }
 
-    @PostAuthorize("returnObject.username == authentication.name")
+
     public UserResponse getMyInfo() {
         var context = SecurityContextHolder.getContext();
         String name = context.getAuthentication().getName();
-        User user = userRepository.findByUsername(name).orElseThrow(() -> new AppException(ErrorCode.USER_NOTEXISITED));
+        User user = userRepository.findById(name).orElseThrow(() -> new AppException(ErrorCode.USER_NOTEXISITED));
         return userMapper.toUserResponse(user);
     }
 
@@ -99,4 +99,3 @@ public class UserService {
         userRepository.deleteById(userId);
     }
 }
-

@@ -2,13 +2,10 @@ import styles from './styles.module.scss';
 import { dataMenu } from './constant';
 import Menu from './Menu/Menu';
 import Logo from './Logo/Logo';
-import { useEffect, useState, useRef } from 'react';
+import { useEffect, useState } from 'react';
 import useScrollHandling from '@/hooks/useScrollHandling';
-import { useLocation, useNavigate } from 'react-router-dom';
 
 function MyHeader() {
-
-    const location = useLocation();
     const {
         container,
         containerHeader,
@@ -27,9 +24,6 @@ function MyHeader() {
     const [fixedPosition, setFixedPosition] = useState(false);
     const [isMenuOpen, setIsMenuOpen] = useState(false);
     const [currentUser, setCurrentUser] = useState(null);
-    const [showDropdown, setShowDropdown] = useState(false);
-    const dropdownRef = useRef(null);
-    const navigate = useNavigate();
 
     useEffect(() => {
         if (scrollPosition > 100) {
@@ -40,53 +34,30 @@ function MyHeader() {
     }, [scrollPosition]);
 
     useEffect(() => {
-        const token = localStorage.getItem('token');
-        if (!token) return;
-        fetch('http://localhost:8888/api/v1/identity/auth/token', {
-            headers: { 'Authorization': `Bearer ${token}` }
-        })
-            .then(res => res.json())
-            .then(data => {
-                if (data && (data.firstName || data.lastName || data.username)) {
-                    setCurrentUser(`${data.firstName || ''} ${data.lastName || ''}`.trim() || data.username);
-                }
-            })
-            .catch(() => setCurrentUser(null));
+        try {
+            const user = localStorage.getItem('user');
+            if (user) {
+                const userData = JSON.parse(user);
+                setCurrentUser(userData.username || userData.name || userData.firstName || 'User');
+            }
+        } catch (error) {
+            console.error('Error parsing user data:', error);
+            localStorage.removeItem('user');
+        }
     }, []);
 
-    // Đóng dropdown khi click ra ngoài
-    useEffect(() => {
-        function handleClickOutside(event) {
-            if (dropdownRef.current && !dropdownRef.current.contains(event.target)) {
-                setShowDropdown(false);
-            }
+    const toggleMenu = () => {
+        setIsMenuOpen(!isMenuOpen);
+        if (typeof document !== 'undefined') {
+            document.body.style.overflow = !isMenuOpen ? 'hidden' : '';
         }
-        if (showDropdown) {
-            document.addEventListener('mousedown', handleClickOutside);
-        } else {
-            document.removeEventListener('mousedown', handleClickOutside);
-        }
-        return () => {
-            document.removeEventListener('mousedown', handleClickOutside);
-        };
-    }, [showDropdown]);
+    };
 
     const handleLogout = () => {
         localStorage.removeItem('user');
         localStorage.removeItem('token');
         setCurrentUser(null);
-        setShowDropdown(false);
-        navigate('/login');
-    };
-    const handleProfile = () => {
-        setShowDropdown(false);
-        navigate('/profile');
-    };
-
-    const toggleMenu = () => {
-        setIsMenuOpen(!isMenuOpen);
-        // Prevent body scroll when menu is open
-        document.body.style.overflow = !isMenuOpen ? 'hidden' : '';
+        window.location.href = '/login';
     };
 
     return (
@@ -100,49 +71,22 @@ function MyHeader() {
                 {/* Desktop Menu */}
                 <div className={containerMenu}>
                     {dataMenu.map((item, index) => (
-                        <Menu key={index} content={item.content} href={item.href}
-                            active={location.pathname === item.href} />
+                        <Menu key={index} content={item.content} href={item.href} />
                     ))}
                 </div>
 
                 {/* Desktop Login/Username */}
-                <div className={`${desktopAuth} hidden md:block`} ref={dropdownRef} style={{ position: 'relative' }}>
+                <div className={`${desktopAuth} hidden md:block`}>
                     {currentUser ? (
-                        <>
-                            <span
-                                className="text-white cursor-pointer select-none"
-                                onClick={() => setShowDropdown((v) => !v)}
-                                style={{ userSelect: 'none' }}
+                        <div className="flex items-center space-x-4">
+                            <span className="text-white">Xin chào, {currentUser}</span>
+                            <button
+                                onClick={handleLogout}
+                                className="text-white hover:text-gray-300 text-sm"
                             >
-                                Xin chào, {currentUser} <span style={{ fontSize: 12 }}>▼</span>
-                            </span>
-                            {showDropdown && (
-                                <div style={{
-                                    position: 'absolute',
-                                    right: 0,
-                                    top: '100%',
-                                    background: '#fff',
-                                    borderRadius: 6,
-                                    boxShadow: '0 2px 8px rgba(0,0,0,0.15)',
-                                    minWidth: 120,
-                                    zIndex: 1000,
-                                    marginTop: 4
-                                }}>
-                                    <div
-                                        style={{ padding: '10px 16px', cursor: 'pointer', color: '#333' }}
-                                        onClick={handleProfile}
-                                    >
-                                        Profile
-                                    </div>
-                                    <div
-                                        style={{ padding: '10px 16px', cursor: 'pointer', color: '#e53935' }}
-                                        onClick={handleLogout}
-                                    >
-                                        Đăng xuất
-                                    </div>
-                                </div>
-                            )}
-                        </>
+                                Đăng xuất
+                            </button>
+                        </div>
                     ) : (
                         <Menu content="Đăng nhập" href="/login" />
                     )}
@@ -180,42 +124,16 @@ function MyHeader() {
                 {/* Mobile Menu */}
                 <div className={`${mobileMenu} ${isMenuOpen ? mobileMenuActive : ''}`}>
                     {/* Mobile Login/Username */}
-                    <div className="mb-6 px-4" ref={dropdownRef}>
+                    <div className="mb-6 px-4">
                         {currentUser ? (
-                            <div style={{ position: 'relative' }}>
-                                <span
-                                    className="text-white text-lg cursor-pointer select-none"
-                                    onClick={() => setShowDropdown((v) => !v)}
-                                    style={{ userSelect: 'none' }}
+                            <div className="space-y-2">
+                                <span className="text-white text-lg block">Xin chào, {currentUser}</span>
+                                <button
+                                    onClick={handleLogout}
+                                    className="text-white hover:text-gray-300 text-sm"
                                 >
-                                    Xin chào, {currentUser} <span style={{ fontSize: 12 }}>▼</span>
-                                </span>
-                                {showDropdown && (
-                                    <div style={{
-                                        position: 'absolute',
-                                        left: 0,
-                                        top: '100%',
-                                        background: '#fff',
-                                        borderRadius: 6,
-                                        boxShadow: '0 2px 8px rgba(0,0,0,0.15)',
-                                        minWidth: 120,
-                                        zIndex: 1000,
-                                        marginTop: 4
-                                    }}>
-                                        <div
-                                            style={{ padding: '10px 16px', cursor: 'pointer', color: '#333' }}
-                                            onClick={() => { handleProfile(); setIsMenuOpen(false); }}
-                                        >
-                                            Profile
-                                        </div>
-                                        <div
-                                            style={{ padding: '10px 16px', cursor: 'pointer', color: '#e53935' }}
-                                            onClick={() => { handleLogout(); setIsMenuOpen(false); }}
-                                        >
-                                            Đăng xuất
-                                        </div>
-                                    </div>
-                                )}
+                                    Đăng xuất
+                                </button>
                             </div>
                         ) : (
                             <Menu content="Đăng nhập" href="/login" onClick={toggleMenu} />
@@ -230,7 +148,6 @@ function MyHeader() {
                                 content={item.content}
                                 href={item.href}
                                 onClick={toggleMenu}
-                                active={location.pathname === item.href}
                             />
                         ))}
                     </div>
