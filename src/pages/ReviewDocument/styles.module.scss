@@ -322,6 +322,7 @@ a {
     padding: 24px;
     z-index: 2;
 }
+
 .buyButton {
     width: 100%;
 }
@@ -333,6 +334,7 @@ a {
     vertical-align: middle;
     color: white;
 }
+
 .icon:hover {
     color: black;
 }
@@ -397,6 +399,12 @@ a {
                 color: #00c3ff;
                 box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
                 cursor: pointer;
+                height: 50px;
+                width: 50px;
+                padding: 0;
+                display: flex;
+                justify-content: center;
+                align-items: center;
             }
         }
     }
@@ -467,6 +475,7 @@ a {
         }
     }
 }
+
 .featuredCard {
     position: relative;
     border-radius: 12px;

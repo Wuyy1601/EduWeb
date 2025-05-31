@@ -274,7 +274,7 @@
     .result {
         box-sizing: border-box;
         display: grid;
-        grid-template-columns: repeat(4, minmax(260px, 1fr));
+        grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
         gap: 2rem;
         width: 80%;
         max-width: 1680px;
@@ -283,16 +283,16 @@
         @media screen and (max-width: 1420px) {
             width: 95%;
             padding: 0;
-            gap: 1rem;
+            // gap: 1rem;
         }
 
-        @media screen and (max-width: 1150px) {
-            gap: 1.5rem;
-            grid-template-columns: repeat(2, minmax(260px, 1fr));
-        }
+        // @media screen and (max-width: 1150px) {
+        //     gap: 1.5rem;
+        //     // grid-template-columns: repeat(2, minmax(260px, 1fr));
+        // }
 
         @media screen and (max-width: 575px) {
-            grid-template-columns: repeat(1, minmax(260px, 1fr));
+            // grid-template-columns: repeat(1, minmax(260px, 1fr));
         }
 
     }
@@ -388,20 +388,20 @@
 
         .course-list {
             display: grid;
-            grid-template-columns: repeat(4, minmax(260px, 1fr));
+            grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
             gap: 2rem;
 
-            @media screen and (max-width: 1420px) {
-                gap: 1rem;
-            }
+            // @media screen and (max-width: 1420px) {
+            //     gap: 1rem;
+            // }
 
-            @media screen and (max-width: 1150px) {
-                gap: 1.5rem;
-                grid-template-columns: repeat(2, minmax(260px, 1fr));
-            }
+            // @media screen and (max-width: 1150px) {
+            //     gap: 1.5rem;
+            //     // grid-template-columns: repeat(2, minmax(260px, 1fr));
+            // }
 
             @media screen and (max-width: 575px) {
-                grid-template-columns: repeat(1, minmax(260px, 1fr));
+                // grid-template-columns: repeat(1, minmax(260px, 1fr));
             }
         }
     }
@@ -411,6 +411,16 @@
     display: none;
 }
 
-.card {
-    max-width: none !important;
-}
+// .card {
+//     @media screen and (max-width: 1150px) {
+//         max-width: 400px !important;
+//     }
+
+//     @media screen and (max-width: 768px) {
+//         max-width: 260px !important;
+//     }
+
+//     @media screen and (max-width: 574px) {
+//         max-width: 360px !important;
+//     }
+// }
