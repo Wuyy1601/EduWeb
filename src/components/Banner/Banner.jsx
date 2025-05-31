@@ -16,6 +16,7 @@ function Banner() {
         buttonSignUp,
         catImage,
         bannerBottom,
+        mobileDescription
     } = styles;
     const navigate = useNavigate();
 
@@ -30,6 +31,11 @@ function Banner() {
                             ràng và dễ tiếp cận. Dù bạn đang ôn thi, làm bài tập hay tìm hiểu kiến thức mới, Ulearn giúp
                             bạn nắm bắt cốt lõi, học tập hiệu quả mà không tốn thời gian tìm kiếm lan man.{' '}
                             <strong>Học thông minh, hiểu sâu bản chất</strong> – cùng Ulearn chạm đến thành công.
+                        </p>
+                        {/* Mobile description */}
+                        <p className={mobileDescription}>
+                            Ulearn - Kho tài liệu học tập <strong>chọn lọc</strong>, giúp bạn học tập hiệu quả.{' '}
+                            <strong>Học thông minh, hiểu sâu bản chất</strong>
                         </p>
                         <div onClick={() => navigate('/login')}>
                             <Button content={'Đăng ký ngay'} className={buttonSignUp} />
