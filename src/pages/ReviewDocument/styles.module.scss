@@ -391,6 +391,7 @@ a {
     }
 }
 
+
 .buyButton {
     width: 100%;
     margin: 1rem 0;
@@ -412,6 +413,7 @@ a {
         width: 20px;
         height: 20px;
     }
+
 
     &:hover {
         color: black;
@@ -495,7 +497,12 @@ a {
                 color: #00c3ff;
                 box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
                 cursor: pointer;
-
+                height: 50px;
+                width: 50px;
+                padding: 0;
+                display: flex;
+                justify-content: center;
+                align-items: center;
                 @media (max-width: 768px) {
                     padding: 0.8rem;
                     font-size: 1rem;
@@ -529,6 +536,45 @@ a {
         display: grid;
         grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
         gap: 1.5rem;
+
+        .card {
+            background: white;
+            border-radius: 16px;
+            overflow: hidden;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.05);
+            padding: 1rem;
+            text-align: center;
+            position: relative;
+
+            .discountTag {
+                position: absolute;
+                top: 10px;
+                left: 10px;
+                background: red;
+                color: white;
+                font-weight: bold;
+                padding: 0.2rem 0.6rem;
+                border-radius: 6px;
+                font-size: 0.8rem;
+            }
+
+            img {
+                width: 100%;
+                border-radius: 8px;
+                margin-bottom: 1rem;
+            }
+
+            h4 {
+                font-size: 1rem;
+                font-weight: bold;
+                margin-bottom: 0.5rem;
+            }
+
+            p {
+                font-size: 0.9rem;
+                color: #555;
+            }
+        }
     }
 }
 
@@ -643,7 +689,6 @@ a {
         }
     }
 }
-
 div[style*="grid-template-columns"] {
     @media (max-width: 1024px) {
         gap: 4rem !important;

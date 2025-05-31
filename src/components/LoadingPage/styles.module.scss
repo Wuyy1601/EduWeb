@@ -1,0 +1,46 @@
+@import '@styles/variables.module.scss';
+
+.loading-container {
+    position: absolute;
+    background-color: $secondary-color;
+    top: 0;
+    bottom: 0;
+    left: 0;
+    right: 0;
+
+    .loading {
+        height: 100%;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+    }
+
+    .border {
+        position: absolute;
+        height: 72px;
+        width: 72px;
+        border: 3px solid #00FFF0;
+        border-radius: 8px;
+        transform: rotate(45deg);
+        animation: spin 4s linear 0s infinite;
+    }
+
+    span {
+        color: #fff;
+        font-family: 'Preahvihear';
+        font-size: 54px;
+        font-weight: 500;
+        line-height: 0;
+        margin-top: 6px;
+    }
+}
+
+@keyframes spin {
+    0% {
+        transform: rotate(45deg);
+    }
+
+    100% {
+        transform: rotate(405deg);
+    }
+}
