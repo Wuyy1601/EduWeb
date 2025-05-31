@@ -52,9 +52,7 @@ export default function LoginRegister() {
             setLoading(true);
             const res = await fetch('http://localhost:8888/api/v1/identity/auth/token', {
                 method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json',
-                },
+                headers: { 'Content-Type': 'application/json' },
                 body: JSON.stringify({
                     username: loginData.username,
                     password: loginData.password,
@@ -64,9 +62,22 @@ export default function LoginRegister() {
             const data = await res.json();
             if (res.ok && data?.result?.token) {
                 localStorage.setItem('token', data.result.token);
-                localStorage.setItem('user', JSON.stringify(data.result));
-                // alert('Đăng nhập thành công!');
-                navigate('/'); // chuyển hướng
+
+                // Fetch thông tin user
+                const userRes = await fetch('http://localhost:8888/api/v1/identity/users/myInfo', {
+                    method: 'GET',
+                    headers: {
+                        'Authorization': `Bearer ${data.result.token}`,
+                    },
+                });
+
+                const userData = await userRes.json();
+                if (userRes.ok && userData?.result) {
+                    localStorage.setItem('user', JSON.stringify(userData.result));
+                    navigate('/'); // chuyển hướng
+                } else {
+                    setError('Lỗi khi lấy thông tin người dùng');
+                }
             } else {
                 setError(data?.message || 'Đăng nhập thất bại');
             }
@@ -77,7 +88,6 @@ export default function LoginRegister() {
             setLoading(false);
         }
     };
-
     const handleRegister = async (registerData) => {
         try {
             setLoading(true);

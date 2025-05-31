@@ -38,12 +38,11 @@ function MyHeader() {
             const user = localStorage.getItem('user');
             if (user) {
                 const userData = JSON.parse(user);
-                // Kiểm tra nhiều trường có thể chứa tên
-                setCurrentUser(userData.username || userData.name || userData.firstName || 'User');
+                setCurrentUser(userData); // lưu toàn bộ dữ liệu user vào state
             }
         } catch (error) {
             console.error('Error parsing user data:', error);
-            localStorage.removeItem('user'); // Xóa data lỗi
+            localStorage.removeItem('user');
         }
     }, []);
 
@@ -81,7 +80,9 @@ function MyHeader() {
                 <div className={`${desktopAuth} hidden md:block`}>
                     {currentUser ? (
                         <div className="flex items-center space-x-4">
-                            <span className="text-white">Xin chào {currentUser.name}</span>
+                            <span className="text-white">
+                                Xin chào <a style={{ color: 'white' }} href="/profile">{currentUser.firstName || currentUser.username}</a>
+                            </span>
                             <button
                                 onClick={handleLogout}
                                 className="text-white hover:text-gray-300 text-sm"
