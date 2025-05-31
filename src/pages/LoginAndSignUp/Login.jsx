@@ -1,10 +1,12 @@
-import React, { useState } from "react";
-import styles from "./styles.module.scss";
-import imgCat from "@images/cat.png";
-import MainLayout from "@components/Layout/Layout";
-import MyHeader from "@components/Header/Header";
+import React, { useState } from 'react';
+import { useNavigate } from 'react-router-dom';
+import styles from './styles.module.scss';
+import imgCat from '@images/cat.png';
+import MainLayout from '@components/Layout/Layout';
+import MyHeader from '@components/Header/Header';
 
 export default function LoginRegister() {
+    const navigate = useNavigate();
     const [isLogin, setIsLogin] = useState(true);
     const [formData, setFormData] = useState({
         username: '',
@@ -12,16 +14,16 @@ export default function LoginRegister() {
         firstName: '',
         lastName: '',
         dob: '',
-        city: ''
+        city: '',
     });
     const [loading, setLoading] = useState(false);
     const [error, setError] = useState('');
 
     const handleInputChange = (e) => {
         const { name, value } = e.target;
-        setFormData(prev => ({
+        setFormData((prev) => ({
             ...prev,
-            [name]: value
+            [name]: value,
         }));
         if (error) setError('');
     };
@@ -50,25 +52,23 @@ export default function LoginRegister() {
             setLoading(true);
             const res = await fetch('http://localhost:8888/api/v1/identity/auth/token', {
                 method: 'POST',
-                headers: { 
-                    'Content-Type': 'application/json'
+                headers: {
+                    'Content-Type': 'application/json',
                 },
                 body: JSON.stringify({
                     username: loginData.username,
-                    password: loginData.password
-                })
+                    password: loginData.password,
+                }),
             });
 
             const data = await res.json();
-            console.log('Login response:', data);
-            
-            if (res.ok && data.result && data.result.token) {
+            if (res.ok && data?.result?.token) {
                 localStorage.setItem('token', data.result.token);
                 localStorage.setItem('user', JSON.stringify(data.result));
-                alert('Đăng nhập thành công!');
-                window.location.href = '/';
+                // alert('Đăng nhập thành công!');
+                navigate('/'); // chuyển hướng
             } else {
-                setError(data.message || 'Đăng nhập thất bại');
+                setError(data?.message || 'Đăng nhập thất bại');
             }
         } catch (error) {
             console.error('Login error:', error);
@@ -81,24 +81,27 @@ export default function LoginRegister() {
     const handleRegister = async (registerData) => {
         try {
             setLoading(true);
+            const token = localStorage.getItem('token');
+            const headers = {
+                'Content-Type': 'application/json',
+            };
+            if (token) {
+                headers['Authorization'] = `Bearer ${token}`;
+            }
             const res = await fetch('http://localhost:8888/api/v1/identity/users/registration', {
                 method: 'POST',
-                headers: { 
-                    'Content-Type': 'application/json'
-                },
+                headers,
                 body: JSON.stringify({
                     username: registerData.username,
                     password: registerData.password,
                     firstName: registerData.firstName,
                     lastName: registerData.lastName,
                     dob: registerData.dob || null,
-                    city: registerData.city || null
-                })
+                    city: registerData.city || null,
+                }),
             });
 
             const data = await res.json();
-            console.log('Register response:', data);
-            
             if (res.ok) {
                 alert('Đăng ký thành công! Vui lòng đăng nhập.');
                 setIsLogin(true);
@@ -108,10 +111,10 @@ export default function LoginRegister() {
                     firstName: '',
                     lastName: '',
                     dob: '',
-                    city: ''
+                    city: '',
                 });
             } else {
-                setError(data.message || 'Đăng ký thất bại');
+                setError(data?.message || 'Đăng ký thất bại');
             }
         } catch (error) {
             console.error('Register error:', error);
@@ -121,13 +124,24 @@ export default function LoginRegister() {
         }
     };
 
+    const handleToggle = (login) => {
+        setIsLogin(login);
+        setError('');
+        setFormData({
+            username: '',
+            password: '',
+            firstName: '',
+            lastName: '',
+            dob: '',
+            city: '',
+        });
+    };
+
     const handleSubmit = async (e) => {
         e.preventDefault();
-        
         if (!formValidation(formData)) {
             return;
         }
-
         if (isLogin) {
             await handleLogin(formData);
         } else {
@@ -139,40 +153,30 @@ export default function LoginRegister() {
         <MainLayout>
             <MyHeader />
             <div style={{ minHeight: '100vh', marginTop: 100 }}>
-                <div className={styles["auth-container"]} style={{ borderRadius: 10, margin: 40 }}>
-                    <div className={styles["auth-left"]}>
-                        <img
-                            src={imgCat}
-                            alt="Mascot"
-                            className={styles["auth-image"]}
-                        />
+                <div className={styles['auth-container']} style={{ borderRadius: 10, margin: 40 }}>
+                    <div className={styles['auth-left']}>
+                        <img src={imgCat} alt="Mascot" className={styles['auth-image']} />
                     </div>
-                    <div className={styles["auth-right"]}>
+                    <div className={styles['auth-right']}>
                         <h2>Welcome to Ulearn</h2>
-                        <div className={styles["auth-toggle"]}>
-                            <div className={styles["toggle-group"]}>
+                        <div className={styles['auth-toggle']}>
+                            <div className={styles['toggle-group']}>
                                 <div
-                                    className={styles["toggle-indicator"]}
+                                    className={styles['toggle-indicator']}
                                     style={{
-                                        transform: isLogin ? "translateX(0%)" : "translateX(100%)"
+                                        transform: isLogin ? 'translateX(0%)' : 'translateX(100%)',
                                     }}
                                 />
                                 <button
-                                    className={isLogin ? styles.active : ""}
-                                    onClick={() => {
-                                        setIsLogin(true);
-                                        setError('');
-                                    }}
+                                    className={isLogin ? styles.active : ''}
+                                    onClick={() => handleToggle(true)}
                                     type="button"
                                 >
                                     Login
                                 </button>
                                 <button
-                                    className={!isLogin ? styles.active : ""}
-                                    onClick={() => {
-                                        setIsLogin(false);
-                                        setError('');
-                                    }}
+                                    className={!isLogin ? styles.active : ''}
+                                    onClick={() => handleToggle(false)}
                                     type="button"
                                 >
                                     Register
@@ -181,61 +185,63 @@ export default function LoginRegister() {
                         </div>
 
                         {error && (
-                            <div style={{ 
-                                color: 'red', 
-                                marginBottom: '15px', 
-                                padding: '10px', 
-                                backgroundColor: '#ffebee',
-                                borderRadius: '5px',
-                                border: '1px solid #ffcdd2'
-                            }}>
+                            <div
+                                style={{
+                                    color: 'red',
+                                    marginBottom: '15px',
+                                    padding: '10px',
+                                    backgroundColor: '#ffebee',
+                                    borderRadius: '5px',
+                                    border: '1px solid #ffcdd2',
+                                }}
+                            >
                                 {error}
                             </div>
                         )}
 
-                        <form className={styles["auth-form"]} onSubmit={handleSubmit}>
+                        <form className={styles['auth-form']} onSubmit={handleSubmit}>
                             {!isLogin && (
                                 <>
-                                    <div className={styles["form-group"]}>
+                                    <div className={styles['form-group']}>
                                         <label htmlFor="firstName">First Name *</label>
-                                        <input 
-                                            id="firstName" 
+                                        <input
+                                            id="firstName"
                                             name="firstName"
-                                            type="text" 
+                                            type="text"
                                             placeholder="Enter your First Name"
                                             value={formData.firstName}
                                             onChange={handleInputChange}
                                             required={!isLogin}
                                         />
                                     </div>
-                                    <div className={styles["form-group"]}>
+                                    <div className={styles['form-group']}>
                                         <label htmlFor="lastName">Last Name *</label>
-                                        <input 
-                                            id="lastName" 
+                                        <input
+                                            id="lastName"
                                             name="lastName"
-                                            type="text" 
+                                            type="text"
                                             placeholder="Enter your Last Name"
                                             value={formData.lastName}
                                             onChange={handleInputChange}
                                             required={!isLogin}
                                         />
                                     </div>
-                                    <div className={styles["form-group"]}>
+                                    <div className={styles['form-group']}>
                                         <label htmlFor="dob">Birthday</label>
-                                        <input 
-                                            id="dob" 
+                                        <input
+                                            id="dob"
                                             name="dob"
                                             type="date"
                                             value={formData.dob}
                                             onChange={handleInputChange}
                                         />
                                     </div>
-                                    <div className={styles["form-group"]}>
+                                    <div className={styles['form-group']}>
                                         <label htmlFor="city">City</label>
-                                        <input 
-                                            id="city" 
+                                        <input
+                                            id="city"
                                             name="city"
-                                            type="text" 
+                                            type="text"
                                             placeholder="Enter your City"
                                             value={formData.city}
                                             onChange={handleInputChange}
@@ -244,12 +250,12 @@ export default function LoginRegister() {
                                 </>
                             )}
 
-                            <div className={styles["form-group"]}>
+                            <div className={styles['form-group']}>
                                 <label htmlFor="username">User name *</label>
-                                <input 
-                                    id="username" 
+                                <input
+                                    id="username"
                                     name="username"
-                                    type="text" 
+                                    type="text"
                                     placeholder="Enter your User name"
                                     value={formData.username}
                                     onChange={handleInputChange}
@@ -257,13 +263,13 @@ export default function LoginRegister() {
                                 />
                             </div>
 
-                            <div className={styles["form-group"]}>
+                            <div className={styles['form-group']}>
                                 <label htmlFor="password">Password *</label>
-                                <div className={styles["password-input"]}>
-                                    <input 
-                                        id="password" 
+                                <div className={styles['password-input']}>
+                                    <input
+                                        id="password"
                                         name="password"
-                                        type="password" 
+                                        type="password"
                                         placeholder="Enter your Password"
                                         value={formData.password}
                                         onChange={handleInputChange}
@@ -273,7 +279,7 @@ export default function LoginRegister() {
                             </div>
 
                             {isLogin && (
-                                <div className={styles["form-bottom"]}>
+                                <div className={styles['form-bottom']}>
                                     <label>
                                         <input type="checkbox" /> Remember me
                                     </label>
@@ -281,12 +287,8 @@ export default function LoginRegister() {
                                 </div>
                             )}
 
-                            <button 
-                                className={styles["submit-btn"]}
-                                type="submit"
-                                disabled={loading}
-                            >
-                                {loading ? 'Đang xử lý...' : (isLogin ? "Login" : "Register")}
+                            <button className={styles['submit-btn']} type="submit" disabled={loading}>
+                                {loading ? 'Đang xử lý...' : isLogin ? 'Login' : 'Register'}
                             </button>
                         </form>
                     </div>

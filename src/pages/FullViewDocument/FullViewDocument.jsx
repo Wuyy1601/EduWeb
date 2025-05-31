@@ -118,7 +118,6 @@ function FullViewDocument() {
                             <h1 className="text-2xl md:text-3xl font-bold mb-2">Tên tài liệu</h1>
                             <span className="text-sm md:text-base">Tác giả</span>
                         </div>
-                        <span className="mt-2 md:mt-0 md:absolute md:bottom-4 md:right-6 text-base md:text-lg opacity-80">1 hour</span>
                     </div>
 
                     <div className="bg-gray-800 rounded-2xl shadow overflow-hidden">
@@ -151,7 +150,6 @@ function FullViewDocument() {
 
                     {/* Related Courses */}
                     <div className="pb-6">
-                        <h2 className="font-bold text-xl md:text-2xl mb-4">Tài liệu tương tự</h2>
                         <Courses title="Tài liệu gợi ý" />
                     </div>
                 </main>
