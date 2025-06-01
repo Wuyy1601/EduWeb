@@ -1,7 +1,8 @@
 import React from 'react';
 import styles from './styles.module.scss';
-import { useNavigate } from 'react-router-dom';
+import MainLayout from '@components/Layout/Layout';
 import MyHeader from '@components/Header/Header';
+import MyFooter from '@components/Footer/Footer';
 
 const mockCart = {
     items: [
@@ -11,22 +12,21 @@ const mockCart = {
 };
 
 export default function Cart() {
-    const navigate = useNavigate();
-    const cart = mockCart;
+    const cart = mockCart; // Thay bằng state thực tế nếu có
 
     const handleCheckout = () => {
+        // Xử lý thanh toán
         alert('Thanh toán thành công!');
     };
 
     const handleContinueShopping = () => {
-        navigate('/');
+        window.location.href = '/';
     };
 
     return (
-        <div className={styles.pageWrapper}>
+        <MainLayout>
             <MyHeader />
-
-            <div className={styles.cartPage}>
+            <div className={styles.cartPage} style={{ marginTop: '100px' }}>
                 <div className={styles.cartContainer}>
                     <h2 className={styles.cartTitle}>Giỏ hàng</h2>
                     <div className={styles.cartCount}>
@@ -49,35 +49,33 @@ export default function Cart() {
                             </div>
                         ) : (
                             <div className={styles.cartTableWrapper}>
-                                <div className={styles.cartTable}>
-                                    <div className={styles.cartTableHeader}>
-                                        <div>Tên khóa học</div>
-                                        <div>Số lượng</div>
-                                        <div>Thành tiền</div>
-                                    </div>
-                                    <div className={styles.cartTableBody}>
+                                <table className={styles.cartTable}>
+                                    <thead>
+                                        <tr>
+                                            <th>Tên khóa học</th>
+                                            <th>Thành tiền</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
                                         {cart.items.map((item) => (
-                                            <div key={item.id} className={styles.cartItem}>
-                                                <div className={styles.courseInfo}>
+                                            <tr key={item.id}>
+                                                <td className={styles.courseInfo}>
                                                     <img src={item.image} alt={item.name} className={styles.courseImg} />
-                                                    <span className={styles.courseName}>{item.name}</span>
-                                                </div>
-                                                <div className={styles.quantity}>{item.quantity}</div>
-                                                <div className={styles.price}>
+                                                    {item.name}
+                                                </td>
+                                                <td>
                                                     {item.price.toLocaleString('vi-VN')} đ
-                                                </div>
-                                            </div>
+                                                </td>
+                                            </tr>
                                         ))}
-                                    </div>
-                                    <div className={styles.cartTableFooter}>
-                                        <div className={styles.totalRow}>
-                                            <span>Tổng cộng:</span>
-                                            <span>
-                                                {cart.items.reduce((total, item) => total + item.price * item.quantity, 0).toLocaleString('vi-VN')} đ
-                                            </span>
-                                        </div>
-                                    </div>
-                                </div>
+                                        <tr className={styles.totalRow}>
+                                            <td style={{ textAlign: 'right', fontWeight: 'bold' }}>Tổng cộng:</td>
+                                            <td style={{ fontWeight: 'bold' }}>
+                                                {cart.items.reduce((total, item) => total + item.price, 0).toLocaleString('vi-VN')} đ
+                                            </td>
+                                        </tr>
+                                    </tbody>
+                                </table>
                                 <div className={styles.checkoutBtnWrapper}>
                                     <button className={styles.checkoutBtn} onClick={handleCheckout}>
                                         Thanh toán
@@ -88,6 +86,8 @@ export default function Cart() {
                     </div>
                 </div>
             </div>
-        </div>
+            <MyFooter />
+        </MainLayout>
+
     );
 }

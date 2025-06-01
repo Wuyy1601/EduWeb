@@ -13,12 +13,13 @@ export default function LoginRegister() {
         password: '',
         firstName: '',
         lastName: '',
-        dob: '',
+        birthday: '',
         city: '',
     });
     const [loading, setLoading] = useState(false);
     const [error, setError] = useState('');
 
+    // Xử lý input, tự tách ngày/tháng/năm nếu là ngày sinh
     const handleInputChange = (e) => {
         const { name, value } = e.target;
         setFormData((prev) => ({
@@ -47,7 +48,6 @@ export default function LoginRegister() {
                 setError('Tên đăng nhập phải có ít nhất 3 ký tự');
                 return false;
             }
-            // Validate username format (chỉ chứa chữ cái, số, underscore)
             if (!/^[a-zA-Z0-9_]+$/.test(data.username)) {
                 setError('Tên đăng nhập chỉ được chứa chữ cái, số và dấu gạch dưới');
                 return false;
@@ -71,19 +71,17 @@ export default function LoginRegister() {
             const data = await res.json();
             if (res.ok && data?.result?.token) {
                 localStorage.setItem('token', data.result.token);
-
-                // Fetch thông tin user
+                // Fetch user info
                 const userRes = await fetch('http://localhost:8888/api/v1/identity/users/myInfo', {
                     method: 'GET',
                     headers: {
                         'Authorization': `Bearer ${data.result.token}`,
                     },
                 });
-
                 const userData = await userRes.json();
                 if (userRes.ok && userData?.result) {
                     localStorage.setItem('user', JSON.stringify(userData.result));
-                    navigate('/'); // chuyển hướng
+                    navigate('/');
                 } else {
                     setError('Lỗi khi lấy thông tin người dùng');
                 }
@@ -97,12 +95,14 @@ export default function LoginRegister() {
             setLoading(false);
         }
     };
+
     const handleRegister = async (registerData) => {
         try {
             setLoading(true);
+            // Gửi lên backend chỉ dob (YYYY-MM-DD). Nếu cần có thể gửi thêm các trường riêng lẻ.
             const res = await fetch('http://localhost:8888/api/v1/identity/users/registration', {
                 method: 'POST',
-                headers: { 
+                headers: {
                     'Content-Type': 'application/json'
                 },
                 body: JSON.stringify({
@@ -110,7 +110,7 @@ export default function LoginRegister() {
                     password: registerData.password,
                     firstName: registerData.firstName,
                     lastName: registerData.lastName,
-                    dob: registerData.dob || null,
+                    birthday: registerData.birthday || null,
                     city: registerData.city || null
                 })
             });
@@ -124,7 +124,7 @@ export default function LoginRegister() {
                     password: '',
                     firstName: '',
                     lastName: '',
-                    dob: '',
+                    birthday: '',
                     city: '',
                 });
             } else {
@@ -146,7 +146,7 @@ export default function LoginRegister() {
             password: '',
             firstName: '',
             lastName: '',
-            dob: '',
+            birthday: '',
             city: '',
         });
     };
@@ -241,14 +241,22 @@ export default function LoginRegister() {
                                         />
                                     </div>
                                     <div className={styles['form-group']}>
-                                        <label htmlFor="dob">Birthday</label>
+                                        <label htmlFor="birthday">Birthday</label>
                                         <input
-                                            id="dob"
-                                            name="dob"
+                                            id="birthday"
+                                            name="birthday"
                                             type="date"
-                                            value={formData.dob}
+                                            value={formData.birthday}
                                             onChange={handleInputChange}
                                         />
+                                        {/* Hiển thị ra năm/tháng/ngày nếu đã chọn */}
+                                        {formData.birthday && (
+                                            <div style={{ fontSize: 12, color: '#555', marginTop: 4 }}>
+                                                Năm: {formData.birthday.split('-')[0]} &nbsp;
+                                                Tháng: {formData.birthday.split('-')[1]} &nbsp;
+                                                Ngày: {formData.birthday.split('-')[2]}
+                                            </div>
+                                        )}
                                     </div>
                                     <div className={styles['form-group']}>
                                         <label htmlFor="city">City</label>

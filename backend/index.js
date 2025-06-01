@@ -30,7 +30,7 @@ Course 1: Lập trình Python cơ bản - 10 bài, có quiz cuối khoá.
 Course 2: ReactJS chuyên sâu - 15 bài, project thực tế.
 `;
 
-mongoose.connect('mongodb://localhost:27017/DataChatBot', { useNewUrlParser: true, useUnifiedTopology: true });
+mongoose.connect('mongodb://root:root@localhost:27017/Docs', {});
 
 const DocumentSchema = new mongoose.Schema({
     title: String,
@@ -45,7 +45,7 @@ const DocumentSchema = new mongoose.Schema({
     originalname: String,
     createdAt: { type: Date, default: Date.now }
 });
-const Document = mongoose.model('datadocs', DocumentSchema);
+const Document = mongoose.model('Document', DocumentSchema, 'Docs');
 
 const upload = multer({ dest: 'uploads/' });
 
@@ -148,7 +148,8 @@ app.get('/api/documents', async (req, res) => {
         const docs = await Document.find(filter);
         res.json(docs);
     } catch (error) {
-        res.status(500).json({ error: 'Lỗi khi lấy danh sách tài liệu' });
+        console.error("Lỗi khi lấy danh sách tài liệu:", error);
+        res.status(500).json({ error: 'Lỗi khi lấy danh sách tài liệu', detail: error.message });
     }
 });
 
@@ -173,7 +174,13 @@ app.put('/api/documents/:id', async (req, res) => {
     }
 });
 
-// Middleware debug routes (thêm vào cuối index.js)
+// Đặt route này TRƯỚC middleware 404!
+app.get('/api/documents/count', async (req, res) => {
+    const count = await Document.countDocuments();
+    res.json({ count });
+});
+
+// Middleware debug routes (luôn để CUỐI file)
 app.use((req, res, next) => {
     console.log(`Route không tìm thấy: ${req.method} ${req.url}`);
     res.status(404).json({ error: "Route không tìm thấy", url: req.url });
