@@ -1,318 +1,236 @@
-import React, { useEffect, useState } from "react";
+import React, { useState, useEffect } from 'react';
+import { useNavigate } from 'react-router-dom';
 import styles from './styles.module.scss';
-import Button from "@components/Button/Button";
-
-const filterFields = [
-    { label: "Môn học", name: "subject" },
-    { label: "Chuyên ngành", name: "major" },
-    { label: "Ngôn ngữ", name: "language" },
-    { label: "Cấp học", name: "level" }
-];
 
 export default function DocumentsTable() {
-    const [docs, setDocs] = useState([]);
-    const [filters, setFilters] = useState({ subject: "", major: "", language: "", level: "" });
-    const [editDoc, setEditDoc] = useState(null);
-    const [newDoc, setNewDoc] = useState({
-        title: "", description: "", subject: "", major: "", language: "", level: ""
-    });
-    const [showAddModal, setShowAddModal] = useState(false);
-    const [addDoc, setAddDoc] = useState({
-        title: "", description: "", subject: "", major: "", language: "", subLanguage: "", level: "", note: ""
-    });
-    const [addFile, setAddFile] = useState(null);
+    const navigate = useNavigate();
+    const [courses, setCourses] = useState([]);
+    const [loading, setLoading] = useState(true);
+    const [error, setError] = useState(null);
+    const [currentPage, setCurrentPage] = useState(1);
+    const [totalPages, setTotalPages] = useState(1);
+    const pageSize = 10;
 
+<<<<<<< HEAD
+    useEffect(() => {
+        fetchCourses();
+    }, [currentPage]);
+=======
     const fetchDocs = async () => {
         const params = new URLSearchParams(filters);
         const res = await fetch(`http://localhost:8000/api/documents?${params}`);
         const data = await res.json();
         setDocs(Array.isArray(data) ? data : []);
     };
+>>>>>>> 2317ac4c7e7c014b621772f01c43826862fb049b
 
-    useEffect(() => { fetchDocs(); }, [filters]);
+    const fetchCourses = async () => {
+        try {
+            setLoading(true);
+            const token = localStorage.getItem('token');
+            const response = await fetch(`http://localhost:8888/api/v1/course/all?page=${currentPage}&size=${pageSize}`, {
+                method: 'GET',
+                headers: {
+                    'Authorization': `Bearer ${token}`,
+                    'Content-Type': 'application/json'
+                }
+            });
 
-    const handleDelete = async (id) => {
-        if (!window.confirm("Bạn chắc chắn muốn xóa?")) return;
-        await fetch(`http://localhost:8000/api/documents/${id}`, { method: "DELETE" });
-        fetchDocs();
-    };
-
-    const handleEdit = (doc) => setEditDoc(doc);
-
-    const handleEditSubmit = async (e) => {
-        e.preventDefault();
-        const { _id, ...update } = editDoc;
-        await fetch(`http://localhost:8000/api/documents/${_id}`, {
-            method: "PUT",
-            headers: { "Content-Type": "application/json" },
-            body: JSON.stringify(update)
-        });
-        setEditDoc(null);
-        fetchDocs();
-    };
-    const [desc, setDesc] = useState('');
-    const maxDesc = 120;
-    const [file, setFile] = useState(null);
-
-    const majors = ["CNTT", "Kinh tế", "Y dược"];
-    const subjects = ["Toán", "Lý", "Hóa"];
-    const languages = ["Tiếng Việt", "Tiếng Anh"];
-    const levels = ["Đại học", "Cao đẳng", "THPT"];
-
-    const handleSubmit = async (e) => {
-        e.preventDefault();
-        const formData = new FormData(e.target);
-        if (file) formData.append('file', file);
-
-        const res = await fetch('http://localhost:8000/api/documents', {
-            method: 'POST',
-            body: formData
-        });
-        const data = await res.json();
-        if (data.success) {
-            alert('Tải tài liệu thành công!');
-            // Reset form nếu muốn
+            const data = await response.json();
+            if (data.code === 1000 && data.result) {
+                setCourses(data.result.data || []);
+                setTotalPages(data.result.totalPages || 1);
+            } else {
+                setError('Không thể tải danh sách khóa học');
+            }
+        } catch (error) {
+            console.error('Error fetching courses:', error);
+            setError('Lỗi khi tải danh sách khóa học');
+        } finally {
+            setLoading(false);
         }
     };
 
-    return (
-        <div>
-            <h2 className={styles.adminTitle}>Quản lý tài liệu</h2>
-            {/* Form thêm mới */}
-            <Button content="Thêm mới" onClick={() => setShowAddModal(true)} />
-            {showAddModal && (
-                <div className={styles.modalOverlay}>
-                    <div className={styles.modalContent}>
-                        <button className={styles.closeBtn} onClick={() => setShowAddModal(false)}>×</button>
-                        <h3>Thêm tài liệu mới</h3>
-                        <form
-                            onSubmit={async e => {
-                                e.preventDefault();
-                                const formData = new FormData();
-                                // Thêm các trường text
-                                Object.entries(addDoc).forEach(([key, value]) => formData.append(key, value));
-                                // Thêm file nếu có
-                                if (addFile) formData.append('file', addFile);
+    const handleViewCourse = (courseId) => {
+        // Chuyển đến FullViewDocument với admin privileges
+        navigate(`/course/${courseId}`);
+    };
 
-                                const res = await fetch("http://localhost:8000/api/documents", {
-                                    method: "POST",
-                                    body: formData
-                                });
-                                if (res.ok) {
-                                    setAddDoc({ title: "", description: "", subject: "", major: "", language: "", subLanguage: "", level: "", note: "" });
-                                    setAddFile(null);
-                                    setShowAddModal(false);
-                                    fetchDocs();
-                                } else {
-                                    alert("Thêm tài liệu thất bại!");
-                                }
-                            }}
-                            className={styles.addForm}
-                        >
-                            <div className={styles.formRow}>
-                                <div className={styles.formCol}>
-                                    <label>Tiêu đề</label>
-                                    <input
-                                        type="text"
-                                        placeholder="Tiêu đề tài liệu của bạn"
-                                        maxLength={80}
-                                        value={addDoc.title}
-                                        onChange={e => setAddDoc({ ...addDoc, title: e.target.value })}
-                                        required
-                                    />
-                                </div>
-                                <div className={styles.formCol}>
-                                    <label>Mô tả</label>
-                                    <input
-                                        type="text"
-                                        placeholder="Mô tả tài liệu của bạn"
-                                        maxLength={120}
-                                        value={addDoc.description}
-                                        onChange={e => setAddDoc({ ...addDoc, description: e.target.value })}
-                                        required
-                                    />
-                                </div>
-                            </div>
-                            <div className={styles.formRow}>
-                                <div className={styles.formCol}>
-                                    <label>File tài liệu</label>
-                                    <input
-                                        type="file"
-                                        id="adminFileInput"
-                                        style={{ display: 'none' }}
-                                        onChange={e => setAddFile(e.target.files[0])}
-                                        accept=".pdf,.doc,.docx,.jpg,.png"
-                                    />
-                                    <Button
-                                        type="button"
-                                        content={addFile ? addFile.name : "Chọn file"}
-                                        onClick={() => document.getElementById('adminFileInput').click()}
-                                    />
-                                    {addFile && addFile.type.startsWith("image/") && (
-                                        <img
-                                            src={URL.createObjectURL(addFile)}
-                                            alt="preview"
-                                            style={{ width: 120, marginTop: 8, borderRadius: 6 }}
-                                        />
-                                    )}
-                                </div>
-                            </div>
-                            <div className={styles.formRow}>
-                                <div className={styles.formCol}>
-                                    <label>Chuyên ngành</label>
-                                    <select
-                                        value={addDoc.major}
-                                        onChange={e => setAddDoc({ ...addDoc, major: e.target.value })}
-                                    >
-                                        <option value="">Chọn</option>
-                                        {majors.map(m => <option key={m} value={m}>{m}</option>)}
-                                    </select>
-                                </div>
-                                <div className={styles.formCol}>
-                                    <label>Môn học</label>
-                                    <select
-                                        value={addDoc.subject}
-                                        onChange={e => setAddDoc({ ...addDoc, subject: e.target.value })}
-                                    >
-                                        <option value="">Chọn</option>
-                                        {subjects.map(m => <option key={m} value={m}>{m}</option>)}
-                                    </select>
-                                </div>
-                            </div>
-                            <div className={styles.formRow}>
-                                <div className={styles.formCol}>
-                                    <label>Chủ đề tài liệu</label>
-                                    <input
-                                        type="text"
-                                        placeholder="Nội dung chính của tài liệu bạn là gì"
-                                        value={addDoc.note}
-                                        onChange={e => setAddDoc({ ...addDoc, note: e.target.value })}
-                                    />
-                                </div>
-                            </div>
-                            <div className={styles.formRow}>
-                                <div className={styles.formCol}>
-                                    <label>Ngôn ngữ</label>
-                                    <select
-                                        value={addDoc.language}
-                                        onChange={e => setAddDoc({ ...addDoc, language: e.target.value })}
-                                    >
-                                        <option value="">Chọn</option>
-                                        {languages.map(m => <option key={m} value={m}>{m}</option>)}
-                                    </select>
-                                </div>
-                                <div className={styles.formCol}>
-                                    <label>Ngôn Ngữ phụ</label>
-                                    <select
-                                        value={addDoc.subLanguage}
-                                        onChange={e => setAddDoc({ ...addDoc, subLanguage: e.target.value })}
-                                    >
-                                        <option value="">Chọn</option>
-                                        {languages.map(m => <option key={m} value={m}>{m}</option>)}
-                                    </select>
-                                </div>
-                                <div className={styles.formCol}>
-                                    <label>Cấp học</label>
-                                    <select
-                                        value={addDoc.level}
-                                        onChange={e => setAddDoc({ ...addDoc, level: e.target.value })}
-                                    >
-                                        <option value="">Chọn</option>
-                                        {levels.map(m => <option key={m} value={m}>{m}</option>)}
-                                    </select>
-                                </div>
-                                <div className={styles.formCol}>
-                                    <label>Ghi chú</label>
-                                    <input
-                                        type="text"
-                                        placeholder="Ghi chú"
-                                        value={addDoc.note}
-                                        onChange={e => setAddDoc({ ...addDoc, note: e.target.value })}
-                                    />
-                                </div>
-                            </div>
-                            <div style={{ textAlign: "right", marginTop: 16 }}>
-                                <Button type="submit" content="Lưu" />
-                            </div>
-                        </form>
-                    </div>
-                </div>
-            )}
-            {/* Filter */}
-            <div style={{ display: "flex", gap: 12, marginBottom: 16 }}>
-                {filterFields.map(f => (
-                    <select
-                        key={f.name}
-                        value={filters[f.name]}
-                        onChange={e => setFilters({ ...filters, [f.name]: e.target.value })}
-                    >
-                        <option value="">{f.label}</option>
-                        {[...new Set(docs.map(d => d[f.name]).filter(Boolean))].map(val =>
-                            <option key={val} value={val}>{val}</option>
-                        )}
-                    </select>
-                ))}
-                <Button onClick={() => setFilters({ subject: "", major: "", language: "", level: "" })} content="Xóa filter"></Button>
+    const handleDeleteCourse = async (courseId, courseName) => {
+        if (!confirm(`Bạn có chắc chắn muốn xóa khóa học "${courseName}"?`)) {
+            return;
+        }
+
+        try {
+            const token = localStorage.getItem('token');
+            const response = await fetch(`http://localhost:8888/api/v1/course/${courseId}`, {
+                method: 'DELETE',
+                headers: {
+                    'Authorization': `Bearer ${token}`,
+                }
+            });
+
+            if (response.ok) {
+                alert('Xóa khóa học thành công!');
+                fetchCourses(); // Refresh data
+            } else {
+                throw new Error('Xóa khóa học thất bại');
+            }
+        } catch (error) {
+            console.error('Error deleting course:', error);
+            alert('Lỗi khi xóa khóa học: ' + error.message);
+        }
+    };
+
+    const formatDate = (dateString) => {
+        if (!dateString) return 'N/A';
+        return new Date(dateString).toLocaleDateString('vi-VN');
+    };
+
+    if (loading) {
+        return (
+            <div className={styles.loadingContainer}>
+                <div className={styles.spinner}></div>
+                <p>Đang tải danh sách khóa học...</p>
             </div>
-            {/* Table */}
-            <table className={styles.adminTable}>
-                <thead>
-                    <tr>
-                        <th>ID</th>
-                        <th>Tiêu đề</th>
-                        <th>Mô tả</th>
-                        <th>Môn học</th>
-                        <th>Chuyên ngành</th>
-                        <th>Ngôn ngữ</th>
-                        <th>Cấp học</th>
-                        <th>Hành động</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    {docs.map(doc => (
-                        <tr key={doc._id}>
-                            <td>{doc._id}</td>
-                            <td>{editDoc && editDoc._id === doc._id
-                                ? <input value={editDoc.title} onChange={e => setEditDoc({ ...editDoc, title: e.target.value })} />
-                                : doc.title}
-                            </td>
-                            <td>{editDoc && editDoc._id === doc._id
-                                ? <input value={editDoc.description} onChange={e => setEditDoc({ ...editDoc, description: e.target.value })} />
-                                : doc.description}
-                            </td>
-                            <td>{editDoc && editDoc._id === doc._id
-                                ? <input value={editDoc.subject} onChange={e => setEditDoc({ ...editDoc, subject: e.target.value })} />
-                                : doc.subject}
-                            </td>
-                            <td>{editDoc && editDoc._id === doc._id
-                                ? <input value={editDoc.major} onChange={e => setEditDoc({ ...editDoc, major: e.target.value })} />
-                                : doc.major}
-                            </td>
-                            <td>{editDoc && editDoc._id === doc._id
-                                ? <input value={editDoc.language} onChange={e => setEditDoc({ ...editDoc, language: e.target.value })} />
-                                : doc.language}
-                            </td>
-                            <td>{editDoc && editDoc._id === doc._id
-                                ? <input value={editDoc.level} onChange={e => setEditDoc({ ...editDoc, level: e.target.value })} />
-                                : doc.level}
-                            </td>
-                            <td>
-                                {editDoc && editDoc._id === doc._id ? (
-                                    <>
-                                        <Button onClick={handleEditSubmit} content="Lưu"></Button>
-                                        <Button onClick={() => handleDelete(doc._id)} content="Xóa"></Button>
-                                    </>
-                                ) : (
-                                    <>
-                                        <Button onClick={() => handleEdit(doc)} content="Sửa"></Button>
-                                        <Button onClick={() => handleDelete(doc._id)} content="Xóa"></Button>
-                                    </>
-                                )}
-                            </td>
-                        </tr>
-                    ))}
-                </tbody>
-            </table>
+        );
+    }
+
+    if (error) {
+        return (
+            <div className={styles.errorContainer}>
+                <p className={styles.errorMessage}>{error}</p>
+                <button onClick={fetchCourses} className={styles.retryButton}>
+                    Thử lại
+                </button>
+            </div>
+        );
+    }
+
+    return (
+        <div className={styles.tableContainer}>
+            <div className={styles.tableHeader}>
+                <h2>📚 Quản lý khóa học ({courses.length} khóa học)</h2>
+                <button 
+                    onClick={fetchCourses} 
+                    className={styles.refreshButton}
+                    disabled={loading}
+                >
+                    🔄 Refresh
+                </button>
+            </div>
+
+            {courses.length === 0 ? (
+                <div className={styles.emptyState}>
+                    <p>📭 Không có khóa học nào</p>
+                </div>
+            ) : (
+                <>
+                    <div className={styles.tableWrapper}>
+                        <table className={styles.documentsTable}>
+                            <thead>
+                                <tr>
+                                    <th>ID</th>
+                                    <th>Thumbnail</th>
+                                    <th>Tên khóa học</th>
+                                    <th>Tác giả</th>
+                                    <th>Thể loại</th>
+                                    <th>Cấp độ</th>
+                                    <th>Trạng thái</th>
+                                    <th>Videos</th>
+                                    <th>Đánh giá</th>
+                                    <th>Ngày tạo</th>
+                                    <th>Thao tác</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                {courses.map((course) => (
+                                    <tr key={course.id}>
+                                        <td className={styles.courseId}>{course.id}</td>
+                                        <td className={styles.thumbnailCell}>
+                                            {course.thumbnailUrl ? (
+                                                <img 
+                                                    src={course.thumbnailUrl} 
+                                                    alt={course.courseName}
+                                                    className={styles.thumbnail}
+                                                    onError={(e) => {
+                                                        e.target.style.display = 'none';
+                                                    }}
+                                                />
+                                            ) : (
+                                                <div className={styles.noThumbnail}>📷</div>
+                                            )}
+                                        </td>
+                                        <td className={styles.courseName} title={course.courseName}>
+                                            {course.courseName}
+                                        </td>
+                                        <td>{course.author}</td>
+                                        <td>{course.category}</td>
+                                        <td>
+                                            <span className={`${styles.levelBadge} ${styles[course.level]}`}>
+                                                {course.level}
+                                            </span>
+                                        </td>
+                                        <td>
+                                            <span className={`${styles.statusBadge} ${course.isPublished ? styles.published : styles.draft}`}>
+                                                {course.isPublished ? '✅ Published' : '⏳ Draft'}
+                                            </span>
+                                        </td>
+                                        <td className={styles.videoCount}>
+                                            {course.videoFiles ? course.videoFiles.length : 0} video(s)
+                                        </td>
+                                        <td className={styles.rating}>
+                                            ⭐ {course.rating}/5 ({course.reviewCount})
+                                        </td>
+                                        <td>{formatDate(course.created)}</td>
+                                        <td className={styles.actionsCell}>
+                                            <button 
+                                                onClick={() => handleViewCourse(course.id)}
+                                                className={styles.viewButton}
+                                                title="Xem và chỉnh sửa khóa học"
+                                            >
+                                                🔧 Quản lý
+                                            </button>
+                                            <button 
+                                                onClick={() => handleDeleteCourse(course.id, course.courseName)}
+                                                className={styles.deleteButton}
+                                                title="Xóa khóa học"
+                                            >
+                                                🗑️
+                                            </button>
+                                        </td>
+                                    </tr>
+                                ))}
+                            </tbody>
+                        </table>
+                    </div>
+
+                    {/* Pagination */}
+                    {totalPages > 1 && (
+                        <div className={styles.pagination}>
+                            <button 
+                                onClick={() => setCurrentPage(prev => Math.max(prev - 1, 1))}
+                                disabled={currentPage === 1}
+                                className={styles.pageButton}
+                            >
+                                ← Trước
+                            </button>
+                            
+                            <span className={styles.pageInfo}>
+                                Trang {currentPage} / {totalPages}
+                            </span>
+                            
+                            <button 
+                                onClick={() => setCurrentPage(prev => Math.min(prev + 1, totalPages))}
+                                disabled={currentPage === totalPages}
+                                className={styles.pageButton}
+                            >
+                                Tiếp →
+                            </button>
+                        </div>
+                    )}
+                </>
+            )}
         </div>
     );
 }
