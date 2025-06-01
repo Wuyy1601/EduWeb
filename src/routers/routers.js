@@ -49,6 +49,10 @@ const routers = [
         path: '/cart',
         component: lazy(() => import('@pages/Cart/Cart')),
     },
+    {
+        path: '/checkout',
+        component: lazy(() => import('@pages/Cart/CheckOut')),
+    },
 ];
 
 export default routers;
