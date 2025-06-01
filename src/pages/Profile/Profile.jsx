@@ -1,5 +1,8 @@
 import { useState, useEffect, useRef } from 'react';
 import { useParams } from 'react-router-dom';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { faCamera, faStar, faUserFriends, faEdit } from '@fortawesome/free-solid-svg-icons';
+import { faTwitter, faYoutube, faInstagram } from '@fortawesome/free-brands-svg-icons';
 
 import MyFooter from '@components/Footer/Footer';
 import MyHeader from '@components/Header/Header';
@@ -10,6 +13,7 @@ import UserProfile from './contents/UserProfile';
 
 import ProfileBanner from './components/ProfileBanner';
 import ProfileNavigation from './components/ProfileNavigation';
+import Background from '@images/BackGr.jpg';
 
 import classNames from 'classnames/bind';
 import styles from './styles.module.scss';
@@ -28,10 +32,10 @@ const profileData = {
     followers: '1.2k',
 };
 
-function ProfileContent({ activeTab }) {
+function ProfileContent({ activeTab, profile }) {
     switch (activeTab) {
         case '':
-            return <UserProfile />;
+            return <div className={cx('profile-intro')}>Chào mừng đến trang cá nhân của {profile?.firstName}! Chọn một mục ở trên để xem chi tiết.</div>;
         case 'posts':
             return <Posts />;
         case 'documents':
@@ -43,132 +47,248 @@ function ProfileContent({ activeTab }) {
 
 function Profile() {
     const [profile, setProfile] = useState(null);
-    const [edit, setEdit] = useState(false);
-    const [form, setForm] = useState({});
+    const [editMode, setEditMode] = useState(false);
+    const [formData, setFormData] = useState({});
+
     const [avatarPreview, setAvatarPreview] = useState(null);
-    const fileInputRef = useRef();
+    const [bannerPreview, setBannerPreview] = useState(null);
+
+    const avatarFileInputRef = useRef(null);
+    const bannerFileInputRef = useRef(null);
+
     let { id: activeTab } = useParams();
     activeTab = activeTab || '';
-    const [isFollowing, setIsFollowing] = useState(false);
+
+    const token = localStorage.getItem('token');
 
     const fetchProfile = async () => {
-        const token = localStorage.getItem('token');
-        const res = await fetch('http://localhost:8888/api/v1/profile/users/my-profile', {
-            headers: {
-                'Authorization': `Bearer ${token}`,
-                'Content-Type': 'application/json'
+        if (!token) {
+            console.error("Không tìm thấy token.");
+            return;
+        }
+        try {
+            const res = await fetch('http://localhost:8888/api/v1/profile/users/my-profile', {
+                headers: {
+                    'Authorization': `Bearer ${token}`,
+                },
+            });
+            if (!res.ok) {
+                throw new Error(`Lỗi HTTP: ${res.status}`);
             }
-        });
-        const data = await res.json();
-        const user = data.result || data;
-        setProfile(user);
-        setForm(user);
+            const apiResponse = await res.json();
+            if (apiResponse.result) {
+                const fetchedProfile = apiResponse.result;
+                setProfile(fetchedProfile);
+                setFormData({
+                    firstName: fetchedProfile.firstName || '',
+                    lastName: fetchedProfile.lastName || '',
+                    city: fetchedProfile.city || '',
+                    title: fetchedProfile.title || 'Chưa có tiêu đề',
+                    description: fetchedProfile.description || 'Chưa có mô tả',
+                });
+            } else {
+                console.error("Không có dữ liệu profile:", apiResponse.message);
+            }
+        } catch (error) {
+            console.error("Không thể tải profile:", error);
+        }
     };
 
     useEffect(() => {
         fetchProfile();
-    }, []);
+    }, [token]);
 
-    const handleChange = e => {
-        setForm({ ...form, [e.target.name]: e.target.value });
+    const handleInputChange = e => {
+        setFormData({ ...formData, [e.target.name]: e.target.value });
     };
 
-    const handleSave = async () => {
-        const token = localStorage.getItem('token');
-        await fetch('http://localhost:8888/api/v1/profile/users/my-profile', {
-            method: 'PUT',
-            headers: {
-                'Content-Type': 'application/json',
-                'Authorization': `Bearer ${token}`
-            },
-            body: JSON.stringify(form)
-        });
-        setEdit(false);
-        fetchProfile();
+    const handleSaveProfileText = async () => {
+        if (!token) return;
+        try {
+            const res = await fetch('http://localhost:8888/api/v1/profile/users/my-profile', {
+                method: 'PUT',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'Authorization': `Bearer ${token}`,
+                },
+                body: JSON.stringify(formData),
+            });
+            if (res.ok) {
+                setEditMode(false);
+                fetchProfile();
+                alert("Cập nhật thông tin thành công!");
+            } else {
+                const errData = await res.json();
+                alert(`Lỗi khi cập nhật: ${errData.message || 'Vui lòng thử lại.'}`);
+            }
+        } catch (error) {
+            console.error("Lỗi khi lưu profile:", error);
+            alert("Đã xảy ra lỗi. Vui lòng thử lại.");
+        }
     };
 
     const handleAvatarChange = async e => {
         const file = e.target.files[0];
-        if (!file) return;
+        if (!file || !token) return;
+
         setAvatarPreview(URL.createObjectURL(file));
-        const formData = new FormData();
-        formData.append('file', file);
+        const uploadFormData = new FormData();
+        uploadFormData.append('file', file);
 
-        const token = localStorage.getItem('token');
-        await fetch('http://localhost:8888/api/v1/profile/users/avatar', {
-            method: 'PUT',
-            body: formData,
-            headers: {
-                'Authorization': `Bearer ${token}`
+        try {
+            const res = await fetch('http://localhost:8888/api/v1/profile/users/avatar', {
+                method: 'PUT',
+                headers: { 'Authorization': `Bearer ${token}` },
+                body: uploadFormData,
+            });
+            if (res.ok) {
+                setAvatarPreview(null);
+                fetchProfile();
+                alert("Cập nhật ảnh đại diện thành công!");
+            } else {
+                setAvatarPreview(null);
+                alert("Cập nhật ảnh đại diện thất bại!");
             }
-        });
-        setAvatarPreview(null);
-        fetchProfile();
+        } catch (error) {
+            setAvatarPreview(null);
+            console.error("Lỗi upload avatar:", error);
+            alert("Lỗi khi upload ảnh đại diện.");
+        }
     };
 
-    const handleFollow = () => {
-        setIsFollowing(!isFollowing);
-        // Thêm logic follow/unfollow nếu cần
+    const handleBannerChange = async e => {
+        const file = e.target.files[0];
+        if (!file || !token) return;
+
+        setBannerPreview(URL.createObjectURL(file));
+        const uploadFormData = new FormData();
+        uploadFormData.append('file', file);
+
+        try {
+            const res = await fetch('http://localhost:8888/api/v1/profile/users/banner', {
+                method: 'PUT',
+                headers: { 'Authorization': `Bearer ${token}` },
+                body: uploadFormData,
+            });
+            if (res.ok) {
+                setBannerPreview(null);
+                fetchProfile();
+                alert("Cập nhật ảnh bìa thành công!");
+            } else {
+                setBannerPreview(null);
+                alert("Cập nhật ảnh bìa thất bại!");
+            }
+        } catch (error) {
+            setBannerPreview(null);
+            console.error("Lỗi upload banner:", error);
+            alert("Lỗi khi upload ảnh bìa.");
+        }
     };
 
-    if (!profile) return <div>Đang tải...</div>;
+    const getFullName = () => {
+        if (!profile) return "Người dùng";
+        return `${profile.firstName || ''} ${profile.lastName || ''}`.trim() || "Chưa cập nhật tên";
+    };
+
+    if (!profile) {
+        return (
+            <MainLayout>
+                <MyHeader />
+                <div className={cx('loading-profile')}>Đang tải thông tin trang cá nhân...</div>
+                <ChatBot />
+                <MyFooter />
+            </MainLayout>
+        );
+    }
+
+    const currentAvatarUrl = avatarPreview || (profile.avatar ? `${profile.avatar}?t=${Date.now()}` : Background);
+    const currentBannerUrl = bannerPreview || (profile.bannerUrl ? `${profile.bannerUrl}?t=${Date.now()}` : Background);
+
 
     return (
         <MainLayout>
             <MyHeader />
-            <div id={cx('content')}>
-                {/* AVATAR + NÚT ĐỔI ẢNH */}
-                <div style={{ display: 'flex', alignItems: 'center', gap: 24, marginBottom: 24 }}>
-                    <div style={{ position: 'relative' }}>
+            <div id={cx('content')} className={cx('profile-page-container')}>
+                <div className={cx('profile-banner-container')} style={{ backgroundImage: `url(${currentBannerUrl})` }}>
+                    <button className={cx('change-banner-btn')} onClick={() => bannerFileInputRef.current && bannerFileInputRef.current.click()}>
+                        <FontAwesomeIcon icon={faCamera} /> Đổi ảnh bìa
+                    </button>
+                    <input
+                        type="file"
+                        accept="image/*"
+                        style={{ display: 'none' }}
+                        ref={bannerFileInputRef}
+                        onChange={handleBannerChange}
+                    />
+                </div>
+
+                <div className={cx('profile-header-content')}>
+                    <div className={cx('profile-avatar-wrapper')}>
                         <img
-                            src={
-                                avatarPreview ||
-                                (profile.avatar ? profile.avatar + '?t=' + Date.now() : '/default-avatar.png')
-                            }
-                            alt="avatar"
-                            style={{
-                                width: 140,
-                                height: 140,
-                                borderRadius: '50%',
-                                objectFit: 'cover',
-                                border: '4px solid #fff',
-                                boxShadow: '0 2px 8px #0001'
-                            }}
-                            onClick={() => fileInputRef.current.click()}
+                            src={currentAvatarUrl}
+                            alt="Avatar"
+                            className={cx('profile-avatar-image')}
+                            onClick={() => avatarFileInputRef.current && avatarFileInputRef.current.click()}
                         />
+                        <button className={cx('change-avatar-btn')} onClick={() => avatarFileInputRef.current && avatarFileInputRef.current.click()}>
+                            <FontAwesomeIcon icon={faCamera} />
+                        </button>
                         <input
                             type="file"
                             accept="image/*"
                             style={{ display: 'none' }}
-                            ref={fileInputRef}
+                            ref={avatarFileInputRef}
                             onChange={handleAvatarChange}
                         />
-                        <button
-                            style={{
-                                position: 'absolute',
-                                bottom: 8,
-                                left: '50%',
-                                transform: 'translateX(-50%)',
-                                background: '#ffe066',
-                                border: 'none',
-                                borderRadius: 8,
-                                padding: '4px 12px',
-                                cursor: 'pointer'
-                            }}
-                            onClick={() => fileInputRef.current.click()}
-                        >
-                            Đổi ảnh đại diện
-                        </button>
                     </div>
-                    <div>
-                        <h2 style={{ margin: 0 }}>{profile.fullName}</h2>
-                        <div>{profile.title}</div>
-                        <div>{profile.description}</div>
+
+                    <div className={cx('profile-info-card')}>
+                        {editMode ? (
+                            <div className={cx('profile-edit-form')}>
+                                <input type="text" name="firstName" value={formData.firstName} onChange={handleInputChange} placeholder="Tên" />
+                                <input type="text" name="lastName" value={formData.lastName} onChange={handleInputChange} placeholder="Họ" />
+                                <input type="text" name="title" value={formData.title} onChange={handleInputChange} placeholder="Chức danh/Nghề nghiệp" />
+                                <textarea name="description" value={formData.description} onChange={handleInputChange} placeholder="Mô tả bản thân..." />
+                                <input type="text" name="city" value={formData.city} onChange={handleInputChange} placeholder="Thành phố" />
+                                <div className={cx('edit-actions')}>
+                                    <button onClick={handleSaveProfileText} className={cx('save-btn')}>Lưu</button>
+                                    <button onClick={() => setEditMode(false)} className={cx('cancel-btn')}>Hủy</button>
+                                </div>
+                            </div>
+                        ) : (
+                            <>
+                                <div className={cx('main-info')}>
+                                    <h2 className={cx('profile-name')}>{getFullName()}</h2>
+                                    <button onClick={() => setEditMode(true)} className={cx('edit-profile-btn')}>
+                                        <FontAwesomeIcon icon={faEdit} /> Chỉnh sửa
+                                    </button>
+                                </div>
+                                <p className={cx('profile-title')}>{profile.title || formData.title}</p>
+                                <p className={cx('profile-description')}>{profile.description || formData.description}</p>
+                                {profile.city && <p className={cx('profile-city')}>Sống tại: {profile.city}</p>}
+                            </>
+                        )}
+
+                        <div className={cx('profile-stats-social')}>
+                            <div className={cx('profile-stats')}>
+                                <span className={cx('rating')}>
+                                    <FontAwesomeIcon icon={faStar} /> {profile.rating || 'N/A'} Instructor Rating
+                                </span>
+                                <span className={cx('followers')}>
+                                    <FontAwesomeIcon icon={faUserFriends} /> {profile.followers || '0'} Theo dõi
+                                </span>
+                            </div>
+                            <div className={cx('social-links')}>
+                                <a href={profile.socialLinks?.twitter || '#'} target="_blank" rel="noopener noreferrer"><FontAwesomeIcon icon={faTwitter} /></a>
+                                <a href={profile.socialLinks?.youtube || '#'} target="_blank" rel="noopener noreferrer"><FontAwesomeIcon icon={faYoutube} /></a>
+                                <a href={profile.socialLinks?.instagram || '#'} target="_blank" rel="noopener noreferrer"><FontAwesomeIcon icon={faInstagram} /></a>
+                            </div>
+                        </div>
                     </div>
                 </div>
 
-                <ProfileNavigation activeTab={activeTab} />
-                <ProfileContent activeTab={activeTab} />
+                <ProfileNavigation activeTab={activeTab} userId={profile?.userId} />
+                <ProfileContent activeTab={activeTab} profile={profile} />
             </div>
             <ChatBot />
             <MyFooter />
