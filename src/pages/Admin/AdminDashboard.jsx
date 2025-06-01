@@ -3,6 +3,7 @@ import DocumentsTable from '@pages/Admin/DocumentsTable';
 import { useState, useEffect } from 'react';
 import { FaBook, FaUsers, FaChartBar, FaCog, FaBell } from 'react-icons/fa';
 import CourseTable from './CourseTable';
+import UserTable from './UserTable';
 
 export default function AdminDashboard() {
     const [activeTab, setActiveTab] = useState('documents');
@@ -22,7 +23,7 @@ export default function AdminDashboard() {
             case 'overview':
                 return <Overview />;
             case 'users':
-                return <div>Quản lý người dùng (Đang phát triển)</div>;
+                return <UserTable />;
             case 'settings':
                 return <div>Cài đặt hệ thống (Đang phát triển)</div>;
             case 'courses':
