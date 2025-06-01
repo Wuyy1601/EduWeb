@@ -60,22 +60,25 @@ export default function LoginRegister() {
     const isAdmin = (user) => {
         // Kiểm tra nhiều trường hợp có thể có
         if (user.roles && Array.isArray(user.roles)) {
-            return user.roles.some(role => 
-                role === 'ADMIN' || 
-                role.name === 'ADMIN' || 
-                role.roleName === 'ADMIN' ||
-                role.toLowerCase().includes('admin')
-            );
+            return user.roles.some(role => {
+                // Ensure role is a string before calling toLowerCase
+                const roleStr = typeof role === 'string' ? role :
+                    (role?.name || role?.roleName || '');
+                return roleStr === 'ADMIN' ||
+                    roleStr.toLowerCase().includes('admin');
+            });
         }
         if (user.role) {
-            return user.role === 'ADMIN' || 
-                   user.role.toLowerCase().includes('admin');
+            const roleStr = typeof user.role === 'string' ? user.role : '';
+            return roleStr === 'ADMIN' ||
+                roleStr.toLowerCase().includes('admin');
         }
         if (user.authorities && Array.isArray(user.authorities)) {
-            return user.authorities.some(auth => 
-                auth.includes('ADMIN') || 
-                auth.toLowerCase().includes('admin')
-            );
+            return user.authorities.some(auth => {
+                const authStr = typeof auth === 'string' ? auth : '';
+                return authStr.includes('ADMIN') ||
+                    authStr.toLowerCase().includes('admin');
+            });
         }
         // Kiểm tra username admin (backup)
         if (user.username && user.username.toLowerCase() === 'admin') {
@@ -84,11 +87,12 @@ export default function LoginRegister() {
         return false;
     };
 
+
     const handleLogin = async (loginData) => {
         try {
             setLoading(true);
             console.log('Attempting login...');
-            
+
             const res = await fetch('http://localhost:8888/api/v1/identity/auth/token', {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
@@ -100,10 +104,10 @@ export default function LoginRegister() {
 
             const data = await res.json();
             console.log('Login response:', data);
-            
+
             if (res.ok && data?.result?.token) {
                 localStorage.setItem('token', data.result.token);
-                
+
                 // Fetch user info
                 console.log('Fetching user info...');
                 const userRes = await fetch('http://localhost:8888/api/v1/identity/users/myInfo', {
@@ -112,14 +116,14 @@ export default function LoginRegister() {
                         'Authorization': `Bearer ${data.result.token}`,
                     },
                 });
-                
+
                 const userData = await userRes.json();
                 console.log('User info response:', userData);
-                
+
                 if (userRes.ok && userData?.result) {
                     const user = userData.result;
                     localStorage.setItem('user', JSON.stringify(user));
-                    
+
                     // Kiểm tra nếu là admin thì chuyển hướng đến AdminDashboard
                     if (isAdmin(user)) {
                         console.log('Admin user detected, redirecting to admin dashboard');
