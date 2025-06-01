@@ -34,14 +34,31 @@ function MyHeader() {
     }, [scrollPosition]);
 
     useEffect(() => {
-        const user = JSON.parse(localStorage.getItem('user'));
-        if (user) setCurrentUser(user.name);
+        try {
+            const user = localStorage.getItem('user');
+            if (user) {
+                const userData = JSON.parse(user);
+                setCurrentUser(userData); // lưu toàn bộ dữ liệu user vào state
+            }
+        } catch (error) {
+            console.error('Error parsing user data:', error);
+            localStorage.removeItem('user');
+        }
     }, []);
 
     const toggleMenu = () => {
         setIsMenuOpen(!isMenuOpen);
         // Prevent body scroll when menu is open
-        document.body.style.overflow = !isMenuOpen ? 'hidden' : '';
+        if (typeof document !== 'undefined') {
+            document.body.style.overflow = !isMenuOpen ? 'hidden' : '';
+        }
+    };
+
+    const handleLogout = () => {
+        localStorage.removeItem('user');
+        localStorage.removeItem('token');
+        setCurrentUser(null);
+        window.location.href = '/login';
     };
 
     return (
@@ -62,7 +79,17 @@ function MyHeader() {
                 {/* Desktop Login/Username */}
                 <div className={`${desktopAuth} hidden md:block`}>
                     {currentUser ? (
-                        <span className="text-white">Xin chào, {currentUser}</span>
+                        <div className="flex items-center space-x-4">
+                            <span className="text-white">
+                                Xin chào <a style={{ color: 'white' }} href="/profile">{currentUser.firstName || currentUser.username}</a>
+                            </span>
+                            <button
+                                onClick={handleLogout}
+                                className="text-white hover:text-gray-300 text-sm"
+                            >
+                                Đăng xuất
+                            </button>
+                        </div>
                     ) : (
                         <Menu content="Đăng nhập" href="/login" />
                     )}
@@ -102,7 +129,15 @@ function MyHeader() {
                     {/* Mobile Login/Username */}
                     <div className="mb-6 px-4">
                         {currentUser ? (
-                            <span className="text-white text-lg">Xin chào, {currentUser}</span>
+                            <div className="space-y-2">
+                                <span className="text-white text-lg block">Xin chào {currentUser.name}</span>
+                                <button
+                                    onClick={handleLogout}
+                                    className="text-white hover:text-gray-300 text-sm"
+                                >
+                                    Đăng xuất
+                                </button>
+                            </div>
                         ) : (
                             <Menu content="Đăng nhập" href="/login" onClick={toggleMenu} />
                         )}

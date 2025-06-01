@@ -17,7 +17,7 @@ function Recommend({ title }) {
                     {Array(4)
                         .fill()
                         .map((_, index) => (
-                            <CourseCard key={index} id={index + 1} />
+                            <CourseCard key={index} id={index + 1} className={cx('card')} />
                         ))}
                 </div>
             </section>

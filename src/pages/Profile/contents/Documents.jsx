@@ -38,7 +38,7 @@ function RenderDocuments({ documents, currentPage }) {
     return documents
         .slice(startIndex, endIndex)
         .map((document) => (
-            <CourseCard key={document.id} title={document.title} content={document.content} id={document.id} />
+            <CourseCard key={document.id} title={document.title} content={document.content} id={document.id} className={cx('card')} />
         ));
 }
 

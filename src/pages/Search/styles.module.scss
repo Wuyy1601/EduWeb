@@ -12,19 +12,31 @@
     flex-direction: column;
     gap: 16px;
 
+    @media screen and (max-width: 768px) {
+        margin-top: 76px;
+        padding: 32px;
+    }
+
+    @media screen and (max-width: 380px) {
+        padding: 12px;
+    }
+
     &::before {
         content: '';
         position: absolute;
         top: 0;
         left: 0;
         width: 100%;
-        height: 100%; /* <-- Ensure it fills the container */
+        height: 100%;
+        /* <-- Ensure it fills the container */
         background-image: url('@images/search-background.jpg');
         background-size: cover;
         background-position: center;
         background-repeat: no-repeat;
-        opacity: 0.6; /* <-- Background opacity */
-        z-index: 0; /* <-- Send behind content */
+        opacity: 0.6;
+        /* <-- Background opacity */
+        z-index: 0;
+        /* <-- Send behind content */
     }
 
     .search,
@@ -33,7 +45,73 @@
         display: flex;
         width: 60%;
         max-width: 1324px;
+
+        @media screen and (max-width: 1420px) {
+            width: 80%;
+        }
+
+        @media screen and (max-width: 768px) {
+            width: 100%;
+        }
     }
+
+    .search-filter {
+        @media screen and (max-width: 768px) {
+            display: none !important;
+        }
+    }
+
+    .mobile-filter {
+        z-index: 5;
+        width: 100%;
+
+        .filter-toggle {
+            background-color: rgba($button-primary-color , 0.4);
+            display: flex;
+            gap: 12px;
+            border: 2px solid $button-primary-color;
+            color: $button-primary-color;
+            backdrop-filter: blur(1px);
+
+            &.active {
+                background-color: $button-primary-color;
+
+                &~.mobile-filter-container {
+                    display: flex;
+                }
+            }
+        }
+
+
+        .mobile-filter-container {
+            position: absolute;
+            display: none;
+            flex-wrap: wrap;
+            gap: 16px;
+            left: 16px;
+            right: 16px;
+            margin-top: 8px;
+            background-color: #fff;
+            border-radius: 16px;
+            padding: 16px;
+            box-shadow: 3px 4px 7px 5px rgba(0, 0, 0, 0.1);
+
+            button {
+                border: 1px solid $button-primary-color;
+
+                &.selected {
+                    border: none;
+                }
+            }
+        }
+
+
+
+        @media screen and (min-width: 768px) {
+            display: none;
+        }
+    }
+
     .search {
         gap: 4px;
         background-color: #fff;
@@ -51,12 +129,36 @@
             &:focus {
                 outline: none;
             }
+
+            @media screen and (max-width: 380px) {
+                padding: 0 8px;
+                min-width: 0;
+            }
         }
 
         &-btn {
             border-radius: 4px;
+
+            &.mobile {
+                display: none !important;
+            }
+
+            @media screen and (max-width: 480px) {
+                display: none;
+
+                &.mobile {
+                    display: inline-block !important;
+                }
+            }
+
+            @media screen and (max-width: 380px) {
+                padding: 8px 12px;
+                min-width: 0;
+            }
         }
+
     }
+
     .search-filter {
         display: flex;
         gap: 16px;
@@ -67,6 +169,7 @@
 
 .filter {
     position: relative;
+
     button {
         border: none;
         background-color: #fff;
@@ -120,7 +223,8 @@
         &::-webkit-scrollbar-thumb {
             background-color: rgba(0, 0, 0, 0.1);
             border-radius: 8px;
-            border: 2px solid transparent; /* tạo khoảng cách giả */
+            border: 2px solid transparent;
+            /* tạo khoảng cách giả */
             background-clip: content-box;
         }
 
@@ -166,6 +270,7 @@
     justify-content: center;
     width: 100%;
     margin: 48px auto;
+
     .result {
         box-sizing: border-box;
         display: grid;
@@ -174,6 +279,22 @@
         width: 80%;
         max-width: 1680px;
         padding: 0 28px;
+
+        @media screen and (max-width: 1420px) {
+            width: 95%;
+            padding: 0;
+            // gap: 1rem;
+        }
+
+        // @media screen and (max-width: 1150px) {
+        //     gap: 1.5rem;
+        //     // grid-template-columns: repeat(2, minmax(260px, 1fr));
+        // }
+
+        @media screen and (max-width: 575px) {
+            // grid-template-columns: repeat(1, minmax(260px, 1fr));
+        }
+
     }
 }
 
@@ -188,6 +309,7 @@
         width: 80%;
         max-width: 1680px;
         display: flex;
+        flex-wrap: wrap-reverse;
         gap: 8px;
         padding: 24px;
         justify-content: space-around;
@@ -195,12 +317,17 @@
         background-color: rgba($third-color, 0.2);
         border-radius: 16px;
 
+        @media screen and (max-width: 1420px) {
+            width: 95%;
+        }
+
         &-list {
             color: $text-primary-color;
 
             h2 {
                 margin: 0;
             }
+
             ul {
                 list-style-type: none;
                 padding: 0;
@@ -235,6 +362,15 @@
         display: flex;
         flex-direction: column;
 
+        @media screen and (max-width: 1420px) {
+            width: 95%;
+        }
+
+        // @media  screen and (max-width: 1150px) {
+        //     gap: 1.5rem;
+        //     grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
+        // }
+
         .course-header {
             display: flex;
             justify-content: space-between;
@@ -254,6 +390,19 @@
             display: grid;
             grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
             gap: 2rem;
+
+            // @media screen and (max-width: 1420px) {
+            //     gap: 1rem;
+            // }
+
+            // @media screen and (max-width: 1150px) {
+            //     gap: 1.5rem;
+            //     // grid-template-columns: repeat(2, minmax(260px, 1fr));
+            // }
+
+            @media screen and (max-width: 575px) {
+                // grid-template-columns: repeat(1, minmax(260px, 1fr));
+            }
         }
     }
 }
@@ -261,3 +410,17 @@
 .hidden {
     display: none;
 }
+
+// .card {
+//     @media screen and (max-width: 1150px) {
+//         max-width: 400px !important;
+//     }
+
+//     @media screen and (max-width: 768px) {
+//         max-width: 260px !important;
+//     }
+
+//     @media screen and (max-width: 574px) {
+//         max-width: 360px !important;
+//     }
+// }

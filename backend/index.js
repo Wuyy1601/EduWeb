@@ -79,7 +79,7 @@ app.post('/chat', async (req, res) => {
     Nếu không có file, chỉ cung cấp thông tin tổng quan.
     Dữ liệu khoá học:
     ${COURSE_CONTEXT}
-    `;
+  `;
     try {
         const completion = await openai.chat.completions.create({
             model: 'gpt-4o-mini',
