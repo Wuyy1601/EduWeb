@@ -1,12 +1,31 @@
-# React + Vite
+PHÁT TRIỂN ỨNG DỤNG WEB - IS207
+GIỚI THIỆU MÔN HỌC
+Tên môn học: Phát triển ứng dụng Web
+Mã môn học: IS207
+Mã lớp: IS207.P21 
+Năm học: HK2 (2024 - 2025)
+Giảng viên: ThS. Trình Trọng Tín
+Email: tintt@uit.edu.vn
+GIỚI THIỆU ĐỒ ÁN
+Đề tài: ULearn - Trang Web học tập trực tuyến
+Repository: PHÁT TRIỂN ỨNG DỤNG WEB - IS207
+Design: https://www.figma.com/design/8dKhz0umBUR18p2HdWVMyv/Ulearn?node-id=0-1&p=f&t=8CAHHtOIPYveoHXX-0
+CÔNG NGHỆ SỬ DỤNG
+Backend: Java, SpringBoot
+Frontend: HTML, CSS, JavaScript, ReactJS, Tailwind CSS, Vite
+Database: MySQL, MongGoDB
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+## NHÓM SINH VIÊN THỰC HIỆN
 
-Currently, two official plugins are available:
+| Họ và Tên           | MSSV      |
+|---------------------|-----------|
+| Thái Hoàng Hải Đăng | 23520236  |
+| Hồ Tuyết Sương      | 23521366  |
+| Đổng Khánh Huy      | 23520605  |
+| Võ Thiên Lý         | 23520909  |
+| Nguyễn Khải         | 23520675  |
+| Lê Khánh Duy        | 23520367  |
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react) uses [Babel](https://babeljs.io/) for Fast Refresh
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react-swc) uses [SWC](https://swc.rs/) for Fast Refresh
+---
 
-## Expanding the ESLint configuration
 
-If you are developing a production application, we recommend using TypeScript with type-aware lint rules enabled. Check out the [TS template](https://github.com/vitejs/vite/tree/main/packages/create-vite/template-react-ts) for information on how to integrate TypeScript and [`typescript-eslint`](https://typescript-eslint.io) in your project.
