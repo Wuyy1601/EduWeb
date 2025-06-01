@@ -129,6 +129,8 @@ function UpFile() {
                                 <select name='level'><option>Chọn</option>
                                     {levels.map(m => <option key={m} value={m}>{m}</option>)}</select>
                             </div>
+                        </div>
+                        <div className={styles.formRow}>
                             <div className={styles.formCol}>
                                 <label>Ghi chú</label>
                                 <input type="text" placeholder="Ghi chú" name="note" />
