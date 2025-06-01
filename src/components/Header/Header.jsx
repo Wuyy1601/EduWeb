@@ -24,6 +24,7 @@ function MyHeader() {
     const [fixedPosition, setFixedPosition] = useState(false);
     const [isMenuOpen, setIsMenuOpen] = useState(false);
     const [currentUser, setCurrentUser] = useState(null);
+    const [isDropdownOpen, setIsDropdownOpen] = useState(false);
 
     useEffect(() => {
         if (scrollPosition > 100) {
@@ -45,6 +46,15 @@ function MyHeader() {
             localStorage.removeItem('user');
         }
     }, []);
+
+    useEffect(() => {
+        if (!isDropdownOpen) return;
+        const handleClickOutside = (e) => {
+            setIsDropdownOpen(false);
+        };
+        document.addEventListener('click', handleClickOutside);
+        return () => document.removeEventListener('click', handleClickOutside);
+    }, [isDropdownOpen]);
 
     const toggleMenu = () => {
         setIsMenuOpen(!isMenuOpen);
@@ -79,16 +89,50 @@ function MyHeader() {
                 {/* Desktop Login/Username */}
                 <div className={`${desktopAuth} hidden md:block`}>
                     {currentUser ? (
-                        <div className="flex items-center space-x-4">
-                            <span className="text-white">
-                                Xin chào <a style={{ color: 'white' }} href="/profile">{currentUser.firstName || currentUser.username}</a>
-                            </span>
+                        <div className="relative flex items-center space-x-4">
                             <button
-                                onClick={handleLogout}
-                                className="text-white hover:text-gray-300 text-sm"
+                                onClick={(e) => {
+                                    e.stopPropagation();
+                                    setIsDropdownOpen((v) => !v);
+                                }}
+                                className="text-white focus:outline-none"
                             >
-                                Đăng xuất
+                                Xin chào <span style={{ color: 'white' }}>{currentUser.firstName || currentUser.username}</span>
                             </button>
+                            {isDropdownOpen && (
+                                <div className="absolute right-0 mt-12 w-40 bg-white rounded shadow-lg z-50">
+                                    <a
+                                        href="/profile"
+                                        className="block px-4 py-2 text-gray-800 hover:bg-blue-500 hover:text-white transition"
+                                        onClick={(e) => {
+                                            e.stopPropagation();
+                                            setIsDropdownOpen(false);
+                                        }}
+                                    >
+                                        Profile
+                                    </a>
+                                    <a
+                                        href="/cart"
+                                        className="block px-4 py-2 text-gray-800 hover:bg-gray-100"
+                                        onClick={(e) => {
+                                            e.stopPropagation();
+                                            setIsDropdownOpen(false);
+                                        }}
+                                    >
+                                        Giỏ hàng
+                                    </a>
+                                    <div
+                                        onClick={(e) => {
+                                            e.stopPropagation();
+                                            setIsDropdownOpen(false);
+                                            handleLogout();
+                                        }}
+                                        className="block px-4 py-2 text-gray-800 hover:bg-gray-100 cursor-pointer"
+                                    >
+                                        Đăng xuất
+                                    </div>
+                                </div>
+                            )}
                         </div>
                     ) : (
                         <Menu content="Đăng nhập" href="/login" />
@@ -129,14 +173,50 @@ function MyHeader() {
                     {/* Mobile Login/Username */}
                     <div className="mb-6 px-4">
                         {currentUser ? (
-                            <div className="space-y-2">
-                                <span className="text-white text-lg block">Xin chào {currentUser.name}</span>
+                            <div className="space-y-2 relative">
                                 <button
-                                    onClick={handleLogout}
-                                    className="text-white hover:text-gray-300 text-sm"
+                                    onClick={(e) => {
+                                        e.stopPropagation();
+                                        setIsDropdownOpen((v) => !v);
+                                    }}
+                                    className="text-white text-lg block focus:outline-none"
                                 >
-                                    Đăng xuất
+                                    Xin chào {currentUser.firstName || currentUser.username}
                                 </button>
+                                {isDropdownOpen && (
+                                    <div className="absolute right-0 mt-16 w-40 bg-white rounded shadow-lg z-50">
+                                        <a
+                                            href="/profile"
+                                            className="block px-4 py-2 text-gray-800 hover:bg-blue-500 hover:text-white transition"
+                                            onClick={(e) => {
+                                                e.stopPropagation();
+                                                setIsDropdownOpen(false);
+                                            }}
+                                        >
+                                            Profile
+                                        </a>
+                                        <a
+                                            href="/cart"
+                                            className="block px-4 py-2 text-gray-800 hover:bg-gray-100"
+                                            onClick={(e) => {
+                                                e.stopPropagation();
+                                                setIsDropdownOpen(false);
+                                            }}
+                                        >
+                                            Giỏ hàng
+                                        </a>
+                                        <div
+                                            onClick={(e) => {
+                                                e.stopPropagation();
+                                                setIsDropdownOpen(false);
+                                                handleLogout();
+                                            }}
+                                            className="block px-4 py-2 text-gray-800 hover:bg-gray-100 cursor-pointer"
+                                        >
+                                            Đăng xuất
+                                        </div>
+                                    </div>
+                                )}
                             </div>
                         ) : (
                             <Menu content="Đăng nhập" href="/login" onClick={toggleMenu} />
