@@ -38,7 +38,7 @@ public class CourseService {
     FileClient fileClient;
 
     @PreAuthorize("hasRole('ADMIN')")
-    public CourseResponse updateCourseThumbnail(String courseId ,MultipartFile file) {
+    public CourseResponse updateCourseThumbnail(String courseId, MultipartFile file) {
         var course = courseRepository.findById(courseId)
                 .orElseThrow(() -> new AppException(ErrorCode.COURSE_NOT_FOUND));
 
@@ -109,7 +109,8 @@ public class CourseService {
                 .category(request.getCategory())
                 .level(request.getLevel())
                 .rating(0.0) // Default rating
-                .reviewCount(0) // Default review count
+                .reviewCount(0)
+                .price(request.getPrice()) // Default review count
                 .createdDate(Instant.now())
                 .modifiedDate(Instant.now())
                 .isPublished(true) // Default to not published
@@ -158,11 +159,26 @@ public class CourseService {
         Pageable pageable = PageRequest.of(page - 1, size, sort);
         var pageData = courseRepository.findAll(pageable);
 
-        var courseList = pageData.getContent().stream().map(course -> {
-            var courseResponse = courseMapper.toCourseResponse(course);
-            courseResponse.setCreated(dateTimeFormatter.format(course.getCreatedDate()));
-            return courseResponse;
-        }).toList();
+        var courseList = pageData.getContent().stream()
+                .map(course -> {
+                    CourseResponse dto = new CourseResponse();
+                    dto.setId(course.getId());
+                    dto.setCourseName(course.getCourseName());
+                    dto.setDescription(course.getDescription());
+                    dto.setAuthor(course.getAuthor());
+                    dto.setThumbnailUrl(course.getThumbnailUrl());
+                    dto.setVideoFiles(course.getVideoFiles());
+                    dto.setDuration(course.getDuration());
+                    dto.setCategory(course.getCategory());
+                    dto.setLevel(course.getLevel());
+                    dto.setRating(course.getRating());
+                    dto.setReviewCount(course.getReviewCount());
+                    dto.setPrice(course.getPrice()); // ← Thêm dòng này
+                    dto.setCreated(dateTimeFormatter.format(course.getCreatedDate()));
+                    dto.setPublished(course.isPublished());
+                    return dto;
+                })
+                .toList();
 
         return PageResponse.<CourseResponse>builder()
                 .currentPages(page)

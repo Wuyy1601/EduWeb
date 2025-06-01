@@ -27,4 +27,5 @@ public class CourseResponse {
     Instant modifiedDate;
     String created; // formatted date
     boolean isPublished;
+    double price; // Price of the course
 }

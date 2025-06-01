@@ -31,4 +31,5 @@ public class Course {
     Instant createdDate;
     Instant modifiedDate;
     boolean isPublished;
+    double price; // Price of the course
 }

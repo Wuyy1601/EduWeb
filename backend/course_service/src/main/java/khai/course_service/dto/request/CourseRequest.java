@@ -17,4 +17,5 @@ public class CourseRequest {
     int duration;
     String category;
     String level;
+    double price;
 }
