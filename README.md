@@ -1,18 +1,33 @@
 PHÁT TRIỂN ỨNG DỤNG WEB - IS207
+
 GIỚI THIỆU MÔN HỌC
+
 Tên môn học: Phát triển ứng dụng Web
+
 Mã môn học: IS207
+
 Mã lớp: IS207.P21 
+
 Năm học: HK2 (2024 - 2025)
+
 Giảng viên: ThS. Trình Trọng Tín
+
 Email: tintt@uit.edu.vn
+
 GIỚI THIỆU ĐỒ ÁN
+
 Đề tài: ULearn - Trang Web học tập trực tuyến
+
 Repository: PHÁT TRIỂN ỨNG DỤNG WEB - IS207
+
 Design: https://www.figma.com/design/8dKhz0umBUR18p2HdWVMyv/Ulearn?node-id=0-1&p=f&t=8CAHHtOIPYveoHXX-0
+
 CÔNG NGHỆ SỬ DỤNG
+
 Backend: Java, SpringBoot
+
 Frontend: HTML, CSS, JavaScript, ReactJS, Tailwind CSS, Vite
+
 Database: MySQL, MongGoDB
 
 ## NHÓM SINH VIÊN THỰC HIỆN
