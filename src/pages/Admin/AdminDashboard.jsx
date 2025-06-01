@@ -82,24 +82,25 @@ function Overview() {
                 // Fetch tổng số tài liệu
                 const docsRes = await fetch('http://localhost:8000/api/documents/count');
                 const docsData = await docsRes.json();
+                const count = docsData.count ?? docsData.result ?? 0;
 
-                // Fetch tổng số người dùng
-                const usersRes = await fetch('http://localhost:8000/api/users/count');
-                const usersData = await usersRes.json();
+                // // Fetch tổng số người dùng
+                // const usersRes = await fetch('http://localhost:8888/api/v1/identity/users/count');
+                // const usersData = await usersRes.json();
 
-                // Fetch tổng lượt tải
-                const downloadsRes = await fetch('http://localhost:8000/api/documents/downloads/count');
-                const downloadsData = await downloadsRes.json();
+                // // Fetch tổng lượt tải
+                // const downloadsRes = await fetch('http://localhost:8000/api/documents/downloads/count');
+                // const downloadsData = await downloadsRes.json();
 
-                // Fetch điểm đánh giá trung bình
-                const ratingsRes = await fetch('http://localhost:8000/api/documents/ratings/average');
-                const ratingsData = await ratingsRes.json();
+                // // Fetch điểm đánh giá trung bình
+                // const ratingsRes = await fetch('http://localhost:8000/api/documents/ratings/average');
+                // const ratingsData = await ratingsRes.json();
 
                 setStats([
-                    { label: 'Tổng tài liệu', value: docsData.count.toLocaleString(), color: '#3498db' },
-                    { label: 'Người dùng', value: usersData.count.toLocaleString(), color: '#2ecc71' },
-                    { label: 'Lượt tải', value: downloadsData.count.toLocaleString(), color: '#e74c3c' },
-                    { label: 'Đánh giá', value: ratingsData.average.toFixed(1), color: '#f1c40f' }
+                    { label: 'Tổng tài liệu', value: count.toLocaleString(), color: '#3498db' },
+                    // { label: 'Người dùng', value: usersData.count.toLocaleString(), color: '#2ecc71' },
+                    // { label: 'Lượt tải', value: downloadsData.count.toLocaleString(), color: '#e74c3c' },
+                    // { label: 'Đánh giá', value: ratingsData.average.toFixed(1), color: '#f1c40f' }
                 ]);
             } catch (error) {
                 console.error('Error fetching stats:', error);

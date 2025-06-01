@@ -174,7 +174,13 @@ app.put('/api/documents/:id', async (req, res) => {
     }
 });
 
-// Middleware debug routes (thêm vào cuối index.js)
+// Đặt route này TRƯỚC middleware 404!
+app.get('/api/documents/count', async (req, res) => {
+    const count = await Document.countDocuments();
+    res.json({ count });
+});
+
+// Middleware debug routes (luôn để CUỐI file)
 app.use((req, res, next) => {
     console.log(`Route không tìm thấy: ${req.method} ${req.url}`);
     res.status(404).json({ error: "Route không tìm thấy", url: req.url });

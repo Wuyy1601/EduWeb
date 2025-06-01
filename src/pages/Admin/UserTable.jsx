@@ -5,34 +5,63 @@ const API_URL = 'http://localhost:8888/api/v1/profile/users';
 
 export default function UserTable() {
     const [users, setUsers] = useState([]);
+    const [userCount, setUserCount] = useState(0);
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState(null);
 
+    const user = JSON.parse(localStorage.getItem('user'));
+    if (!user || !user.roles?.includes('ROLE_ADMIN')) {
+        // Chuyển hướng hoặc báo lỗi
+    }
+
     useEffect(() => {
-        fetch(API_URL)
-            .then(res => {
+        const fetchUsers = async () => {
+            try {
+                const token = localStorage.getItem('token');
+                // Lấy danh sách user
+                const res = await fetch('http://localhost:8888/api/v1/identity/users', {
+                    headers: { 'Authorization': `Bearer ${token}` }
+                });
                 if (!res.ok) throw new Error('Lỗi khi lấy danh sách user');
-                return res.json();
-            })
-            .then(data => {
-                setUsers(data);
+                const data = await res.json();
+                setUsers(data.result || data);
+
+                // Lấy tổng số user
+                const countRes = await fetch('http://localhost:8888/api/v1/identity/users/count', {
+                    headers: { 'Authorization': `Bearer ${token}` }
+                });
+                if (countRes.ok) {
+                    const countData = await countRes.json();
+                    setUserCount(countData.result ?? 0);
+                } else {
+                    setUserCount(0);
+                }
+
                 setLoading(false);
-            })
-            .catch(err => {
+            } catch (err) {
                 setError(err.message);
                 setLoading(false);
-            });
+            }
+        };
+        fetchUsers();
     }, []);
 
     const handleDelete = async (userId) => {
+        const token = localStorage.getItem('token');
         if (!window.confirm("Bạn chắc chắn muốn xóa user này?")) return;
-        await fetch(`http://localhost:8888/api/v1/identity/users/${userId}`, { method: "DELETE" });
+        await fetch(`http://localhost:8888/api/v1/identity/users/${userId}`, {
+            method: "DELETE",
+            headers: { 'Authorization': `Bearer ${token}` }
+        });
         setUsers(users.filter(u => u.id !== userId && u.userId !== userId));
+        setUserCount(userCount - 1);
     };
 
     return (
         <div className={styles.adminTableWrapper}>
-            <div className={styles.adminTableTitle}>Danh sách người dùng</div>
+            <div className={styles.adminTableTitle}>
+                Danh sách người dùng ({userCount})
+            </div>
             {loading ? <div>Đang tải...</div> : error ? <div>Lỗi: {error}</div> : (
                 <table className={styles.adminTable}>
                     <thead>
