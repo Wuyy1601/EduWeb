@@ -391,13 +391,10 @@
     max-width: 280px;
 
     .thumbnail {
-        width: 35px; // Giảm size thumbnail
-        height: 26px; // Tỷ lệ 4:3
+        width: 80px;
+        height: auto;
         object-fit: cover;
         border-radius: 4px;
-        flex-shrink: 0;
-        border: 1px solid #e5e7eb;
-        background: #f3f4f6;
     }
 
     span {

@@ -15,6 +15,7 @@ function CourseTable() {
     const [uploadProgress, setUploadProgress] = useState(0);
     const [selectedFile, setSelectedFile] = useState(null);
     const [fileValidation, setFileValidation] = useState({ valid: true, error: '' });
+    const [expandedId, setExpandedId] = useState(null); // ← Thêm state mới
 
     // File size limits (in bytes)
     const FILE_SIZE_LIMITS = {
@@ -414,37 +415,64 @@ function CourseTable() {
                 <div className={styles.tableWrapper}>
                     <table className={styles.table}>
                         <thead>
-                <tr>
-                  <th style={{ width: '80px' }}>ID</th>
-                  <th style={{ width: '280px' }}>Tên khóa học</th>
-                  <th style={{ width: '120px' }}>Tác giả</th>
-                  <th style={{ width: '100px' }}>Danh mục</th>
-                  <th style={{ width: '80px' }}>Cấp độ</th>
-                  <th style={{ width: '80px' }}>Thời lượng</th>
-                  <th style={{ width: '60px' }}>Videos</th>
-                  <th style={{ width: '100px' }}>Giá</th>
-                  <th style={{ width: '80px' }}>Trạng thái</th>
-                  <th style={{ width: '150px' }}>Hành động</th>
+              <tr>
+                <th style={{ width: '80px' }}>ID</th>
+                <th style={{ width: '100px' }}>Thumbnail</th>
+                <th style={{ width: '280px' }}>Tên khóa học</th>
+                <th style={{ width: '120px' }}>Tác giả</th>
+                <th style={{ width: '100px' }}>Danh mục</th>
+                <th style={{ width: '80px' }}>Cấp độ</th>
+                <th style={{ width: '80px' }}>Thời lượng</th>
+                <th style={{ width: '60px' }}>Videos</th>
+                <th style={{ width: '100px' }}>Giá</th>
+                <th style={{ width: '80px' }}>Trạng thái</th>
+                <th style={{ width: '150px' }}>Hành động</th>
+              </tr>
+            </thead>
+            <tbody>
+              {courses.map((course, idx) => (
+                <tr key={course.id ?? idx}>
+                  <td
+                    onClick={() => setExpandedId(expandedId === course.id ? null : course.id)}
+                    title={course.id}
+                    style={{
+                      maxWidth: expandedId === course.id ? 'none' : '80px',
+                      overflow: expandedId === course.id ? 'visible' : 'hidden',
+                      textOverflow: 'ellipsis',
+                      whiteSpace: 'nowrap',
+                      cursor: 'pointer'
+                    }}
+                  >
+                    {course.id
+                      ? (expandedId === course.id
+                          ? course.id
+                          : `${course.id.slice(0, 8)}…`)
+                      : ''}
+                  </td>
+                  <td>
+                    {course.thumbnailUrl
+                      ? <img 
+                          src={course.thumbnailUrl} 
+                          alt={course.courseName} 
+                          className={styles.thumbnail} 
+                        />
+                      : <FaImage style={{ fontSize: '1.5rem', color: '#ccc' }}/>
+                    }
+                  </td>
+                  <td>{course.courseName}</td>
+                  <td>{course.author}</td>
+                  <td>{course.category}</td>
+                  <td>{course.level}</td>
+                  <td>{course.duration}</td>
+                  <td>{renderVideoCount(course)}</td>
+                  <td>{course.price?.toLocaleString('vi-VN')} VND</td>
+                  <td>{course.published ? 'Published' : 'Draft'}</td>
+                  <td>
+                    {/* …buttons Edit / Delete / Upload… */}
+                  </td>
                 </tr>
-              </thead>
-              <tbody>
-                {courses.map((course, idx) => (
-                  <tr key={course.id ?? idx}>
-                    <td>{course.id}</td>
-                    <td>{course.courseName}</td>
-                    <td>{course.author}</td>
-                    <td>{course.category}</td>
-                    <td>{course.level}</td>
-                    <td>{course.duration}</td>
-                    <td>{renderVideoCount(course)}</td>
-                    <td>{course.price?.toLocaleString('vi-VN')} VND</td>
-                    <td>{course.published ? 'Published' : 'Draft'}</td>
-                    <td>
-                      {/* …buttons Edit / Delete / Upload… */}
-                    </td>
-                  </tr>
-                ))}
-              </tbody>
+              ))}
+            </tbody>
                     </table>
                 </div>
             )}

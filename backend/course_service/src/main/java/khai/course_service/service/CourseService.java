@@ -103,7 +103,7 @@ public class CourseService {
         Course course = Course.builder()
                 .courseName(request.getCourseName())
                 .description(request.getDescription())
-                .author(authentication.getName())
+                .author(request.getAuthor())
                 .videoFiles(new ArrayList<>())
                 .duration(request.getDuration())
                 .category(request.getCategory())
