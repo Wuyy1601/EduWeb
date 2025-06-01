@@ -84,15 +84,15 @@ Docker (Optional)	Đóng gói, triển khai dễ dàng
 Link demo: edu-web-five.vercel.app
 
 ⚡ HƯỚNG DẪN CÀI ĐẶT NHANH
-bash
-Sao chép
-Chỉnh sửa
+
 # 1. Clone repo
 git clone https://github.com/Wuyy1601/EduWeb.git
 cd EduWeb
 
 # 2. Cài đặt Frontend
+
 npm install
+
 npm run dev
 
 # 3. Cài đặt Backend 
