@@ -1,10 +1,10 @@
 import React from 'react';
-import styles from './styles.modules.scss';
+import styles from './styles.module.scss';
 
 const mockCart = {
     items: [
-        // Bỏ comment dòng dưới để test trạng thái có khóa học
-        // { id: 1, name: 'JavaScript', price: 2000000, quantity: 1, image: 'https://i.imgur.com/0y8Ftya.png' }
+        { id: 1, name: 'JavaScript Cơ Bản', price: 2000000, quantity: 1, image: 'https://i.imgur.com/0y8Ftya.png' },
+        { id: 2, name: 'React.js Advanced', price: 2500000, quantity: 1, image: 'https://i.imgur.com/YWN7h2T.png' }
     ]
 };
 
@@ -65,6 +65,12 @@ export default function Cart() {
                                             </td>
                                         </tr>
                                     ))}
+                                    <tr className={styles.totalRow}>
+                                        <td colSpan="2" style={{ textAlign: 'right', fontWeight: 'bold' }}>Tổng cộng:</td>
+                                        <td style={{ fontWeight: 'bold' }}>
+                                            {cart.items.reduce((total, item) => total + item.price * item.quantity, 0).toLocaleString('vi-VN')} đ
+                                        </td>
+                                    </tr>
                                 </tbody>
                             </table>
                             <div className={styles.checkoutBtnWrapper}>
