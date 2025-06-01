@@ -16,21 +16,31 @@ spring:
             - Path=${app.api-prefix}/identity/**
           filters:
             - StripPrefix=2
+
         - id: profile_service
           uri: http://localhost:8081
           predicates:
             - Path=${app.api-prefix}/profile/users/**
           filters:
             - StripPrefix=2
+
         - id: post_service
           uri: http://localhost:8082
           predicates:
             - Path=${app.api-prefix}/post/*
           filters:
             - StripPrefix=2
+
         - id: file_service
           uri: http://localhost:8083
           predicates:
             - Path=${app.api-prefix}/file/**
+          filters:
+            - StripPrefix=2
+
+        - id: course_service
+          uri: http://localhost:8084
+          predicates:
+            - Path=${app.api-prefix}/course/**
           filters:
             - StripPrefix=2

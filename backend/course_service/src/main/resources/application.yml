@@ -1,0 +1,15 @@
+server:
+  port: 8084
+  servlet:
+    context-path: /course
+
+spring:
+  application:
+    name: course-service
+  data:
+    mongodb:
+      uri: mongodb://root:root@localhost:27017/course-service?authSource=admin
+
+app:
+  services:
+    file: http://localhost:8083/file

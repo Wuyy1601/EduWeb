@@ -41,6 +41,15 @@ export default function LoginRegister() {
                 setError('Mật khẩu phải có ít nhất 6 ký tự');
                 return false;
             }
+            if (data.username.length < 3) {
+                setError('Tên đăng nhập phải có ít nhất 3 ký tự');
+                return false;
+            }
+            // Validate username format (chỉ chứa chữ cái, số, underscore)
+            if (!/^[a-zA-Z0-9_]+$/.test(data.username)) {
+                setError('Tên đăng nhập chỉ được chứa chữ cái, số và dấu gạch dưới');
+                return false;
+            }
         }
         return true;
     };
@@ -81,19 +90,31 @@ export default function LoginRegister() {
     const handleRegister = async (registerData) => {
         try {
             setLoading(true);
-            const res = await fetch('http://localhost:8888/api/v1/identity/users/registration', {
+            
+            // Tạo payload theo format mà server mong đợi
+            const payload = {
+                username: registerData.username,
+                password: registerData.password,
+                firstName: registerData.firstName,
+                lastName: registerData.lastName
+            };
+
+            // Chỉ thêm các field optional nếu có giá trị
+            if (registerData.dob && registerData.dob.trim()) {
+                payload.dob = registerData.dob;
+            }
+            if (registerData.city && registerData.city.trim()) {
+                payload.city = registerData.city;
+            }
+
+            console.log('Sending registration payload:', payload); // Debug log
+
+            const res = await fetch('http://localhost:8888/api/v1/identity/users/registration', {                                                                                   
                 method: 'POST',
                 headers: { 
                     'Content-Type': 'application/json'
                 },
-                body: JSON.stringify({
-                    username: registerData.username,
-                    password: registerData.password,
-                    firstName: registerData.firstName,
-                    lastName: registerData.lastName,
-                    dob: registerData.dob || null,
-                    city: registerData.city || null
-                })
+                body: JSON.stringify(payload)
             });
 
             const data = await res.json();
@@ -111,7 +132,10 @@ export default function LoginRegister() {
                     city: ''
                 });
             } else {
-                setError(data.message || 'Đăng ký thất bại');
+                // Hiển thị lỗi chi tiết từ server
+                const errorMessage = data.message || data.error || `Đăng ký thất bại (${res.status})`;
+                setError(errorMessage);
+                console.error('Registration failed:', data);
             }
         } catch (error) {
             console.error('Register error:', error);

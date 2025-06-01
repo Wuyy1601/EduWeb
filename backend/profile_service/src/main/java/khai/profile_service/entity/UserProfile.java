@@ -1,15 +1,15 @@
 package khai.profile_service.entity;
 
+import java.time.LocalDate;
 
-import lombok.*;
-import lombok.experimental.FieldDefaults;
 import org.springframework.data.neo4j.core.schema.GeneratedValue;
 import org.springframework.data.neo4j.core.schema.Id;
 import org.springframework.data.neo4j.core.schema.Node;
 import org.springframework.data.neo4j.core.schema.Property;
 import org.springframework.data.neo4j.core.support.UUIDStringGenerator;
 
-import java.time.LocalDate;
+import lombok.*;
+import lombok.experimental.FieldDefaults;
 
 @Getter
 @Setter
@@ -23,12 +23,12 @@ public class UserProfile {
     @GeneratedValue(generatorClass = UUIDStringGenerator.class)
     String id;
 
-    @Property("userId")
-    String userId;
+    @Property("user_id")
+    String userId; // Xóa @Property("userId")
 
+    String avatar;
     String firstName;
     String lastName;
-    LocalDate dob;
+    LocalDate birthday;
     String city;
-
 }
