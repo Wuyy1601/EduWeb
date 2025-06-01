@@ -1,14 +1,132 @@
 import styles from './styles.module.scss';
 import DocumentsTable from '@pages/Admin/DocumentsTable';
-import UsersTable from '@pages/Admin/UserTable';
+import { useState, useEffect } from 'react';
+import { FaBook, FaUsers, FaChartBar, FaCog, FaBell } from 'react-icons/fa';
 
 export default function AdminDashboard() {
+    const [activeTab, setActiveTab] = useState('documents');
+
+    const menuItems = [
+        { id: 'overview', label: 'Tổng quan', icon: <FaChartBar /> },
+        { id: 'documents', label: 'Quản lý tài liệu', icon: <FaBook /> },
+        { id: 'users', label: 'Quản lý người dùng', icon: <FaUsers /> },
+        { id: 'settings', label: 'Cài đặt', icon: <FaCog /> }
+    ];
+
+    const renderContent = () => {
+        switch (activeTab) {
+            case 'documents':
+                return <DocumentsTable />;
+            case 'overview':
+                return <Overview />;
+            case 'users':
+                return <div>Quản lý người dùng (Đang phát triển)</div>;
+            case 'settings':
+                return <div>Cài đặt hệ thống (Đang phát triển)</div>;
+            default:
+                return <DocumentsTable />;
+        }
+    };
+
     return (
         <div className={styles.adminPage}>
-            <div className={styles.adminSection}>
-                <div className={styles.adminTitle}>Admin Dashboard</div>
-                <UsersTable />
-                <DocumentsTable />
+            <div className={styles.adminHeader}>
+                <div className={styles.headerLeft}>
+                    <h1>EduWeb Admin</h1>
+                </div>
+                <div className={styles.headerRight}>
+                    <div className={styles.notification}>
+                        <FaBell />
+                        <span className={styles.badge}>3</span>
+                    </div>
+                    <div className={styles.adminProfile}>
+                        <img src="https://via.placeholder.com/40" alt="Admin" />
+                        <span>Admin</span>
+                    </div>
+                </div>
+            </div>
+
+            <div className={styles.adminContainer}>
+                <div className={styles.sidebar}>
+                    {menuItems.map(item => (
+                        <div
+                            key={item.id}
+                            className={`${styles.menuItem} ${activeTab === item.id ? styles.active : ''}`}
+                            onClick={() => setActiveTab(item.id)}
+                        >
+                            {item.icon}
+                            <span>{item.label}</span>
+                        </div>
+                    ))}
+                </div>
+
+                <div className={styles.mainContent}>
+                    {renderContent()}
+                </div>
+            </div>
+        </div>
+    );
+}
+
+function Overview() {
+    const [stats, setStats] = useState([
+        { label: 'Tổng tài liệu', value: '...', color: '#3498db' },
+        { label: 'Người dùng', value: '...', color: '#2ecc71' },
+        { label: 'Lượt tải', value: '...', color: '#e74c3c' },
+        { label: 'Đánh giá', value: '...', color: '#f1c40f' }
+    ]);
+
+    useEffect(() => {
+        const fetchStats = async () => {
+            try {
+                // Fetch tổng số tài liệu
+                const docsRes = await fetch('http://localhost:8000/api/documents/count');
+                const docsData = await docsRes.json();
+
+                // Fetch tổng số người dùng
+                const usersRes = await fetch('http://localhost:8000/api/users/count');
+                const usersData = await usersRes.json();
+
+                // Fetch tổng lượt tải
+                const downloadsRes = await fetch('http://localhost:8000/api/documents/downloads/count');
+                const downloadsData = await downloadsRes.json();
+
+                // Fetch điểm đánh giá trung bình
+                const ratingsRes = await fetch('http://localhost:8000/api/documents/ratings/average');
+                const ratingsData = await ratingsRes.json();
+
+                setStats([
+                    { label: 'Tổng tài liệu', value: docsData.count.toLocaleString(), color: '#3498db' },
+                    { label: 'Người dùng', value: usersData.count.toLocaleString(), color: '#2ecc71' },
+                    { label: 'Lượt tải', value: downloadsData.count.toLocaleString(), color: '#e74c3c' },
+                    { label: 'Đánh giá', value: ratingsData.average.toFixed(1), color: '#f1c40f' }
+                ]);
+            } catch (error) {
+                console.error('Error fetching stats:', error);
+                // Hiển thị thông báo lỗi nếu cần
+            }
+        };
+
+        fetchStats();
+
+        // Cập nhật số liệu mỗi 5 phút
+        const interval = setInterval(fetchStats, 5 * 60 * 1000);
+
+        return () => clearInterval(interval);
+    }, []);
+
+    return (
+        <div className={styles.overview}>
+            <h2>Tổng quan hệ thống</h2>
+            <div className={styles.statsGrid}>
+                {stats.map((stat, index) => (
+                    <div key={index} className={styles.statCard} style={{ borderColor: stat.color }}>
+                        <h3>{stat.label}</h3>
+                        <div className={styles.statValue} style={{ color: stat.color }}>
+                            {stat.value}
+                        </div>
+                    </div>
+                ))}
             </div>
         </div>
     );

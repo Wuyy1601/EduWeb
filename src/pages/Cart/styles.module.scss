@@ -102,6 +102,16 @@
         color: #222;
         vertical-align: middle;
     }
+
+    .totalRow {
+        background: #f5f7fa;
+        border-top: 2px solid #e1e8ed;
+
+        td {
+            padding: 16px;
+            font-size: 1.1rem;
+        }
+    }
 }
 
 .courseInfo {
