@@ -1,4 +1,9 @@
-<div align="center"> <h1>🎓 EduWeb - Nền tảng giáo dục trực tuyến hiện đại</h1> <p> <img src="https://img.shields.io/badge/React-18.x-blue?logo=react"/> <img src="https://img.shields.io/badge/SpringBoot-Java-green?logo=springboot"/> <img src="https://img.shields.io/badge/Node.js-18.x-green?logo=node.js"/> <img src="https://img.shields.io/badge/Express.js-4.x-black?logo=express"/> <img src="https://img.shields.io/badge/MongoDB-6.x-brightgreen?logo=mongodb"/> <img src="https://img.shields.io/badge/MySQL-8.x-orange?logo=mysql"/> <img src="https://img.shields.io/badge/TailwindCSS-3.x-blue?logo=tailwindcss"/> </p> <p> <i> Website học tập, chia sẻ tài liệu và khóa học mọi lúc mọi nơi.<br> Trao quyền cho người học, kết nối cộng đồng giáo dục số. </i> </p> <img src="https://github.com/Wuyy1601/EduWeb/raw/main/public/banner.png" alt="EduWeb Banner" width="700"/> </div>
+<p align="center">
+  <a href="https://www.uit.edu.vn/" title="Trường Đại học Công nghệ Thông tin" style="border: none;">
+    <img src="https://i.imgur.com/WmMnSRt.png" alt="Trường Đại học Công nghệ Thông tin | University of Information Technology">
+  </a>
+</p>
+
 1. GIỚI THIỆU MÔN HỌC
 Tên môn học: Phát triển Ứng dụng Web
 
@@ -56,18 +61,26 @@ Quản lý user, khóa học, tài liệu và các nghiệp vụ nền tảng.
 🏗️ CÔNG NGHỆ SỬ DỤNG
 Công nghệ	Chức năng
 ReactJS + Vite	Xây dựng giao diện web
+
 Spring Boot (Java)	Xử lý nghiệp vụ backend chính
+
 Node.js + Express	Xây dựng API, tích hợp với Chatbot
+
 MongoDB	Lưu trữ tài liệu, dữ liệu linh hoạt
+
 MySQL	Quản lý user, khóa học (dữ liệu quan hệ)
+
 TailwindCSS	UI/UX hiện đại, responsive
+
 JWT Authentication	Bảo mật đăng nhập
+
 OpenAI API	Tư vấn Chatbot AI
+
 Docker (Optional)	Đóng gói, triển khai dễ dàng
 
 📸 DEMO
 <div align="center"> <img src="https://github.com/Wuyy1601/EduWeb/raw/main/public/demo.gif" alt="EduWeb Demo" width="700"/> </div>
-Link demo: (Nếu có link deploy, cập nhật tại đây)
+Link demo: edu-web-five.vercel.app
 
 ⚡ HƯỚNG DẪN CÀI ĐẶT NHANH
 bash
@@ -78,36 +91,45 @@ git clone https://github.com/Wuyy1601/EduWeb.git
 cd EduWeb
 
 # 2. Cài đặt Frontend
-cd client
 npm install
 npm run dev
 
-# 3. Cài đặt Backend (Node.js hoặc SpringBoot)
-cd ../server
-npm install
-npm run dev
-Lưu ý:
+# 3. Cài đặt Backend 
+Tải JDK bản 23 và cài môi trường Java
 
-Cần cấu hình file .env cho cả backend và frontend theo mẫu .env.example trong repo.
+Tải intelliJ
+
+Tải MongoDB
+
+Tải MySQL
+
+Tải Docker và chạy các lệnh trong CMD:
+
+docker run --name mysql-8.0.36 -e MYSQL_ROOT_PASSWORD=root -d mysql:8.0.36-debian
+
+docker run -d --name mongodb-7.0.11 -p 27017:27017 -e MONGODB_ROOT_USER=root -e MONGODB_ROOT_PASSWORD=root bitnami/mongodb:7.0.11
+
+docker run --name neo4j --publish=7474:7474 --publish=7687:7687 -d neo4j:latest
+
+Cần cấu hình file .env cho backend để chạy ChatBot
 
 Cài đặt & cấu hình database MySQL/MongoDB theo hướng dẫn trong từng thư mục.
 
 📝 CẤU TRÚC DỰ ÁN
-css
-Sao chép
-Chỉnh sửa
-EduWeb/
-├── client/        # Source code ReactJS
-├── server/        # Source code NodeJS/Express
-├── spring-backend/# Source code Spring Boot (nếu có)
-├── public/        # Ảnh, tài liệu minh họa
-└── README.md
-📄 API & HƯỚNG DẪN SỬ DỤNG
-Tham khảo chi tiết tài liệu API trong server/README.md.
 
+EduWeb/
+├── backend/            # Source code backend Java và thư viện SpringBoot
+├── src/                # Source code ReactJS 
+├── package.json        # Thông tin cấu hình dự án (npm)
+├── package-lock.json   # Khóa phiên bản các package
+├── vite.config.js      # Cấu hình Vite
+├── eslint.config.js    # Cấu hình ESLint
+├── public/             
+└── README.md           # Tài liệu mô tả dự án
 Chức năng chính đều được chú thích rõ ràng trong source code.
 
 💡 ĐỊNH HƯỚNG PHÁT TRIỂN
+
 Tối ưu trải nghiệm học tập (UI/UX, tốc độ).
 
 Thêm chức năng live-stream, video call học nhóm.
