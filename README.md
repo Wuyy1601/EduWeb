@@ -5,6 +5,7 @@
 </p>
 
 1. GIỚI THIỆU MÔN HỌC
+
 Tên môn học: Phát triển Ứng dụng Web
 
 Mã môn học: IS207
@@ -18,6 +19,7 @@ Giảng viên: ThS. Trình Trọng Tín
 Email: tintt@uit.edu.vn
 
 2. GIỚI THIỆU ĐỒ ÁN
+
 Tên đề tài: EduWeb - Nền tảng học tập trực tuyến
 
 Mô tả:
@@ -39,6 +41,7 @@ Thiết kế Figma: [Xem giao diện](https://www.figma.com/design/8dKhz0umBUR18
 | Lê Khánh Duy        | 23520367  |
 
 🚀 TÍNH NĂNG NỔI BẬT
+
 Đăng ký & Đăng nhập:
 Tạo tài khoản, đăng nhập an toàn, quản lý hồ sơ người dùng.
 
@@ -61,6 +64,7 @@ Hệ thống quản trị dành cho Admin:
 Quản lý user, khóa học, tài liệu và các nghiệp vụ nền tảng.
 
 🏗️ CÔNG NGHỆ SỬ DỤNG
+
 Công nghệ	Chức năng
 ReactJS + Vite	Xây dựng giao diện web
 
@@ -87,6 +91,7 @@ Link demo: edu-web-five.vercel.app
 ⚡ HƯỚNG DẪN CÀI ĐẶT NHANH
 
 # 1. Clone repo
+
 git clone https://github.com/Wuyy1601/EduWeb.git
 cd EduWeb
 
@@ -97,6 +102,7 @@ npm install
 npm run dev
 
 # 3. Cài đặt Backend 
+
 Tải JDK bản 23 và cài môi trường Java
 
 Tải intelliJ
@@ -135,6 +141,7 @@ EduWeb/
 ├── public/             
 
 └── README.md           # Tài liệu mô tả dự án
+
 Chức năng chính đều được chú thích rõ ràng trong source code.
 
 💡 ĐỊNH HƯỚNG PHÁT TRIỂN
