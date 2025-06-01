@@ -2,6 +2,13 @@ import React, { useEffect, useState } from "react";
 import styles from './styles.module.scss';
 
 const PAGE_SIZE = 10;
+const INIT_COURSE = {
+    courseName: "",
+    description: "",
+    category: "",
+    level: "",
+    duration: 0
+};
 
 export default function CourseTable() {
     const [courses, setCourses] = useState([]);
@@ -9,6 +16,17 @@ export default function CourseTable() {
     const [error, setError] = useState(null);
     const [currentPage, setCurrentPage] = useState(1);
     const [totalPages, setTotalPages] = useState(1);
+
+    // Modal state
+    const [showModal, setShowModal] = useState(false);
+    const [modalType, setModalType] = useState("add"); // "add" | "edit"
+    const [form, setForm] = useState(INIT_COURSE);
+    const [editId, setEditId] = useState(null);
+
+    // New state for upload video
+    const [showUploadVideoModal, setShowUploadVideoModal] = useState(false);
+    const [selectedCourseId, setSelectedCourseId] = useState('');
+    const [selectedVideo, setSelectedVideo] = useState(null);
 
     const token = localStorage.getItem('token');
 
@@ -57,6 +75,63 @@ export default function CourseTable() {
         }
     };
 
+    // Mở modal thêm/sửa
+    const openAddModal = () => {
+        setForm(INIT_COURSE);
+        setModalType("add");
+        setShowModal(true);
+        setEditId(null);
+    };
+    const openEditModal = (course) => {
+        setForm({
+            courseName: course.courseName,
+            description: course.description,
+            category: course.category,
+            level: course.level,
+            duration: course.duration
+        });
+        setModalType("edit");
+        setShowModal(true);
+        setEditId(course.id);
+    };
+
+    // Submit form thêm/sửa
+    const handleSubmit = async (e) => {
+        e.preventDefault();
+        try {
+            let res, data;
+            if (modalType === "add") {
+                res = await fetch("http://localhost:8888/api/v1/course/create", {
+                    method: "POST",
+                    headers: {
+                        'Authorization': `Bearer ${token}`,
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify(form)
+                });
+            } else {
+                res = await fetch(`http://localhost:8888/api/v1/course/${editId}`, {
+                    method: "PUT",
+                    headers: {
+                        'Authorization': `Bearer ${token}`,
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify(form)
+                });
+            }
+            data = await res.json();
+            if (res.ok && data.result) {
+                alert(modalType === "add" ? "Thêm khóa học thành công!" : "Cập nhật thành công!");
+                setShowModal(false);
+                fetchCourses();
+            } else {
+                alert(data.message || "Có lỗi xảy ra!");
+            }
+        } catch (err) {
+            alert("Lỗi khi gửi dữ liệu!");
+        }
+    };
+
     // 6. Upload thumbnail
     const handleUploadThumbnail = async (courseId, file) => {
         const formData = new FormData();
@@ -100,6 +175,7 @@ export default function CourseTable() {
         <div className={styles.tableContainer}>
             <div className={styles.tableHeader}>
                 <h2>📚 Quản lý khóa học ({courses.length} khóa học)</h2>
+                <button onClick={openAddModal} className={styles.addButton}>+ Thêm khóa học</button>
                 <button onClick={fetchCourses} className={styles.refreshButton} disabled={loading}>
                     🔄 Refresh
                 </button>
@@ -173,11 +249,11 @@ export default function CourseTable() {
                                     <td>{formatDate(course.created)}</td>
                                     <td>
                                         <button
-                                            onClick={() => window.location.href = `/course/${course.id}`}
+                                            onClick={() => openEditModal(course)}
                                             className={styles.viewButton}
-                                            title="Quản lý khóa học"
+                                            title="Chỉnh sửa khóa học"
                                         >
-                                            Quản lý
+                                            Sửa
                                         </button>
                                         <button
                                             onClick={() => handleDelete(course.id, course.courseName)}
@@ -213,6 +289,74 @@ export default function CourseTable() {
                     >
                         Tiếp →
                     </button>
+                </div>
+            )}
+
+            {/* Modal Thêm/Sửa */}
+            {showModal && (
+                <div className={styles.modalOverlay}>
+                    <div className={styles.modalContent}>
+                        <h3>{modalType === "add" ? "Thêm khóa học mới" : "Chỉnh sửa khóa học"}</h3>
+                        <form onSubmit={handleSubmit} className={styles.addForm}>
+                            <div>
+                                <label>Tên khóa học</label>
+                                <input
+                                    type="text"
+                                    value={form.courseName}
+                                    onChange={e => setForm({ ...form, courseName: e.target.value })}
+                                    required
+                                />
+                            </div>
+                            <div>
+                                <label>Mô tả</label>
+                                <textarea
+                                    value={form.description}
+                                    onChange={e => setForm({ ...form, description: e.target.value })}
+                                    required
+                                />
+                            </div>
+                            <div>
+                                <label>Thể loại</label>
+                                <input
+                                    type="text"
+                                    value={form.category}
+                                    onChange={e => setForm({ ...form, category: e.target.value })}
+                                    required
+                                />
+                            </div>
+                            <div>
+                                <label>Cấp độ</label>
+                                <select
+                                    value={form.level}
+                                    onChange={e => setForm({ ...form, level: e.target.value })}
+                                    required
+                                >
+                                    <option value="">Chọn cấp độ</option>
+                                    <option value="BEGINNER">Beginner</option>
+                                    <option value="INTERMEDIATE">Intermediate</option>
+                                    <option value="ADVANCED">Advanced</option>
+                                </select>
+                            </div>
+                            <div>
+                                <label>Thời lượng (phút)</label>
+                                <input
+                                    type="number"
+                                    value={form.duration}
+                                    onChange={e => setForm({ ...form, duration: Number(e.target.value) })}
+                                    min={1}
+                                    required
+                                />
+                            </div>
+                            <div style={{ textAlign: "right", marginTop: 16 }}>
+                                <button type="submit" className={styles.saveBtn}>
+                                    {modalType === "add" ? "Thêm" : "Lưu"}
+                                </button>
+                                <button type="button" className={styles.cancelBtn} onClick={() => setShowModal(false)}>
+                                    Hủy
+                                </button>
+                            </div>
+                        </form>
+                    </div>
                 </div>
             )}
         </div>
