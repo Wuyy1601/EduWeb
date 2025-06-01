@@ -47,7 +47,7 @@ const routers = [
     },
     {
         path: '/cart',
-        component: lazy(() => import('@pages/cart/Cart')),
+        component: lazy(() => import('@pages/Cart/Cart')),
     },
 ];
 
