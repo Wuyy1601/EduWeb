@@ -1,10 +1,11 @@
 import styles from './styles.module.scss';
 import DocumentsTable from '@pages/Admin/DocumentsTable';
 import { useState, useEffect } from 'react';
-import { FaBook, FaUsers, FaChartBar, FaCog, FaBell } from 'react-icons/fa';
+import { FaBook, FaUsers, FaChartBar, FaCog, FaBell, FaTimes, FaBars } from 'react-icons/fa';
 
 export default function AdminDashboard() {
     const [activeTab, setActiveTab] = useState('documents');
+    const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
 
     const menuItems = [
         { id: 'overview', label: 'Tổng quan', icon: <FaChartBar /> },
@@ -32,6 +33,12 @@ export default function AdminDashboard() {
         <div className={styles.adminPage}>
             <div className={styles.adminHeader}>
                 <div className={styles.headerLeft}>
+                    <button
+                        className={styles.mobileMenuButton}
+                        onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
+                    >
+                        <FaBars />
+                    </button>
                     <h1>EduWeb Admin</h1>
                 </div>
                 <div className={styles.headerRight}>
@@ -47,22 +54,25 @@ export default function AdminDashboard() {
             </div>
 
             <div className={styles.adminContainer}>
-                <div className={styles.sidebar}>
+                <aside className={`${styles.sidebar} ${isMobileMenuOpen ? styles.sidebarOpen : ''}`}>
                     {menuItems.map(item => (
                         <div
                             key={item.id}
                             className={`${styles.menuItem} ${activeTab === item.id ? styles.active : ''}`}
-                            onClick={() => setActiveTab(item.id)}
+                            onClick={() => {
+                                setActiveTab(item.id);
+                                setIsMobileMenuOpen(false);
+                            }}
                         >
                             {item.icon}
                             <span>{item.label}</span>
                         </div>
                     ))}
-                </div>
+                </aside>
 
-                <div className={styles.mainContent}>
+                <main className={styles.mainContent}>
                     {renderContent()}
-                </div>
+                </main>
             </div>
         </div>
     );
@@ -79,19 +89,15 @@ function Overview() {
     useEffect(() => {
         const fetchStats = async () => {
             try {
-                // Fetch tổng số tài liệu
                 const docsRes = await fetch('http://localhost:8000/api/documents/count');
                 const docsData = await docsRes.json();
 
-                // Fetch tổng số người dùng
                 const usersRes = await fetch('http://localhost:8000/api/users/count');
                 const usersData = await usersRes.json();
 
-                // Fetch tổng lượt tải
                 const downloadsRes = await fetch('http://localhost:8000/api/documents/downloads/count');
                 const downloadsData = await downloadsRes.json();
 
-                // Fetch điểm đánh giá trung bình
                 const ratingsRes = await fetch('http://localhost:8000/api/documents/ratings/average');
                 const ratingsData = await ratingsRes.json();
 
@@ -103,15 +109,11 @@ function Overview() {
                 ]);
             } catch (error) {
                 console.error('Error fetching stats:', error);
-                // Hiển thị thông báo lỗi nếu cần
             }
         };
 
         fetchStats();
-
-        // Cập nhật số liệu mỗi 5 phút
         const interval = setInterval(fetchStats, 5 * 60 * 1000);
-
         return () => clearInterval(interval);
     }, []);
 

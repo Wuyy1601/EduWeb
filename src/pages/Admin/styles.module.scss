@@ -2,26 +2,57 @@
     margin: 0;
     padding: 0;
     min-height: 100vh;
-    background: #f0f4f8;
+    background: #f0f2f5;
+    width: 100%;
+    overflow-x: hidden;
 }
 
 .adminHeader {
     background: #fff;
-    padding: 16px 32px;
+    padding: 0 24px;
+    height: 60px;
     display: flex;
     justify-content: space-between;
     align-items: center;
-    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    box-shadow: 0 1px 2px rgba(0, 0, 0, 0.1);
     position: fixed;
     top: 0;
     left: 0;
     right: 0;
-    z-index: 100;
+    z-index: 1000;
+
+    @media (max-width: 768px) {
+        padding: 0 16px;
+    }
+}
+
+.headerLeft {
+    display: flex;
+    align-items: center;
+    gap: 16px;
 
     h1 {
-        color: #2c3e50;
         margin: 0;
         font-size: 1.5rem;
+        color: #1890ff;
+
+        @media (max-width: 768px) {
+            font-size: 1.2rem;
+        }
+    }
+}
+
+.mobileMenuButton {
+    display: none;
+    background: none;
+    border: none;
+    font-size: 1.5rem;
+    color: #1890ff;
+    cursor: pointer;
+    padding: 4px;
+
+    @media (max-width: 768px) {
+        display: block;
     }
 }
 
@@ -34,13 +65,13 @@
 .notification {
     position: relative;
     cursor: pointer;
-    color: #7f8c8d;
+    color: #1890ff;
 
     .badge {
         position: absolute;
         top: -8px;
         right: -8px;
-        background: #e74c3c;
+        background: #ff4d4f;
         color: white;
         border-radius: 50%;
         width: 18px;
@@ -59,33 +90,48 @@
     cursor: pointer;
 
     img {
-        width: 40px;
-        height: 40px;
+        width: 32px;
+        height: 32px;
         border-radius: 50%;
         object-fit: cover;
     }
 
     span {
-        color: #2c3e50;
+        color: #333;
         font-weight: 500;
+
+        @media (max-width: 768px) {
+            display: none;
+        }
     }
 }
 
 .adminContainer {
     display: flex;
-    padding-top: 64px;
-    min-height: calc(100vh - 64px);
+    padding-top: 60px;
+    min-height: calc(100vh - 60px);
 }
 
 .sidebar {
-    width: 250px;
+    width: 240px;
     background: #fff;
-    padding: 24px 0;
-    box-shadow: 2px 0 4px rgba(0, 0, 0, 0.1);
+    border-right: 1px solid #f0f0f0;
     position: fixed;
     left: 0;
-    top: 64px;
+    top: 60px;
     bottom: 0;
+    overflow-y: auto;
+    transition: transform 0.3s ease;
+
+    @media (max-width: 768px) {
+        transform: translateX(-100%);
+        z-index: 900;
+        box-shadow: 2px 0 8px rgba(0, 0, 0, 0.15);
+    }
+
+    &.sidebarOpen {
+        transform: translateX(0);
+    }
 }
 
 .menuItem {
@@ -93,18 +139,265 @@
     display: flex;
     align-items: center;
     gap: 12px;
-    color: #7f8c8d;
+    color: #595959;
     cursor: pointer;
     transition: all 0.3s ease;
 
+    svg {
+        font-size: 1.2rem;
+    }
+
     &:hover {
-        background: #f5f6fa;
-        color: #3498db;
+        color: #1890ff;
+        background: #e6f7ff;
     }
 
     &.active {
-        background: #3498db;
+        color: #1890ff;
+        background: #e6f7ff;
+        border-right: 3px solid #1890ff;
+    }
+}
+
+.mainContent {
+    flex: 1;
+    margin-left: 240px;
+    padding: 24px;
+    min-width: 0;
+
+    @media (max-width: 768px) {
+        margin-left: 0;
+        padding: 16px;
+    }
+}
+
+// DocumentsTable styles
+.documentsContainer {
+    background: #f0f2f5;
+    width: 100%;
+    padding: 16px;
+
+    @media (max-width: 768px) {
+        padding: 8px;
+    }
+}
+
+.contentWrapper {
+    background: white;
+    border-radius: 8px;
+    box-shadow: 0 1px 2px rgba(0, 0, 0, 0.1);
+    width: 100%;
+    padding: 16px;
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+
+    @media (max-width: 768px) {
+        padding: 12px;
+        gap: 12px;
+    }
+}
+
+.headerSection {
+    padding-bottom: 16px;
+    border-bottom: 1px solid #f0f0f0;
+}
+
+.pageTitle {
+    margin: 0;
+    font-size: 1.2rem;
+    color: #333;
+    font-weight: 500;
+}
+
+.filtersSection {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+    gap: 12px;
+    padding: 16px 0;
+    border-bottom: 1px solid #f0f0f0;
+}
+
+.filterItem {
+    .filterSelect {
+        width: 100%;
+        padding: 8px 12px;
+        border: 1px solid #d9d9d9;
+        border-radius: 6px;
+        font-size: 14px;
+        background: white;
+        height: 36px;
+        appearance: none;
+        background-image: url("data:image/svg+xml;charset=UTF-8,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='currentColor' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3e%3cpolyline points='6 9 12 15 18 9'%3e%3c/polyline%3e%3c/svg%3e");
+        background-repeat: no-repeat;
+        background-position: right 8px center;
+        background-size: 16px;
+        padding-right: 32px;
+
+        &:focus {
+            outline: none;
+            border-color: #1890ff;
+        }
+    }
+}
+
+.actionsContainer {
+    display: flex;
+    gap: 12px;
+    padding: 16px 0;
+    border-bottom: 1px solid #f0f0f0;
+}
+
+.addButtonContainer {
+    .addButton {
+        display: inline-flex;
+        align-items: center;
+        padding: 8px 16px;
+        background: #1890ff;
         color: white;
+        border: none;
+        border-radius: 6px;
+        font-size: 14px;
+        cursor: pointer;
+        white-space: nowrap;
+
+        &:hover {
+            background: #40a9ff;
+        }
+    }
+}
+
+.clearFilterContainer {
+    .clearFilterButton {
+        display: inline-flex;
+        align-items: center;
+        padding: 8px 16px;
+        background: #ffd700;
+        color: #000;
+        border: none;
+        border-radius: 6px;
+        font-size: 14px;
+        font-weight: 500;
+        cursor: pointer;
+        white-space: nowrap;
+
+        &:hover {
+            background: #ffed4a;
+        }
+    }
+}
+
+.tableSection {
+    overflow: hidden;
+}
+
+.tableWrapper {
+    margin: 0 0px;
+    overflow-x: auto;
+    -webkit-overflow-scrolling: touch;
+
+    @media (max-width: 768px) {
+        margin: 0 -12px;
+    }
+
+    &::-webkit-scrollbar {
+        height: 6px;
+    }
+
+    &::-webkit-scrollbar-track {
+        background: #f1f1f1;
+    }
+
+    &::-webkit-scrollbar-thumb {
+        background: #888;
+        border-radius: 3px;
+    }
+}
+
+.adminTable {
+    width: 100%;
+    border-collapse: collapse;
+    min-width: 800px;
+
+    th,
+    td {
+        padding: 12px 16px;
+        text-align: left;
+        font-size: 14px;
+    }
+
+    th {
+        background: #1890ff;
+        color: white;
+        font-weight: 500;
+        white-space: nowrap;
+
+        &:first-child {
+            padding-left: 16px;
+        }
+    }
+
+    td {
+        border-bottom: 1px solid #f0f0f0;
+
+        &:first-child {
+            padding-left: 16px;
+        }
+    }
+
+    tr:hover td {
+        background: #f5f5f5;
+    }
+}
+
+// Desktop/Mobile Views
+.desktopView {
+    @media (max-width: 768px) {
+        display: none;
+    }
+}
+
+.mobileView {
+    display: none;
+
+    @media (max-width: 768px) {
+        display: block;
+        padding: 16px;
+
+        .mobilePopupContent {
+            padding: 16px;
+            overflow-y: auto;
+            max-height: 80vh;
+        }
+
+        .filterContainer {
+            margin-bottom: 16px;
+        }
+
+        .adminTable {
+            margin-top: 16px;
+        }
+    }
+}
+
+.showContentButton {
+    width: 100%;
+    padding: 16px;
+    background: #3498db;
+    color: white;
+    border: none;
+    border-radius: 8px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 12px;
+    font-size: 1rem;
+    font-weight: 500;
+    cursor: pointer;
+    transition: background 0.2s;
+
+    &:hover {
+        background: #2980b9;
     }
 
     svg {
@@ -112,19 +405,86 @@
     }
 }
 
-.mainContent {
-    flex: 1;
-    padding: 32px;
-    margin-left: 250px;
+.mobilePopup {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: rgba(0, 0, 0, 0.5);
+    z-index: 1000;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 16px;
+    animation: fadeIn 0.3s ease;
 }
 
-.overview {
+.mobilePopupContent {
+    background: white;
+    width: 100%;
+    max-height: 90vh;
+    border-radius: 12px;
+    overflow: hidden;
+    animation: slideUp 0.3s ease;
+}
+
+.mobilePopupHeader {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 16px;
+    background: #f8f9fa;
+    border-bottom: 1px solid #eee;
+
     h2 {
+        margin: 0;
+        font-size: 1.2rem;
         color: #2c3e50;
-        margin-bottom: 24px;
     }
 }
 
+.closeButton {
+    background: none;
+    border: none;
+    font-size: 1.5rem;
+    color: #7f8c8d;
+    cursor: pointer;
+    padding: 4px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: color 0.2s;
+
+    &:hover {
+        color: #e74c3c;
+    }
+}
+
+// Animations
+@keyframes fadeIn {
+    from {
+        opacity: 0;
+    }
+
+    to {
+        opacity: 1;
+    }
+}
+
+@keyframes slideUp {
+    from {
+        transform: translateY(50px);
+        opacity: 0;
+    }
+
+    to {
+        transform: translateY(0);
+        opacity: 1;
+    }
+}
+
+// Stats Grid
 .statsGrid {
     display: grid;
     grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
@@ -151,14 +511,23 @@
     }
 }
 
+// Table Styles
 .adminTable {
     width: 100%;
     border-collapse: collapse;
     background: #fff;
     border-radius: 10px;
-    overflow: hidden;
+    overflow-x: auto;
     margin-bottom: 24px;
     box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+
+    @media (max-width: 768px) {
+        font-size: 0.9rem;
+        display: block;
+        overflow-x: auto;
+        white-space: nowrap;
+        -webkit-overflow-scrolling: touch;
+    }
 }
 
 .adminTable th,
@@ -166,6 +535,10 @@
     padding: 12px 16px;
     border-bottom: 1px solid #eee;
     text-align: left;
+
+    @media (max-width: 768px) {
+        padding: 8px 12px;
+    }
 }
 
 .adminTable th {
@@ -178,52 +551,16 @@
     background: #f8f9fa;
 }
 
-.modalOverlay {
-    position: fixed;
-    top: 0;
-    left: 0;
-    right: 0;
-    bottom: 0;
-    background: rgba(0, 0, 0, 0.5);
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    z-index: 1000;
-}
-
-.modalContent {
-    background: #fff;
-    border-radius: 12px;
-    padding: 32px;
-    min-width: 600px;
-    max-width: 90%;
-    max-height: 90vh;
-    overflow-y: auto;
-    position: relative;
-    box-shadow: 0 4px 32px rgba(0, 0, 0, 0.15);
-}
-
-.closeBtn {
-    position: absolute;
-    top: 16px;
-    right: 16px;
-    background: none;
-    border: none;
-    font-size: 1.5rem;
-    color: #7f8c8d;
-    cursor: pointer;
-    padding: 4px;
-    line-height: 1;
-
-    &:hover {
-        color: #e74c3c;
-    }
-}
-
+// Form Styles
 .formRow {
     display: flex;
     gap: 24px;
     margin-bottom: 24px;
+
+    @media (max-width: 768px) {
+        flex-direction: column;
+        gap: 16px;
+    }
 }
 
 .formCol {
@@ -243,7 +580,6 @@
         border: 1px solid #ddd;
         border-radius: 6px;
         font-size: 1rem;
-        transition: border-color 0.3s ease;
 
         &:focus {
             outline: none;
@@ -252,43 +588,147 @@
     }
 }
 
-@media (max-width: 1024px) {
-    .sidebar {
-        width: 200px;
+// Filter Styles
+.filterContainer {
+    display: flex;
+    gap: 12px;
+    margin-bottom: 16px;
+    flex-wrap: wrap;
+
+    @media (max-width: 768px) {
+        gap: 8px;
     }
 
-    .mainContent {
-        margin-left: 200px;
+    select {
+        padding: 8px 12px;
+        border: 1px solid #ddd;
+        border-radius: 6px;
+        background: white;
+        min-width: 120px;
+
+        @media (max-width: 768px) {
+            flex: 1;
+            min-width: calc(50% - 8px);
+            font-size: 0.9rem;
+        }
+    }
+
+    button {
+        @media (max-width: 768px) {
+            width: 100%;
+            margin-top: 8px;
+        }
     }
 }
 
-@media (max-width: 768px) {
-    .adminContainer {
+.tableContainer {
+    width: 100%;
+    overflow-x: auto;
+    -webkit-overflow-scrolling: touch;
+    margin-bottom: 24px;
+
+    @media (max-width: 768px) {
+        margin: 0 -16px;
+        padding: 0 16px;
+    }
+}
+
+.actionButtons {
+    display: flex;
+    gap: 8px;
+    flex-wrap: nowrap;
+
+    @media (max-width: 768px) {
         flex-direction: column;
-    }
+        gap: 4px;
 
-    .sidebar {
-        width: 100%;
-        position: static;
-        padding: 12px;
+        button {
+            padding: 4px 8px;
+            font-size: 0.9rem;
+            white-space: nowrap;
+        }
     }
+}
 
-    .mainContent {
-        margin-left: 0;
-        padding: 16px;
+.adminTitle {
+    margin-bottom: 24px;
+    color: #2c3e50;
+    font-size: 1.5rem;
+
+    @media (max-width: 768px) {
+        font-size: 1.2rem;
+        margin-bottom: 16px;
     }
+}
 
-    .statsGrid {
+// Improve table cell padding on mobile
+.adminTable {
+
+    td,
+    th {
+        @media (max-width: 768px) {
+            padding: 8px;
+            font-size: 0.9rem;
+
+            input {
+                padding: 4px;
+                font-size: 0.9rem;
+            }
+        }
+    }
+}
+
+// Add horizontal scroll indicator
+.tableContainer::after {
+    @media (max-width: 768px) {
+        content: '';
+        position: absolute;
+        right: 0;
+        top: 0;
+        bottom: 0;
+        width: 5px;
+        background: linear-gradient(to right, transparent, rgba(0, 0, 0, 0.1));
+        pointer-events: none;
+    }
+}
+
+.filtersGrid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+    gap: 16px;
+
+    @media (max-width: 768px) {
         grid-template-columns: 1fr;
+        gap: 8px;
     }
+}
 
-    .modalContent {
-        min-width: auto;
-        width: 95%;
-    }
+// Modal styles
+.modalOverlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: rgba(0, 0, 0, 0.5);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    z-index: 1000;
+}
 
-    .formRow {
-        flex-direction: column;
-        gap: 16px;
+.modalContent {
+    width: 90%;
+    max-width: 600px;
+    max-height: 90vh;
+    background: white;
+    border-radius: 12px;
+    padding: 24px;
+    overflow-y: auto;
+
+    @media (max-width: 768px) {
+        width: calc(100% - 32px);
+        padding: 16px;
+        margin: 16px;
     }
 }

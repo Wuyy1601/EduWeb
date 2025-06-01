@@ -76,10 +76,95 @@ export default function DocumentsTable() {
     };
 
     return (
-        <div>
-            <h2 className={styles.adminTitle}>Quản lý tài liệu</h2>
-            {/* Form thêm mới */}
-            <Button content="Thêm mới" onClick={() => setShowAddModal(true)} />
+        <div className={styles.documentsContainer}>
+            <div className={styles.contentWrapper}>
+                <div className={styles.headerSection}>
+                    <h2 className={styles.pageTitle}>Quản lý tài liệu</h2>
+                </div>
+
+                <div className={styles.actionsContainer}>
+                    <div className={styles.addButtonContainer}>
+                        <Button
+                            content="Thêm mới"
+                            onClick={() => setShowAddModal(true)}
+                            className={styles.addButton}
+                        />
+                    </div>
+
+                    <div className={styles.clearFilterContainer}>
+                        <Button
+                            onClick={() => setFilters({ subject: "", major: "", language: "", level: "" })}
+                            content="Xóa filter"
+                            className={styles.clearFilterButton}
+                        />
+                    </div>
+                </div>
+
+                <div className={styles.filtersSection}>
+                    {filterFields.map(field => (
+                        <div key={field.name} className={styles.filterItem}>
+                            <select
+                                value={filters[field.name]}
+                                onChange={e => setFilters({ ...filters, [field.name]: e.target.value })}
+                                className={styles.filterSelect}
+                            >
+                                <option value="">{field.label}</option>
+                                {[...new Set(docs.map(d => d[field.name]).filter(Boolean))].map(val =>
+                                    <option key={val} value={val}>{val}</option>
+                                )}
+                            </select>
+                        </div>
+                    ))}
+                </div>
+
+                <div className={styles.tableSection}>
+                    <div className={styles.tableWrapper}>
+                        <table className={styles.adminTable}>
+                            <thead>
+                                <tr>
+                                    <th>ID</th>
+                                    <th>Tiêu đề</th>
+                                    <th>Mô tả</th>
+                                    <th>Môn học</th>
+                                    <th>Chuyên ngành</th>
+                                    <th>Ngôn ngữ</th>
+                                    <th>Cấp học</th>
+                                    <th>Hành động</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                {docs.map(doc => (
+                                    <tr key={doc._id}>
+                                        <td>{doc._id}</td>
+                                        <td>{doc.title}</td>
+                                        <td>{doc.description}</td>
+                                        <td>{doc.subject}</td>
+                                        <td>{doc.major}</td>
+                                        <td>{doc.language}</td>
+                                        <td>{doc.level}</td>
+                                        <td>
+                                            <div className={styles.actionButtons}>
+                                                <Button
+                                                    onClick={() => setEditDoc(doc)}
+                                                    content="Sửa"
+                                                    className={styles.editButton}
+                                                />
+                                                <Button
+                                                    onClick={() => handleDelete(doc._id)}
+                                                    content="Xóa"
+                                                    className={styles.deleteButton}
+                                                />
+                                            </div>
+                                        </td>
+                                    </tr>
+                                ))}
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+
+            {/* Add/Edit Modal */}
             {showAddModal && (
                 <div className={styles.modalOverlay}>
                     <div className={styles.modalContent}>
@@ -238,81 +323,6 @@ export default function DocumentsTable() {
                     </div>
                 </div>
             )}
-            {/* Filter */}
-            <div style={{ display: "flex", gap: 12, marginBottom: 16 }}>
-                {filterFields.map(f => (
-                    <select
-                        key={f.name}
-                        value={filters[f.name]}
-                        onChange={e => setFilters({ ...filters, [f.name]: e.target.value })}
-                    >
-                        <option value="">{f.label}</option>
-                        {[...new Set(docs.map(d => d[f.name]).filter(Boolean))].map(val =>
-                            <option key={val} value={val}>{val}</option>
-                        )}
-                    </select>
-                ))}
-                <Button onClick={() => setFilters({ subject: "", major: "", language: "", level: "" })} content="Xóa filter"></Button>
-            </div>
-            {/* Table */}
-            <table className={styles.adminTable}>
-                <thead>
-                    <tr>
-                        <th>ID</th>
-                        <th>Tiêu đề</th>
-                        <th>Mô tả</th>
-                        <th>Môn học</th>
-                        <th>Chuyên ngành</th>
-                        <th>Ngôn ngữ</th>
-                        <th>Cấp học</th>
-                        <th>Hành động</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    {docs.map(doc => (
-                        <tr key={doc._id}>
-                            <td>{doc._id}</td>
-                            <td>{editDoc && editDoc._id === doc._id
-                                ? <input value={editDoc.title} onChange={e => setEditDoc({ ...editDoc, title: e.target.value })} />
-                                : doc.title}
-                            </td>
-                            <td>{editDoc && editDoc._id === doc._id
-                                ? <input value={editDoc.description} onChange={e => setEditDoc({ ...editDoc, description: e.target.value })} />
-                                : doc.description}
-                            </td>
-                            <td>{editDoc && editDoc._id === doc._id
-                                ? <input value={editDoc.subject} onChange={e => setEditDoc({ ...editDoc, subject: e.target.value })} />
-                                : doc.subject}
-                            </td>
-                            <td>{editDoc && editDoc._id === doc._id
-                                ? <input value={editDoc.major} onChange={e => setEditDoc({ ...editDoc, major: e.target.value })} />
-                                : doc.major}
-                            </td>
-                            <td>{editDoc && editDoc._id === doc._id
-                                ? <input value={editDoc.language} onChange={e => setEditDoc({ ...editDoc, language: e.target.value })} />
-                                : doc.language}
-                            </td>
-                            <td>{editDoc && editDoc._id === doc._id
-                                ? <input value={editDoc.level} onChange={e => setEditDoc({ ...editDoc, level: e.target.value })} />
-                                : doc.level}
-                            </td>
-                            <td>
-                                {editDoc && editDoc._id === doc._id ? (
-                                    <>
-                                        <Button onClick={handleEditSubmit} content="Lưu"></Button>
-                                        <Button onClick={() => handleDelete(doc._id)} content="Xóa"></Button>
-                                    </>
-                                ) : (
-                                    <>
-                                        <Button onClick={() => handleEdit(doc)} content="Sửa"></Button>
-                                        <Button onClick={() => handleDelete(doc._id)} content="Xóa"></Button>
-                                    </>
-                                )}
-                            </td>
-                        </tr>
-                    ))}
-                </tbody>
-            </table>
         </div>
     );
 }
