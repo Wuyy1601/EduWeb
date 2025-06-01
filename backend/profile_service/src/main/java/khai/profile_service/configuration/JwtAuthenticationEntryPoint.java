@@ -1,20 +1,21 @@
 package khai.profile_service.configuration;
 
+import java.io.IOException;
 
-import com.fasterxml.jackson.databind.ObjectMapper;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
-import khai.profile_service.dto.ApiResponse;
-import khai.profile_service.exception.ErrorCode;
+
 import org.springframework.http.MediaType;
 import org.springframework.security.core.AuthenticationException;
 import org.springframework.security.web.AuthenticationEntryPoint;
 
-import java.io.IOException;
+import com.fasterxml.jackson.databind.ObjectMapper;
+
+import khai.profile_service.dto.ApiResponse;
+import khai.profile_service.exception.ErrorCode;
 
 public class JwtAuthenticationEntryPoint implements AuthenticationEntryPoint {
-
 
     @Override
     public void commence(

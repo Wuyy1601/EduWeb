@@ -81,9 +81,15 @@ function ChatBot({ onClose, position, onDrag, onDragEnd }) {
             const before = text.substring(lastIndex, match.index);
             if (before) parts.push(<span key={idx++}>{before}</span>);
             parts.push(
-                <a key={idx++} href={`http://localhost:8000${match[2]}`} target="_blank" rel="noopener noreferrer" style={{ color: '#0a6ebd', textDecoration: 'underline', fontWeight: 500 }}>
+                <a
+                    key={idx++}
+                    href={`http://localhost:8000${match[2]}`}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    style={{ color: '#0a6ebd', textDecoration: 'underline', fontWeight: 500 }}
+                >
                     {match[1]}
-                </a>
+                </a>,
             );
             lastIndex = match.index + match[0].length;
         }
@@ -93,7 +99,6 @@ function ChatBot({ onClose, position, onDrag, onDragEnd }) {
         // Nếu không match, trả về text thường
         return parts.length > 0 ? parts : text;
     }
-
 
     return (
         <div

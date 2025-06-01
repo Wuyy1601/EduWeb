@@ -3,8 +3,8 @@ package khai.profile_service.exception;
 public class AppException extends RuntimeException {
 
     public AppException(ErrorCode errorcode) {
-      super(errorcode.getMessage());
-      this.errorcode = errorcode;
+        super(errorcode.getMessage());
+        this.errorcode = errorcode;
     }
 
     private ErrorCode errorcode;
@@ -16,6 +16,4 @@ public class AppException extends RuntimeException {
     public void setErrorcode(ErrorCode errorcode) {
         this.errorcode = errorcode;
     }
-
-
 }
