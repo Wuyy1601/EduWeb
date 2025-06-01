@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { FaEdit, FaTrash, FaPlus, FaEye } from 'react-icons/fa';
+import { FaEdit, FaTrash, FaPlus, FaEye, FaSync } from 'react-icons/fa';
 import styles from './styles.module.scss';
 
 export default function UserTable() {
@@ -94,12 +94,16 @@ export default function UserTable() {
                 <h2>👥 Quản lý người dùng ({users.length} người dùng)</h2>
                 <div className={styles.headerActions}>
                     <button className={styles.refreshButton}>
-                        🔄 Làm mới
+                        <FaSync /> Làm mới
                     </button>
                     <button onClick={openCreateModal} className={styles.addButton}>
                         <FaPlus /> Thêm người dùng mới
                     </button>
                 </div>
+            </div>
+
+            <div className={styles.scrollIndicator}>
+                ← Cuộn ngang để xem thêm →
             </div>
 
             <div className={styles.tableWrapper}>

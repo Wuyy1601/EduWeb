@@ -1,12 +1,13 @@
 import styles from './styles.module.scss';
 import DocumentsTable from '@pages/Admin/DocumentsTable';
 import { useState, useEffect } from 'react';
-import { FaBook, FaUsers, FaChartBar, FaCog, FaBell } from 'react-icons/fa';
+import { FaBook, FaUsers, FaChartBar, FaCog, FaBell, FaBars } from 'react-icons/fa';
 import CourseTable from './CourseTable';
 import UserTable from './UserTable';
 
 export default function AdminDashboard() {
     const [activeTab, setActiveTab] = useState('documents');
+    const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
 
     const menuItems = [
         { id: 'overview', label: 'Tổng quan', icon: <FaChartBar /> },
@@ -15,6 +16,11 @@ export default function AdminDashboard() {
         { id: 'settings', label: 'Cài đặt', icon: <FaCog /> },
         { id: 'courses', label: 'Quản lý khóa học', icon: <FaBook /> }
     ];
+
+    const handleMenuItemClick = (id) => {
+        setActiveTab(id);
+        setIsMobileMenuOpen(false); // Đóng menu khi chọn item trên mobile
+    };
 
     const renderContent = () => {
         switch (activeTab) {
@@ -37,6 +43,12 @@ export default function AdminDashboard() {
         <div className={styles.adminPage}>
             <div className={styles.adminHeader}>
                 <div className={styles.headerLeft}>
+                    <button
+                        className={styles.menuToggle}
+                        onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
+                    >
+                        <FaBars />
+                    </button>
                     <h1>EduWeb Admin</h1>
                 </div>
                 <div className={styles.headerRight}>
@@ -52,12 +64,19 @@ export default function AdminDashboard() {
             </div>
 
             <div className={styles.adminContainer}>
-                <div className={styles.sidebar}>
+                {/* Overlay for mobile menu */}
+                <div
+                    className={`${styles.menuOverlay} ${isMobileMenuOpen ? styles.open : ''}`}
+                    onClick={() => setIsMobileMenuOpen(false)}
+                ></div>
+
+                {/* Sidebar */}
+                <div className={`${styles.sidebar} ${isMobileMenuOpen ? styles.open : ''}`}>
                     {menuItems.map(item => (
                         <div
                             key={item.id}
                             className={`${styles.menuItem} ${activeTab === item.id ? styles.active : ''}`}
-                            onClick={() => setActiveTab(item.id)}
+                            onClick={() => handleMenuItemClick(item.id)}
                         >
                             {item.icon}
                             <span>{item.label}</span>
