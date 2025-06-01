@@ -9,6 +9,10 @@ spring:
   data:
     mongodb:
       uri: mongodb://root:root@localhost:27017/course-service?authSource=admin
+  servlet:
+    multipart:
+      max-file-size: 1GB
+      max-request-size: 1GB
 
 app:
   services:

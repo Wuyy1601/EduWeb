@@ -56,9 +56,39 @@ export default function LoginRegister() {
         return true;
     };
 
+    // Hàm kiểm tra role admin
+    const isAdmin = (user) => {
+        // Kiểm tra nhiều trường hợp có thể có
+        if (user.roles && Array.isArray(user.roles)) {
+            return user.roles.some(role => 
+                role === 'ADMIN' || 
+                role.name === 'ADMIN' || 
+                role.roleName === 'ADMIN' ||
+                role.toLowerCase().includes('admin')
+            );
+        }
+        if (user.role) {
+            return user.role === 'ADMIN' || 
+                   user.role.toLowerCase().includes('admin');
+        }
+        if (user.authorities && Array.isArray(user.authorities)) {
+            return user.authorities.some(auth => 
+                auth.includes('ADMIN') || 
+                auth.toLowerCase().includes('admin')
+            );
+        }
+        // Kiểm tra username admin (backup)
+        if (user.username && user.username.toLowerCase() === 'admin') {
+            return true;
+        }
+        return false;
+    };
+
     const handleLogin = async (loginData) => {
         try {
             setLoading(true);
+            console.log('Attempting login...');
+            
             const res = await fetch('http://localhost:8888/api/v1/identity/auth/token', {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
@@ -69,19 +99,35 @@ export default function LoginRegister() {
             });
 
             const data = await res.json();
+            console.log('Login response:', data);
+            
             if (res.ok && data?.result?.token) {
                 localStorage.setItem('token', data.result.token);
+                
                 // Fetch user info
+                console.log('Fetching user info...');
                 const userRes = await fetch('http://localhost:8888/api/v1/identity/users/myInfo', {
                     method: 'GET',
                     headers: {
                         'Authorization': `Bearer ${data.result.token}`,
                     },
                 });
+                
                 const userData = await userRes.json();
+                console.log('User info response:', userData);
+                
                 if (userRes.ok && userData?.result) {
-                    localStorage.setItem('user', JSON.stringify(userData.result));
-                    navigate('/');
+                    const user = userData.result;
+                    localStorage.setItem('user', JSON.stringify(user));
+                    
+                    // Kiểm tra nếu là admin thì chuyển hướng đến AdminDashboard
+                    if (isAdmin(user)) {
+                        console.log('Admin user detected, redirecting to admin dashboard');
+                        navigate('/admin');
+                    } else {
+                        console.log('Regular user, redirecting to home');
+                        navigate('/');
+                    }
                 } else {
                     setError('Lỗi khi lấy thông tin người dùng');
                 }
