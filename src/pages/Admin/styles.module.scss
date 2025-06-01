@@ -3,6 +3,8 @@
     padding: 0;
     min-height: 100vh;
     background: #f0f4f8;
+    width: 100%;
+    overflow-x: hidden;
 }
 
 .adminHeader {
@@ -25,6 +27,24 @@
     }
 
     .headerLeft {
+        display: flex;
+        align-items: center;
+        gap: 16px;
+
+        .menuToggle {
+            display: none; // Ẩn mặc định trên desktop
+            background: none;
+            border: none;
+            color: #2c3e50;
+            font-size: 24px;
+            cursor: pointer;
+            padding: 4px;
+
+            &:hover {
+                color: #3498db;
+            }
+        }
+
         .welcomeText {
             margin-left: 20px;
             color: #666;
@@ -102,6 +122,7 @@
     display: flex;
     padding-top: 64px;
     min-height: calc(100vh - 64px);
+    width: 100%;
 }
 
 .sidebar {
@@ -115,42 +136,47 @@
     bottom: 0;
     display: flex;
     flex-direction: column;
+    transition: transform 0.3s ease;
+    z-index: 99;
 
     .sidebarFooter {
         margin-top: auto;
         padding-top: 20px;
         border-top: 1px solid #e5e7eb;
     }
-}
 
-.menuItem {
-    padding: 16px 24px;
-    display: flex;
-    align-items: center;
-    gap: 12px;
-    color: #7f8c8d;
-    cursor: pointer;
-    transition: all 0.3s ease;
+    .menuItem {
+        padding: 16px 24px;
+        display: flex;
+        align-items: center;
+        gap: 12px;
+        color: #7f8c8d;
+        cursor: pointer;
+        transition: all 0.3s ease;
 
-    &:hover {
-        background: #f5f6fa;
-        color: #3498db;
-    }
+        &:hover {
+            background: #f5f6fa;
+            color: #3498db;
+        }
 
-    &.active {
-        background: #3498db;
-        color: white;
-    }
+        &.active {
+            background: #3498db;
+            color: white;
+        }
 
-    svg {
-        font-size: 1.2rem;
+        svg {
+            font-size: 1.2rem;
+        }
     }
 }
 
 .mainContent {
     flex: 1;
-    padding: 32px;
+    padding: 20px;
     margin-left: 250px;
+    width: calc(100% - 250px);
+    transition: margin-left 0.3s ease;
+    overflow-x: auto;
 }
 
 .overview {
@@ -206,6 +232,8 @@
     box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
     overflow: hidden;
     margin: 20px 0;
+    width: 100%;
+    min-width: 800px;
 }
 
 .tableHeader {
@@ -215,138 +243,98 @@
     padding: 20px;
     border-bottom: 1px solid #e5e7eb;
     background: #f9fafb;
+    flex-wrap: wrap;
+    gap: 10px;
 
     h2 {
         margin: 0;
         color: #1f2937;
         font-size: 1.5rem;
     }
+
+    .headerActions {
+        display: flex;
+        gap: 10px;
+        flex-wrap: nowrap;
+        align-items: center;
+
+        button {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+            padding: 8px 16px;
+            border-radius: 6px;
+            font-size: 14px;
+            font-weight: 500;
+            white-space: nowrap;
+            min-width: 160px;
+            height: 40px;
+            transition: all 0.2s ease;
+        }
+    }
 }
 
 .tableWrapper {
     overflow-x: auto;
+    width: 100%;
+    -webkit-overflow-scrolling: touch;
 
     .table {
         width: 100%;
         border-collapse: collapse;
-        min-width: 1200px;
 
         th,
         td {
-            padding: 12px 8px;
-            vertical-align: middle;
-            border-bottom: 1px solid #e5e7eb;
-
-            transition: all 0.3s ease; // Thêm transition mượt mà
-        }
-
-        th {
-            font-size: 13px;
-            font-weight: 600;
-            background: #f8fafc;
-            color: #374151;
+            padding: 12px 16px;
             text-align: left;
+            border-bottom: 1px solid #e5e7eb;
+            white-space: nowrap;
         }
 
-        td {
-            font-size: 13px;
-            color: #6b7280;
-        }
-
-        tr:hover {
-            background: #f9fafb;
-        }
-
-        // Cột ID - Thu gọn mặc định, mở rộng khi hover
-        th:nth-child(1), 
+        // Fixed column widths
+        th:nth-child(1),
         td:nth-child(1) {
-            width: 60px; // Width mặc định nhỏ
-            max-width: 60px;
-            min-width: 60px;
-            font-size: 11px;
-            color: #666;
-            font-family: 'Courier New', monospace;
-            overflow: hidden;
-            text-overflow: ellipsis;
-            white-space: nowrap;
-            position: relative;
-            cursor: pointer;
-            transition: all 0.3s ease;
+            width: 60px;
         }
 
-        // Khi hover vào cột ID
-        th:nth-child(1):hover,
-        td:nth-child(1):hover {
-            width: 300px !important; // Mở rộng khi hover
-            max-width: 300px !important;
-            min-width: 300px !important;
-            background: #fff3cd;
-            z-index: 10;
-            position: relative;
-            word-break: break-all;
-            white-space: normal;
-            padding: 8px;
-            box-shadow: 2px 0 8px rgba(0,0,0,0.1);
-        }
-
-        // Khi hover vào row, cột ID cũng mở rộng
-        tr:hover td:nth-child(1) {
-            width: 250px;
-            max-width: 250px;
-            min-width: 250px;
-            background: #f8f9fa;
-            word-break: break-all;
-            white-space: normal;
-        }
-
-        // Cột tên khóa học
+        // ID
+        th:nth-child(2),
         td:nth-child(2) {
-            max-width: 280px;
-            min-width: 200px;
+            width: 120px;
         }
 
-        // Cột tác giả
+        // Username
+        th:nth-child(3),
         td:nth-child(3) {
-            max-width: 150px;
-            overflow: hidden;
-            text-overflow: ellipsis;
-            white-space: nowrap;
+            width: 200px;
         }
 
-        // Cột danh mục
+        // Email
+        th:nth-child(4),
         td:nth-child(4) {
-            max-width: 120px;
+            width: 150px;
         }
 
-        // Cột cấp độ
+        // Họ và tên
+        th:nth-child(5),
         td:nth-child(5) {
             width: 100px;
-            text-align: center;
         }
 
-        // Cột thời lượng
+        // Vai trò
+        th:nth-child(6),
         td:nth-child(6) {
-            width: 80px;
-            text-align: right;
+            width: 150px;
         }
 
-        // Cột giá
+        // Ngày tạo
+        th:nth-child(7),
         td:nth-child(7) {
-            width: 100px;
-            text-align: right;
+            width: 120px;
         }
 
-        // Cột trạng thái
-        td:nth-child(8) {
-            width: 100px;
-            text-align: center;
-        }
-
-        // Cột hành động
-        td:nth-child(9) {
-            width: 160px;
-            min-width: 160px;
-        }
+        // Hành động
     }
 }
 
@@ -354,7 +342,7 @@
 .idCell {
     position: relative;
     cursor: help;
-    
+
     &::before {
         content: "🔍"; // Icon gợi ý hover
         position: absolute;
@@ -365,11 +353,11 @@
         opacity: 0;
         transition: opacity 0.3s ease;
     }
-    
+
     &:hover::before {
         opacity: 1;
     }
-    
+
     // Tooltip hiển thị full ID
     &::after {
         content: attr(title);
@@ -389,7 +377,7 @@
         max-width: 300px;
         word-break: break-all;
     }
-    
+
     &:hover::after {
         opacity: 1;
     }
@@ -485,10 +473,9 @@
         display: flex;
         align-items: center;
         justify-content: center;
-        transition: all 0.2s;
+        transition: background-color 0.2s;
 
         &:hover {
-            transform: translateY(-1px);
             box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
         }
     }
@@ -941,17 +928,16 @@
     &:hover {
         background: #059669;
     }
+
+    svg {
+        font-size: 16px;
+    }
 }
 
 .refreshButton {
     background: #3b82f6;
     color: white;
     border: none;
-    padding: 8px 16px;
-    border-radius: 6px;
-    cursor: pointer;
-    font-size: 14px;
-    transition: background-color 0.2s;
 
     &:hover {
         background: #2563eb;
@@ -969,32 +955,35 @@
     align-items: center;
     justify-content: center;
     gap: 4px;
-    
+
     .videoIcon {
         color: #6366f1;
         font-size: 12px;
     }
-    
+
     .videoCount {
         font-weight: 600;
         color: #374151;
         font-size: 13px;
         min-width: 20px;
         text-align: center;
-        
+
         // Style khác nhau dựa trên số lượng video
         &[data-count="0"] {
             color: #9ca3af;
         }
-        
-        &[data-count="1"], &[data-count="2"], &[data-count="3"] {
+
+        &[data-count="1"],
+        &[data-count="2"],
+        &[data-count="3"] {
             color: #059669;
         }
-        
-        &[data-count="4"], &[data-count="5"] {
+
+        &[data-count="4"],
+        &[data-count="5"] {
             color: #0891b2;
         }
-        
+
         // Nhiều hơn 5 videos
         &:not([data-count="0"]):not([data-count="1"]):not([data-count="2"]):not([data-count="3"]):not([data-count="4"]):not([data-count="5"]) {
             color: #7c3aed;
@@ -1010,7 +999,7 @@
         transform: scale(1.1);
         transition: all 0.2s ease;
     }
-    
+
     .videoCount {
         transform: scale(1.05);
         transition: all 0.2s ease;
@@ -1029,27 +1018,27 @@
     font-size: 11px;
     font-weight: 500;
     color: #374151;
-    
+
     .videoIcon {
         font-size: 10px;
         color: #6366f1;
     }
-    
+
     &.hasVideos {
         background: #ecfdf5;
         border-color: #d1fae5;
         color: #059669;
-        
+
         .videoIcon {
             color: #059669;
         }
     }
-    
+
     &.noVideos {
         background: #fef2f2;
         border-color: #fecaca;
         color: #dc2626;
-        
+
         .videoIcon {
             color: #dc2626;
         }
@@ -1059,20 +1048,22 @@
 // Responsive cho cột Videos
 @media (max-width: 1200px) {
     .table {
-        th:nth-child(7), // Cột Videos
+
+        th:nth-child(7),
+        // Cột Videos
         td:nth-child(7) {
             width: 50px;
             min-width: 50px;
         }
-        
+
         .videoInfo {
             flex-direction: column;
             gap: 2px;
-            
+
             .videoIcon {
                 font-size: 10px;
             }
-            
+
             .videoCount {
                 font-size: 11px;
             }
@@ -1082,12 +1073,13 @@
 
 @media (max-width: 768px) {
     .table {
+
         th:nth-child(7),
         td:nth-child(7) {
             width: 40px;
             min-width: 40px;
         }
-        
+
         .videoInfo {
             .videoCount {
                 font-size: 10px;
@@ -1105,16 +1097,17 @@
     .mainContent {
         margin-left: 200px;
     }
-    
+
     .table {
-        th:nth-child(1), 
+
+        th:nth-child(1),
         td:nth-child(1) {
             width: 50px !important;
             max-width: 50px !important;
             min-width: 50px !important;
             font-size: 10px;
         }
-        
+
         th:nth-child(1):hover,
         td:nth-child(1):hover {
             width: 200px !important;
@@ -1146,20 +1139,21 @@
     }
 
     .table {
+
         th,
         td {
             padding: 8px 4px;
             font-size: 11px;
         }
-        
-        th:nth-child(1), 
+
+        th:nth-child(1),
         td:nth-child(1) {
             width: 40px !important;
             max-width: 40px !important;
             min-width: 40px !important;
             font-size: 9px;
         }
-        
+
         th:nth-child(1):hover,
         td:nth-child(1):hover {
             width: 150px !important;
@@ -1169,15 +1163,216 @@
     }
 
     .sidebar {
-        width: 180px;
+        transform: translateX(-100%); // Ẩn sidebar mặc định
+        width: 100%;
+        max-width: 300px;
+
+        &.open {
+            transform: translateX(0); // Hiện sidebar khi có class open
+        }
     }
 
     .mainContent {
-        margin-left: 180px;
-        padding: 16px;
+        margin-left: 0;
+        padding: 10px;
+        width: 100%;
     }
 
     .adminHeader {
         padding: 12px 16px;
+
+        .headerLeft {
+            .menuToggle {
+                display: block; // Hiển thị nút menu trên mobile
+            }
+        }
+    }
+
+    // Overlay khi menu mở
+    .menuOverlay {
+        display: none;
+        position: fixed;
+        top: 0;
+        left: 0;
+        right: 0;
+        bottom: 0;
+        background: rgba(0, 0, 0, 0.5);
+        z-index: 98;
+
+        &.open {
+            display: block;
+        }
+    }
+}
+
+// Role badges
+.role {
+    padding: 4px 8px;
+    border-radius: 12px;
+    font-size: 11px;
+    font-weight: 500;
+    text-transform: uppercase;
+    white-space: nowrap;
+    display: inline-block;
+    text-align: center;
+    min-width: 80px;
+
+    &.admin {
+        background: #fef2f2;
+        color: #dc2626;
+    }
+
+    &.user {
+        background: #ecfdf5;
+        color: #059669;
+    }
+
+    &.moderator {
+        background: #eff6ff;
+        color: #3b82f6;
+    }
+}
+
+// Mobile optimizations
+@media (max-width: 768px) {
+    .adminContainer {
+        padding-top: 56px;
+    }
+
+    .mainContent {
+        margin-left: 0;
+        padding: 10px;
+        width: 100%;
+    }
+
+    .tableContainer {
+        margin: 10px 0;
+        border-radius: 8px;
+        min-width: 100%;
+    }
+
+    .tableWrapper {
+        margin: 0 -10px;
+        padding: 0 10px;
+        overflow-x: auto;
+        scrollbar-width: thin;
+
+        &::-webkit-scrollbar {
+            height: 6px;
+        }
+
+        &::-webkit-scrollbar-track {
+            background: #f1f1f1;
+            border-radius: 3px;
+        }
+
+        &::-webkit-scrollbar-thumb {
+            background: #888;
+            border-radius: 3px;
+        }
+
+        .table {
+            font-size: 13px;
+
+            th,
+            td {
+                padding: 10px 12px;
+            }
+
+            // Adjust column widths for mobile
+            th:nth-child(1),
+            td:nth-child(1) {
+                min-width: 50px;
+            }
+
+            // ID
+            th:nth-child(2),
+            td:nth-child(2) {
+                min-width: 100px;
+            }
+
+            // Username
+            th:nth-child(3),
+            td:nth-child(3) {
+                min-width: 180px;
+            }
+
+            // Email
+            th:nth-child(4),
+            td:nth-child(4) {
+                min-width: 130px;
+            }
+
+            // Họ và tên
+            th:nth-child(5),
+            td:nth-child(5) {
+                min-width: 90px;
+            }
+
+            // Vai trò
+            th:nth-child(6),
+            td:nth-child(6) {
+                min-width: 130px;
+            }
+
+            // Ngày tạo
+            th:nth-child(7),
+            td:nth-child(7) {
+                min-width: 110px;
+            }
+
+            // Hành động
+        }
+    }
+
+    .scrollIndicator {
+        display: block;
+        text-align: center;
+        padding: 8px;
+        color: #6b7280;
+        font-size: 12px;
+        background: rgba(255, 255, 255, 0.9);
+        position: sticky;
+        bottom: 0;
+        left: 0;
+        right: 0;
+        border-top: 1px solid #e5e7eb;
+    }
+}
+
+// Small mobile optimizations
+@media (max-width: 480px) {
+    .mainContent {
+        padding: 8px;
+    }
+
+    .tableContainer {
+        margin: 8px 0;
+    }
+
+    .tableWrapper {
+        .table {
+            font-size: 12px;
+
+            th,
+            td {
+                padding: 8px 10px;
+            }
+        }
+    }
+}
+
+// Extra small devices
+@media (max-width: 480px) {
+    .tableHeader {
+        .headerActions {
+            flex-direction: column;
+            width: 100%;
+
+            button {
+                width: 100%;
+                justify-content: center;
+            }
+        }
     }
 }
