@@ -11,9 +11,18 @@ export default function DocumentsTable() {
     const [totalPages, setTotalPages] = useState(1);
     const pageSize = 10;
 
+<<<<<<< HEAD
     useEffect(() => {
         fetchCourses();
     }, [currentPage]);
+=======
+    const fetchDocs = async () => {
+        const params = new URLSearchParams(filters);
+        const res = await fetch(`http://localhost:8000/api/documents?${params}`);
+        const data = await res.json();
+        setDocs(Array.isArray(data) ? data : []);
+    };
+>>>>>>> 2317ac4c7e7c014b621772f01c43826862fb049b
 
     const fetchCourses = async () => {
         try {
