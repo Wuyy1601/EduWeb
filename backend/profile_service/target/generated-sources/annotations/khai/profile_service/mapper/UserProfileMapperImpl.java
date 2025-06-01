@@ -9,7 +9,7 @@ import org.springframework.stereotype.Component;
 
 @Generated(
     value = "org.mapstruct.ap.MappingProcessor",
-    comments = "version: 1.5.5.Final, compiler: Eclipse JDT (IDE) 3.42.0.v20250514-1000, environment: Java 21.0.7 (Eclipse Adoptium)"
+    comments = "version: 1.5.5.Final, compiler: javac, environment: Java 23.0.2 (Oracle Corporation)"
 )
 @Component
 public class UserProfileMapperImpl implements UserProfileMapper {
@@ -22,11 +22,11 @@ public class UserProfileMapperImpl implements UserProfileMapper {
 
         UserProfile.UserProfileBuilder userProfile = UserProfile.builder();
 
-        userProfile.birthday( request.getBirthday() );
-        userProfile.city( request.getCity() );
+        userProfile.userId( request.getUserId() );
         userProfile.firstName( request.getFirstName() );
         userProfile.lastName( request.getLastName() );
-        userProfile.userId( request.getUserId() );
+        userProfile.birthday( request.getBirthday() );
+        userProfile.city( request.getCity() );
 
         return userProfile.build();
     }
@@ -39,12 +39,12 @@ public class UserProfileMapperImpl implements UserProfileMapper {
 
         UserProfileResponse.UserProfileResponseBuilder userProfileResponse = UserProfileResponse.builder();
 
+        userProfileResponse.id( entity.getId() );
         userProfileResponse.avatar( entity.getAvatar() );
+        userProfileResponse.firstName( entity.getFirstName() );
+        userProfileResponse.lastName( entity.getLastName() );
         userProfileResponse.birthday( entity.getBirthday() );
         userProfileResponse.city( entity.getCity() );
-        userProfileResponse.firstName( entity.getFirstName() );
-        userProfileResponse.id( entity.getId() );
-        userProfileResponse.lastName( entity.getLastName() );
 
         return userProfileResponse.build();
     }
@@ -55,9 +55,9 @@ public class UserProfileMapperImpl implements UserProfileMapper {
             return;
         }
 
-        entity.setBirthday( request.getBirthday() );
-        entity.setCity( request.getCity() );
         entity.setFirstName( request.getFirstName() );
         entity.setLastName( request.getLastName() );
+        entity.setBirthday( request.getBirthday() );
+        entity.setCity( request.getCity() );
     }
 }

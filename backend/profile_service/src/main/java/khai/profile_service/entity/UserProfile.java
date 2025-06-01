@@ -24,7 +24,7 @@ public class UserProfile {
     String id;
 
     @Property("user_id")
-    String userId; // Xóa @Property("userId")
+    String userId;
 
     String avatar;
     String firstName;

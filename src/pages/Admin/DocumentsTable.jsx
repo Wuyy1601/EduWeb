@@ -26,7 +26,7 @@ export default function DocumentsTable() {
         const params = new URLSearchParams(filters);
         const res = await fetch(`http://localhost:8000/api/documents?${params}`);
         const data = await res.json();
-        setDocs(data);
+        setDocs(Array.isArray(data) ? data : []);
     };
 
     useEffect(() => { fetchDocs(); }, [filters]);
