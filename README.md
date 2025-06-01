@@ -121,12 +121,19 @@ Cài đặt & cấu hình database MySQL/MongoDB theo hướng dẫn trong từn
 
 EduWeb/
 ├── backend/            # Source code backend Java và thư viện SpringBoot
+
 ├── src/                # Source code ReactJS 
+
 ├── package.json        # Thông tin cấu hình dự án (npm)
+
 ├── package-lock.json   # Khóa phiên bản các package
+
 ├── vite.config.js      # Cấu hình Vite
+
 ├── eslint.config.js    # Cấu hình ESLint
+
 ├── public/             
+
 └── README.md           # Tài liệu mô tả dự án
 Chức năng chính đều được chú thích rõ ràng trong source code.
 
