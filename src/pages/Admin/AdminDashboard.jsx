@@ -2,6 +2,7 @@ import styles from './styles.module.scss';
 import DocumentsTable from '@pages/Admin/DocumentsTable';
 import { useState, useEffect } from 'react';
 import { FaBook, FaUsers, FaChartBar, FaCog, FaBell } from 'react-icons/fa';
+import CourseTable from './CourseTable';
 
 export default function AdminDashboard() {
     const [activeTab, setActiveTab] = useState('documents');
@@ -10,7 +11,8 @@ export default function AdminDashboard() {
         { id: 'overview', label: 'Tổng quan', icon: <FaChartBar /> },
         { id: 'documents', label: 'Quản lý tài liệu', icon: <FaBook /> },
         { id: 'users', label: 'Quản lý người dùng', icon: <FaUsers /> },
-        { id: 'settings', label: 'Cài đặt', icon: <FaCog /> }
+        { id: 'settings', label: 'Cài đặt', icon: <FaCog /> },
+        { id: 'courses', label: 'Quản lý khóa học', icon: <FaBook /> }
     ];
 
     const renderContent = () => {
@@ -23,6 +25,8 @@ export default function AdminDashboard() {
                 return <div>Quản lý người dùng (Đang phát triển)</div>;
             case 'settings':
                 return <div>Cài đặt hệ thống (Đang phát triển)</div>;
+            case 'courses':
+                return <CourseTable />;
             default:
                 return <DocumentsTable />;
         }
