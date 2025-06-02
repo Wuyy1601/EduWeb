@@ -16,7 +16,7 @@ function Banner() {
         buttonSignUp,
         catImage,
         bannerBottom,
-        mobileDescription
+        mobileDescription,
     } = styles;
     const navigate = useNavigate();
 
@@ -37,9 +37,6 @@ function Banner() {
                             Ulearn - Kho tài liệu học tập <strong>chọn lọc</strong>, giúp bạn học tập hiệu quả.{' '}
                             <strong>Học thông minh, hiểu sâu bản chất</strong>
                         </p>
-                        <div onClick={() => navigate('/login')}>
-                            <Button content={'Đăng ký ngay'} className={buttonSignUp} />
-                        </div>
                     </div>
 
                     <div className={contentRight}>

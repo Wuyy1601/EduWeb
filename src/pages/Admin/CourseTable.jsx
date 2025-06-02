@@ -215,10 +215,15 @@ function CourseTable() {
             setUploadProgress(0);
 
             const token = localStorage.getItem('token');
+            const endpoint = type === 'thumbnail' ? 'upload-thumbnail' : 'upload-video';
             const formData = new FormData();
             formData.append(type, file);
 
-            const endpoint = type === 'thumbnail' ? 'upload-thumbnail' : 'upload-video';
+            // Thêm metadata cho video nếu cần
+            if (type === 'video') {
+                formData.append('videoName', file.name);
+                formData.append('videoSize', file.size);
+            }
 
             // Create XMLHttpRequest for progress tracking
             const xhr = new XMLHttpRequest();
@@ -233,25 +238,25 @@ function CourseTable() {
 
                 xhr.onload = function () {
                     setUploadProgress(100);
-
                     if (xhr.status === 200) {
                         try {
                             const data = JSON.parse(xhr.responseText);
                             if (data.code === 1000) {
-                                alert(`Upload ${type === 'thumbnail' ? 'thumbnail' : 'video'} thành công!`);
+                                const message =
+                                    type === 'thumbnail' ? 'Upload thumbnail thành công!' : 'Upload video thành công!';
+                                alert(message);
                                 setUploadModal({ show: false, type: '', courseId: '' });
-                                fetchCourses();
-                                resolve(data);
+                                fetchCourses(); // Reload để cập nhật danh sách video
                             } else {
                                 throw new Error(data.message || `Lỗi khi upload ${type}`);
                             }
                         } catch (parseError) {
-                            reject(new Error('Lỗi phân tích phản hồi từ server'));
+                            throw new Error('Lỗi phân tích phản hồi từ server');
                         }
                     } else if (xhr.status === 413) {
-                        reject(new Error('File quá lớn! Vui lòng chọn file nhỏ hơn.'));
+                        throw new Error('File quá lớn! Vui lòng chọn file nhỏ hơn.');
                     } else if (xhr.status === 415) {
-                        reject(new Error('Định dạng file không được hỗ trợ.'));
+                        throw new Error('Định dạng file không được hỗ trợ.');
                     } else {
                         reject(new Error(`HTTP ${xhr.status}: ${xhr.statusText}`));
                     }
@@ -321,6 +326,13 @@ function CourseTable() {
             <div className={styles.videoInfo}>
                 <FaPlay className={styles.videoIcon} />
                 <span className={styles.videoCount}>{videoCount}</span>
+                {course.videoFiles && course.videoFiles.length > 0 && (
+                    <div className={styles.videoList}>
+                        {course.videoFiles.map((video, index) => (
+                            <div key={index} className={styles.videoItem}></div>
+                        ))}
+                    </div>
+                )}
             </div>
         );
     };
@@ -546,6 +558,20 @@ function CourseTable() {
                                             style={{ marginLeft: 8 }}
                                         >
                                             <FaTrash />
+                                        </button>
+                                        <button
+                                            onClick={() =>
+                                                setUploadModal({
+                                                    show: true,
+                                                    type: 'video',
+                                                    courseId: course.id,
+                                                })
+                                            }
+                                            className={styles.uploadButton}
+                                            title="Upload Video"
+                                            style={{ marginLeft: 8 }}
+                                        >
+                                            <FaVideo />
                                         </button>
                                     </td>
                                 </tr>

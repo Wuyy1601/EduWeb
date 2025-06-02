@@ -115,9 +115,20 @@ function Overview() {
                 const courseData = await courseRes.json();
                 const courseCount = courseData.result?.totalElements || courseData.result?.totalItems || 0;
 
+                // Tổng số user (lấy full rồi đếm)
+                const userRes = await fetch('http://localhost:8888/api/v1/identity/users', {
+                    headers: {
+                        'Content-Type': 'application/json',
+                        ...(token && { Authorization: `Bearer ${token}` }),
+                    },
+                });
+                const userData = await userRes.json();
+                const userCount = Array.isArray(userData.result) ? userData.result.length : 0;
+
                 setStats([
                     { label: 'Tổng tài liệu', value: docCount.toLocaleString(), color: '#3498db' },
                     { label: 'Tổng khóa học', value: courseCount.toLocaleString(), color: '#2563eb' },
+                    { label: 'Tổng người dùng', value: userCount.toLocaleString(), color: '#2ecc71' },
                 ]);
             } catch (error) {
                 console.error('Error fetching stats:', error);
