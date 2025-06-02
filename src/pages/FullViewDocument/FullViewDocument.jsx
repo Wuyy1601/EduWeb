@@ -3,6 +3,9 @@ import { useParams } from 'react-router-dom';
 import MyHeader from '@components/Header/Header';
 import MainLayout from '@components/Layout/Layout';
 import MyFooter from '@components/Footer/Footer';
+import ChatBot from '@components/ChatBot/ChatBot';
+import Courses from './Course';
+import styles from './styles.module.scss';
 
 function FullViewDocument() {
     const { id } = useParams();
@@ -65,53 +68,53 @@ function FullViewDocument() {
                 )}
 
                 {/* Sidebar */}
-                <aside
-                    className={`
-                    fixed md:relative top-0 left-0 h-full z-50 w-3/4 md:w-1/4 bg-white shadow-lg
-                    transform transition-transform duration-300 ease-in-out
-                    ${showSidebar ? 'translate-x-0' : '-translate-x-full'}
-                    md:translate-x-0 md:shadow md:mr-6 md:h-fit md:self-start md:sticky md:top-6 md:rounded-xl
-                    overflow-y-auto
-                `}
-                >
-                    <button
-                        className="md:hidden absolute top-4 right-4 text-gray-500 hover:text-gray-700"
-                        onClick={handleSidebarClose}
-                    >
-                        <svg
-                            xmlns="http://www.w3.org/2000/svg"
-                            className="h-6 w-6"
-                            fill="none"
-                            viewBox="0 0 24 24"
-                            stroke="currentColor"
-                        >
-                            <path
-                                strokeLinecap="round"
-                                strokeLinejoin="round"
-                                strokeWidth={2}
-                                d="M6 18L18 6M6 6l12 12"
-                            />
-                        </svg>
-                    </button>
-                    <div className="p-6">
-                        <h2 className="font-bold text-xl mb-4">{course.courseName}</h2>
+                <aside className={styles.sidebarLesson}>
+                    <div style={{ fontWeight: 700, fontSize: 18, marginBottom: 8 }}>Tên Tài liệu</div>
+                    <div className={styles.lessonList}>
                         {lessons.map((ls, idx) => (
                             <div
                                 key={idx}
-                                className={
-                                    'mb-2 p-2 rounded cursor-pointer transition ' +
-                                    (activeLesson === idx
-                                        ? 'bg-blue-600 text-white font-bold shadow'
-                                        : 'bg-blue-100 hover:bg-blue-200')
-                                }
+                                className={`${styles.lessonItem} ${activeLesson === idx ? styles.active : ''}`}
                                 onClick={() => {
                                     setActiveLesson(idx);
                                     handleSidebarClose();
                                 }}
                             >
-                                {`Bài ${idx + 1}`}
+                                Lesson {idx + 1}
                             </div>
                         ))}
+                    </div>
+                    <div style={{ marginTop: 32 }}>
+                        <div style={{ fontWeight: 600, color: '#374151', marginBottom: 6 }}>Câu hỏi</div>
+                        <div
+                            style={{
+                                background: '#fef08a',
+                                borderRadius: 8,
+                                padding: '8px 14px',
+                                fontSize: 15,
+                                marginBottom: 6,
+                            }}
+                        >
+                            Câu hỏi 1
+                        </div>
+                        <div style={{ background: '#fee2e2', borderRadius: 8, padding: '8px 14px', fontSize: 15 }}>
+                            Câu hỏi 2
+                        </div>
+                        <div style={{ fontWeight: 600, color: '#374151', margin: '22px 0 6px' }}>Luyện tập</div>
+                        <div
+                            style={{
+                                background: '#d1fae5',
+                                borderRadius: 8,
+                                padding: '8px 14px',
+                                fontSize: 15,
+                                marginBottom: 6,
+                            }}
+                        >
+                            Luyện tập 1
+                        </div>
+                        <div style={{ background: '#c7d2fe', borderRadius: 8, padding: '8px 14px', fontSize: 15 }}>
+                            Luyện tập 2
+                        </div>
                     </div>
                 </aside>
 
@@ -132,12 +135,51 @@ function FullViewDocument() {
                             <div className="text-white p-8 text-center">Chưa có video cho bài này</div>
                         )}
                     </div>
-                    <div className="bg-white p-4 md:p-8 rounded-2xl shadow text-gray-700">
-                        <h2 className="font-bold text-lg mb-2">Mô tả bài học</h2>
-                        <p>Không có mô tả.</p>
+                    <div className={styles.courseInfoBlock}>
+                        <h2>Điều bạn nhận được khi học khóa này</h2>
+                        <p>
+                            Khóa học cung cấp kiến thức từ cơ bản đến nâng cao, giúp bạn xây dựng nền tảng vững chắc và
+                            phát triển kỹ năng thực tiễn. Tất cả nội dung đều được giảng giải rõ ràng, có ví dụ minh họa
+                            và ứng dụng thực tế. Bạn có thể học theo tốc độ riêng, chủ động luyện tập qua các bài tập
+                            đính kèm và được cập nhật nội dung mới miễn phí trọn đời.
+                        </p>
+
+                        <h2>Khóa học này phù hợp với ai?</h2>
+                        <p>
+                            Khóa học dành cho người mới bắt đầu, người muốn củng cố kiến thức nền tảng, cũng như những
+                            ai đang tìm kiếm giải pháp học tập chủ động, tiết kiệm thời gian. Nếu bạn muốn học bài bản,
+                            tự tin thực hành và ứng dụng ngay, đây là lựa chọn phù hợp.
+                        </p>
+
+                        <h2>Cam kết của chúng tôi</h2>
+                        <p>
+                            Đội ngũ giảng viên và hỗ trợ luôn đồng hành cùng bạn trong suốt quá trình học. Bạn sẽ được
+                            giải đáp thắc mắc, tham gia cộng đồng học viên, nhận chứng chỉ hoàn thành và hỗ trợ cập nhật
+                            tài liệu mới nhất. Sự thành công của bạn là mục tiêu của chúng tôi!
+                        </p>
+
+                        <div className={styles.reviewBox}>
+                            <div style={{ display: 'flex', alignItems: 'center', gap: 12 }}>
+                                <img
+                                    src="https://randomuser.me/api/portraits/women/44.jpg"
+                                    alt="user"
+                                    style={{ width: 46, height: 46, borderRadius: 16 }}
+                                />
+                                <div>
+                                    <div style={{ fontWeight: 700 }}>Nguyễn Thị Hạnh</div>
+                                    <div style={{ color: '#efb24e', fontSize: 20, marginTop: 2 }}>★★★★★</div>
+                                </div>
+                            </div>
+                            <div style={{ marginTop: 10 }}>
+                                "Khóa học trình bày dễ hiểu, có hướng dẫn chi tiết từng bước và nhiều ví dụ thực tế. Hỗ
+                                trợ giải đáp nhanh, mình cảm thấy rất hài lòng và tự tin ứng dụng sau khi học xong."
+                            </div>
+                        </div>
                     </div>
                 </main>
             </div>
+            <ChatBot />
+            <Courses title="Tài liệu gợi ý" size={5} />
             <MyFooter />
         </MainLayout>
     );
