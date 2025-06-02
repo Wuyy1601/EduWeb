@@ -127,6 +127,7 @@ public class CourseService {
         var courseResponse = courseMapper.toCourseResponse(course);
         courseResponse.setCreated(dateTimeFormatter.format(course.getCreatedDate()));
 
+        courseResponse.setPrice(course.getPrice());
         return courseResponse;
     }
 
