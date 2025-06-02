@@ -1,5 +1,7 @@
 import { useParams } from 'react-router-dom';
 import { useState, useEffect } from 'react';
+import { useNavigate } from 'react-router-dom';
+
 import styles from './styles.module.scss';
 import MyFooter from '@components/Footer/Footer';
 import MyHeader from '@components/Header/Header';
@@ -36,6 +38,7 @@ function FeaturedCard({ title, description, thumbnailUrl }) {
 }
 
 function ReviewDocument() {
+    const navigate = useNavigate();
     const { id } = useParams();
     const [course, setCourse] = useState(null);
     const [loading, setLoading] = useState(true);
@@ -76,7 +79,6 @@ function ReviewDocument() {
                     <img src={course.thumbnailUrl} alt="Course Banner" className={styles.bannerImage} />
                     <div className={styles.priceBox}>
                         <img src={course.thumbnailUrl} alt="preview" className={styles.miniImage} />
-
                         <h3 style={{ fontSize: '1.5rem', fontWeight: 'bold', marginBottom: '0.5rem', color: '#000' }}>
                             {course.price?.toLocaleString('vi-VN')} VND
                         </h3>
@@ -99,8 +101,29 @@ function ReviewDocument() {
                             </>
                         )}
 
-                        <Button content="Buy Now" className={styles.buyButton} />
+                        <Button
+                            content="Buy Now"
+                            className={styles.buyButton}
+                            onClick={() => {
+                                // Lấy cart hiện tại từ localStorage (nếu có)
+                                const stored = localStorage.getItem('cart');
+                                let cart = [];
+                                if (stored) cart = JSON.parse(stored);
 
+                                if (!cart.find((item) => item.id === course.id)) {
+                                    cart.push({
+                                        id: course.id,
+                                        name: course.courseName,
+                                        price: course.price,
+                                        image: course.thumbnailUrl,
+                                    });
+                                    localStorage.setItem('cart', JSON.stringify(cart));
+                                }
+
+                                // Chuyển hướng sang trang Cart
+                                navigate('/cart');
+                            }}
+                        />
                         <div style={{ borderTop: '1px solid #ccc', padding: '10px', marginTop: '10px' }}>
                             <h4>Thông tin tài liệu</h4>
                             <ul style={{ listStyleType: 'none', padding: 0 }}>

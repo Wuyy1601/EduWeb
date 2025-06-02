@@ -321,3 +321,60 @@
         background: #2554a3;
     }
 }
+
+.cartTable {
+    width: 100%;
+    border-collapse: separate;
+    border-spacing: 0 8px;
+    th,
+    td {
+        padding: 14px 20px;
+        font-size: 16px;
+        vertical-align: middle;
+    }
+    th {
+        background: none;
+        font-weight: bold;
+        border: none;
+        text-align: left;
+    }
+    td {
+        background: #fff;
+        border: none;
+        vertical-align: middle;
+    }
+}
+
+.courseInfo {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    height: 56px; // luôn cùng chiều cao
+}
+
+.courseImg {
+    width: 48px;
+    height: 48px;
+    object-fit: cover;
+    border-radius: 8px;
+    flex-shrink: 0;
+}
+
+.deleteBtn {
+    margin-left: 16px;
+    color: #ff3b3b;
+    background: none;
+    border: none;
+    cursor: pointer;
+    font-size: 22px;
+    vertical-align: middle;
+    transition: color 0.2s;
+    &:hover {
+        color: #c00;
+    }
+}
+
+.totalRow td {
+    background: none !important;
+    font-size: 18px;
+}
