@@ -87,7 +87,7 @@ Docker (Optional)	Đóng gói, triển khai dễ dàng
 📸 DEMO
 <div align="center"> <img src="https://github.com/Wuyy1601/EduWeb/raw/main/public/demo.gif" alt="EduWeb Demo" width="700"/> </div>
 
-Link demo: [edu-web-five.vercel.app](https://www.edu-web-five.vercel.app)
+Link demo: [edu-web-five.vercel.app](https://edu-web-five.vercel.app)
 
 ⚡ HƯỚNG DẪN CÀI ĐẶT NHANH
 
