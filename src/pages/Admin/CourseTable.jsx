@@ -89,10 +89,10 @@ function CourseTable() {
         e.preventDefault();
         try {
             const token = localStorage.getItem('token');
-            const url = editingCourse 
+            const url = editingCourse
                 ? `http://localhost:8888/api/v1/course/${editingCourse.id}`
                 : 'http://localhost:8888/api/v1/course/create';
-            
+
             const method = editingCourse ? 'PUT' : 'POST';
 
             // convert price về number trước khi gửi
@@ -112,7 +112,7 @@ function CourseTable() {
             }
 
             const data = await response.json();
-            
+
             if (data.code === 1000) {
                 alert(editingCourse ? 'Cập nhật khóa học thành công!' : 'Tạo khóa học thành công!');
                 setShowModal(false);
@@ -145,7 +145,7 @@ function CourseTable() {
             }
 
             const data = await response.json();
-            
+
             if (data.code === 1000) {
                 alert('Xóa khóa học thành công!');
                 await fetchCourses();
@@ -214,16 +214,16 @@ function CourseTable() {
             }
 
             setUploadProgress(0);
-            
+
             const token = localStorage.getItem('token');
             const formData = new FormData();
             formData.append(type, file);
 
             const endpoint = type === 'thumbnail' ? 'upload-thumbnail' : 'upload-video';
-            
+
             // Create XMLHttpRequest for progress tracking
             const xhr = new XMLHttpRequest();
-            
+
             return new Promise((resolve, reject) => {
                 xhr.upload.addEventListener('progress', (e) => {
                     if (e.lengthComputable) {
@@ -232,9 +232,9 @@ function CourseTable() {
                     }
                 });
 
-                xhr.onload = function() {
+                xhr.onload = function () {
                     setUploadProgress(100);
-                    
+
                     if (xhr.status === 200) {
                         try {
                             const data = JSON.parse(xhr.responseText);
@@ -256,16 +256,16 @@ function CourseTable() {
                     } else {
                         reject(new Error(`HTTP ${xhr.status}: ${xhr.statusText}`));
                     }
-                    
+
                     setUploadProgress(0);
                 };
 
-                xhr.onerror = function() {
+                xhr.onerror = function () {
                     setUploadProgress(0);
                     reject(new Error('Lỗi kết nối mạng'));
                 };
 
-                xhr.ontimeout = function() {
+                xhr.ontimeout = function () {
                     setUploadProgress(0);
                     reject(new Error('Upload timeout - file quá lớn hoặc kết nối chậm'));
                 };
@@ -382,7 +382,7 @@ function CourseTable() {
             <div className={styles.tableHeader}>
                 <h2>📚 Quản lý khóa học</h2>
                 <div className={styles.headerActions}>
-                    <button 
+                    <button
                         onClick={fetchCourses}
                         className={styles.refreshButton}
                         disabled={loading}
@@ -415,64 +415,78 @@ function CourseTable() {
                 <div className={styles.tableWrapper}>
                     <table className={styles.table}>
                         <thead>
-              <tr>
-                <th style={{ width: '80px' }}>ID</th>
-                <th style={{ width: '100px' }}>Thumbnail</th>
-                <th style={{ width: '280px' }}>Tên khóa học</th>
-                <th style={{ width: '120px' }}>Tác giả</th>
-                <th style={{ width: '100px' }}>Danh mục</th>
-                <th style={{ width: '80px' }}>Cấp độ</th>
-                <th style={{ width: '80px' }}>Thời lượng</th>
-                <th style={{ width: '60px' }}>Videos</th>
-                <th style={{ width: '100px' }}>Giá</th>
-                <th style={{ width: '80px' }}>Trạng thái</th>
-                <th style={{ width: '150px' }}>Hành động</th>
-              </tr>
-            </thead>
-            <tbody>
-              {courses.map((course, idx) => (
-                <tr key={course.id ?? idx}>
-                  <td
-                    onClick={() => setExpandedId(expandedId === course.id ? null : course.id)}
-                    title={course.id}
-                    style={{
-                      maxWidth: expandedId === course.id ? 'none' : '80px',
-                      overflow: expandedId === course.id ? 'visible' : 'hidden',
-                      textOverflow: 'ellipsis',
-                      whiteSpace: 'nowrap',
-                      cursor: 'pointer'
-                    }}
-                  >
-                    {course.id
-                      ? (expandedId === course.id
-                          ? course.id
-                          : `${course.id.slice(0, 8)}…`)
-                      : ''}
-                  </td>
-                  <td>
-                    {course.thumbnailUrl
-                      ? <img 
-                          src={course.thumbnailUrl} 
-                          alt={course.courseName} 
-                          className={styles.thumbnail} 
-                        />
-                      : <FaImage style={{ fontSize: '1.5rem', color: '#ccc' }}/>
-                    }
-                  </td>
-                  <td>{course.courseName}</td>
-                  <td>{course.author}</td>
-                  <td>{course.category}</td>
-                  <td>{course.level}</td>
-                  <td>{course.duration}</td>
-                  <td>{renderVideoCount(course)}</td>
-                  <td>{course.price?.toLocaleString('vi-VN')} VND</td>
-                  <td>{course.published ? 'Published' : 'Draft'}</td>
-                  <td>
-                    {/* …buttons Edit / Delete / Upload… */}
-                  </td>
-                </tr>
-              ))}
-            </tbody>
+                            <tr>
+                                <th style={{ width: '80px' }}>ID</th>
+                                <th style={{ width: '100px' }}>Thumbnail</th>
+                                <th style={{ width: '280px' }}>Tên khóa học</th>
+                                <th style={{ width: '120px' }}>Tác giả</th>
+                                <th style={{ width: '100px' }}>Danh mục</th>
+                                <th style={{ width: '80px' }}>Cấp độ</th>
+                                <th style={{ width: '80px' }}>Thời lượng</th>
+                                <th style={{ width: '60px' }}>Videos</th>
+                                <th style={{ width: '100px' }}>Giá</th>
+                                <th style={{ width: '80px' }}>Trạng thái</th>
+                                <th style={{ width: '150px' }}>Hành động</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {courses.map((course, idx) => (
+                                <tr key={course.id ?? idx}>
+                                    <td
+                                        onClick={() => setExpandedId(expandedId === course.id ? null : course.id)}
+                                        title={course.id}
+                                        style={{
+                                            maxWidth: expandedId === course.id ? 'none' : '80px',
+                                            overflow: expandedId === course.id ? 'visible' : 'hidden',
+                                            textOverflow: 'ellipsis',
+                                            whiteSpace: 'nowrap',
+                                            cursor: 'pointer'
+                                        }}
+                                    >
+                                        {course.id
+                                            ? (expandedId === course.id
+                                                ? course.id
+                                                : `${course.id.slice(0, 8)}…`)
+                                            : ''}
+                                    </td>
+                                    <td>
+                                        {course.thumbnailUrl
+                                            ? <img
+                                                src={course.thumbnailUrl}
+                                                alt={course.courseName}
+                                                className={styles.thumbnail}
+                                            />
+                                            : <FaImage style={{ fontSize: '1.5rem', color: '#ccc' }} />
+                                        }
+                                    </td>
+                                    <td>{course.courseName}</td>
+                                    <td>{course.author}</td>
+                                    <td>{course.category}</td>
+                                    <td>{course.level}</td>
+                                    <td>{course.duration}</td>
+                                    <td>{renderVideoCount(course)}</td>
+                                    <td>{course.price?.toLocaleString('vi-VN')} VND</td>
+                                    <td>{course.published ? 'Published' : 'Draft'}</td>
+                                    <td>
+                                        <button
+                                            onClick={() => openEditModal(course)}
+                                            className={styles.editButton}
+                                            title="Chỉnh sửa"
+                                        >
+                                            <FaEdit />
+                                        </button>
+                                        <button
+                                            onClick={() => handleDelete(course.id)}
+                                            className={styles.deleteButton}
+                                            title="Xóa"
+                                            style={{ marginLeft: 8 }}
+                                        >
+                                            <FaTrash />
+                                        </button>
+                                    </td>
+                                </tr>
+                            ))}
+                        </tbody>
                     </table>
                 </div>
             )}
@@ -480,19 +494,19 @@ function CourseTable() {
             {/* Pagination */}
             {!loading && !error && totalPages > 1 && (
                 <div className={styles.pagination}>
-                    <button 
+                    <button
                         onClick={() => setCurrentPage(prev => Math.max(prev - 1, 1))}
                         disabled={currentPage === 1}
                         className={styles.pageButton}
                     >
                         « Trước
                     </button>
-                    
+
                     <span className={styles.pageInfo}>
                         Trang {currentPage} / {totalPages}
                     </span>
-                    
-                    <button 
+
+                    <button
                         onClick={() => setCurrentPage(prev => Math.min(prev + 1, totalPages))}
                         disabled={currentPage === totalPages}
                         className={styles.pageButton}
@@ -515,7 +529,7 @@ function CourseTable() {
                                 ×
                             </button>
                         </div>
-                        
+
                         <form onSubmit={handleSubmit} className={styles.form}>
                             <div className={styles.formRow}>
                                 <div className={styles.formGroup}>
@@ -523,7 +537,7 @@ function CourseTable() {
                                     <input
                                         type="text"
                                         value={formData.courseName}
-                                        onChange={(e) => setFormData({...formData, courseName: e.target.value})}
+                                        onChange={(e) => setFormData({ ...formData, courseName: e.target.value })}
                                         required
                                         placeholder="Nhập tên khóa học"
                                     />
@@ -533,7 +547,7 @@ function CourseTable() {
                                     <input
                                         type="text"
                                         value={formData.author}
-                                        onChange={(e) => setFormData({...formData, author: e.target.value})}
+                                        onChange={(e) => setFormData({ ...formData, author: e.target.value })}
                                         required
                                         placeholder="Nhập tên tác giả"
                                     />
@@ -544,7 +558,7 @@ function CourseTable() {
                                 <label>Mô tả</label>
                                 <textarea
                                     value={formData.description}
-                                    onChange={(e) => setFormData({...formData, description: e.target.value})}
+                                    onChange={(e) => setFormData({ ...formData, description: e.target.value })}
                                     placeholder="Nhập mô tả khóa học"
                                     rows={4}
                                 />
@@ -555,7 +569,7 @@ function CourseTable() {
                                     <label>Danh mục *</label>
                                     <select
                                         value={formData.category}
-                                        onChange={(e) => setFormData({...formData, category: e.target.value})}
+                                        onChange={(e) => setFormData({ ...formData, category: e.target.value })}
                                         required
                                     >
                                         <option value="">Chọn danh mục</option>
@@ -571,7 +585,7 @@ function CourseTable() {
                                     <label>Cấp độ *</label>
                                     <select
                                         value={formData.level}
-                                        onChange={(e) => setFormData({...formData, level: e.target.value})}
+                                        onChange={(e) => setFormData({ ...formData, level: e.target.value })}
                                         required
                                     >
                                         <option value="">Chọn cấp độ</option>
@@ -588,7 +602,7 @@ function CourseTable() {
                                     <input
                                         type="number"
                                         value={formData.duration}
-                                        onChange={(e) => setFormData({...formData, duration: e.target.value})}
+                                        onChange={(e) => setFormData({ ...formData, duration: e.target.value })}
                                         required
                                         min="1"
                                         placeholder="120"
@@ -599,7 +613,7 @@ function CourseTable() {
                                     <input
                                         type="number"
                                         value={formData.price}
-                                        onChange={e => setFormData({...formData, price: e.target.value})}
+                                        onChange={e => setFormData({ ...formData, price: e.target.value })}
                                         min="0"
                                         placeholder="Nhập giá"
                                     />
@@ -611,7 +625,7 @@ function CourseTable() {
                                     <input
                                         type="checkbox"
                                         checked={formData.isPublished}
-                                        onChange={(e) => setFormData({...formData, isPublished: e.target.checked})}
+                                        onChange={(e) => setFormData({ ...formData, isPublished: e.target.checked })}
                                     />
                                     Xuất bản khóa học
                                 </label>
@@ -650,7 +664,7 @@ function CourseTable() {
                                 ×
                             </button>
                         </div>
-                        
+
                         <div className={styles.uploadForm}>
                             {/* File size info */}
                             <div className={styles.uploadInfo}>
@@ -683,8 +697,8 @@ function CourseTable() {
                                     disabled={uploadProgress > 0 && uploadProgress < 100}
                                 />
                                 <label htmlFor="fileUploadInput" className={styles.fileInputLabel}>
-                                    {selectedFile ? 
-                                        `📁 ${selectedFile.name}` : 
+                                    {selectedFile ?
+                                        `📁 ${selectedFile.name}` :
                                         `📂 Chọn ${uploadModal.type === 'thumbnail' ? 'ảnh' : 'video'}...`
                                     }
                                 </label>
@@ -727,7 +741,7 @@ function CourseTable() {
                                         Đang upload... {uploadProgress}%
                                     </div>
                                     <div className={styles.progressBar}>
-                                        <div 
+                                        <div
                                             className={styles.progressFill}
                                             style={{ width: `${uploadProgress}%` }}
                                         ></div>
@@ -741,7 +755,7 @@ function CourseTable() {
                             )}
 
                             <p className={styles.uploadHint}>
-                                {uploadModal.type === 'thumbnail' 
+                                {uploadModal.type === 'thumbnail'
                                     ? '🖼️ Chọn ảnh thumbnail cho khóa học'
                                     : '🎥 Chọn video cho khóa học'
                                 }
