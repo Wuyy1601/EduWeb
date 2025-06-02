@@ -14,6 +14,10 @@ const routers = [
         component: lazy(() => import('@pages/FullViewDocument/FullViewDocument')),
     },
     {
+        path: '/fullviewdocument/:id',
+        component: lazy(() => import('@pages/FullViewDocument/FullViewDocument')),
+    },
+    {
         path: '/search',
         component: lazy(() => import('@pages/Search/Search')),
     },

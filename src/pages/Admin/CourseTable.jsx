@@ -1,8 +1,10 @@
 import React, { useState, useEffect } from 'react';
+import { useNavigate } from 'react-router-dom';
 import { FaEdit, FaTrash, FaPlus, FaEye, FaUpload, FaImage, FaVideo, FaPlay } from 'react-icons/fa';
 import styles from './styles.module.scss';
 
 function CourseTable() {
+    const navigate = useNavigate();
     const [courses, setCourses] = useState([]);
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState(null);
@@ -516,7 +518,12 @@ function CourseTable() {
                                             </button>
                                         )}
                                     </td>
-                                    <td>{course.courseName}</td>
+                                    <td
+                                        style={{ color: '#2563eb', cursor: 'pointer', textDecoration: 'underline' }}
+                                        onClick={() => navigate(`/fullviewdocument/${course.id}`)}
+                                    >
+                                        {course.courseName}
+                                    </td>
                                     <td>{course.author}</td>
                                     <td>{course.category}</td>
                                     <td>{course.level}</td>
