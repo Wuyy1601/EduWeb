@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import styles from './styles.module.scss';
 import imgCat from '@images/cat.png';
@@ -6,6 +6,9 @@ import MainLayout from '@components/Layout/Layout';
 import MyHeader from '@components/Header/Header';
 
 export default function LoginRegister() {
+    useEffect(() => {
+        document.title = "Ulearn - Login";
+    }, []);
     const navigate = useNavigate();
     const [isLogin, setIsLogin] = useState(true);
     const [formData, setFormData] = useState({

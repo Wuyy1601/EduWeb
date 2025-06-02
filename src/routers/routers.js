@@ -57,6 +57,10 @@ const routers = [
         path: '/checkout',
         component: lazy(() => import('@pages/Cart/CheckOut')),
     },
+    {
+        path: '*',
+        component: lazy(() => import('@components/NotFound/NotFound')),
+    },
 ];
 
 export default routers;

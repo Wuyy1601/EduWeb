@@ -86,39 +86,42 @@ Docker (Optional)	Đóng gói, triển khai dễ dàng
 
 📸 DEMO
 <div align="center"> <img src="https://github.com/Wuyy1601/EduWeb/raw/main/public/demo.gif" alt="EduWeb Demo" width="700"/> </div>
-Link demo: edu-web-five.vercel.app
+
+Link demo: [edu-web-five.vercel.app](https://www.edu-web-five.vercel.app)
 
 ⚡ HƯỚNG DẪN CÀI ĐẶT NHANH
 
 # 1. Clone repo
 
-git clone https://github.com/Wuyy1601/EduWeb.git
+```
+git clone https://github.com/Wuyy1601/EduWeb.git 
 cd EduWeb
+ ```
 
 # 2. Cài đặt Frontend
 
+```
 npm install
-
 npm run dev
+```
 
 # 3. Cài đặt Backend 
 
-Tải JDK bản 23 và cài môi trường Java
+Tải [JDK bản 23](https://www.oracle.com/java/technologies/javase/jdk23-archive-downloads.html) và cài môi trường Java
 
-Tải intelliJ
+Tải [intelliJ](https://www.jetbrains.com/idea/download/?section=windows)
 
-Tải MongoDB
+Tải [MongoDB](https://www.mongodb.com/try/download/tools)
 
-Tải MySQL
+Tải [MySQL](https://dev.mysql.com/downloads/)
 
-Tải Docker và chạy các lệnh trong CMD:
+Tải [Docker](https://docs.docker.com/desktop/setup/install/windows-install/) và chạy các lệnh trong CMD:
 
+```
 docker run --name mysql-8.0.36 -e MYSQL_ROOT_PASSWORD=root -d mysql:8.0.36-debian
-
 docker run -d --name mongodb-7.0.11 -p 27017:27017 -e MONGODB_ROOT_USER=root -e MONGODB_ROOT_PASSWORD=root bitnami/mongodb:7.0.11
-
 docker run --name neo4j --publish=7474:7474 --publish=7687:7687 -d neo4j:latest
-
+```
 Cần cấu hình file .env cho backend để chạy ChatBot
 
 Cài đặt & cấu hình database MySQL/MongoDB theo hướng dẫn trong từng thư mục.
@@ -126,6 +129,7 @@ Cài đặt & cấu hình database MySQL/MongoDB theo hướng dẫn trong từn
 📝 CẤU TRÚC DỰ ÁN
 
 EduWeb/
+
 ├── backend/            # Source code backend Java và thư viện SpringBoot
 
 ├── src/                # Source code ReactJS 
@@ -155,4 +159,3 @@ Nâng cấp AI tư vấn chuyên sâu hơn.
 Xây dựng hệ thống học liệu mở rộng, học liệu theo chủ đề, cấp bậc.
 
 Tích hợp chức năng thông báo, nhắc lịch học tự động.
-

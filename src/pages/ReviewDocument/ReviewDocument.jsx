@@ -38,6 +38,10 @@ function FeaturedCard({ title, description, thumbnailUrl }) {
 }
 
 function ReviewDocument() {
+    useEffect(() => {
+        document.title = "Ulearn - Document Review";
+    }, []);
+
     const navigate = useNavigate();
     const { id } = useParams();
     const [course, setCourse] = useState(null);

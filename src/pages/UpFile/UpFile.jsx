@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { useParams } from 'react-router-dom';
 
 import MyFooter from '@components/Footer/Footer';
@@ -11,6 +11,9 @@ import imgCat from '@images/cat.png';
 import styles from './styles.module.scss';
 
 function UpFile() {
+    useEffect(() => {
+        document.title = "Ulearn - Upload File";
+    }, []);
     const [desc, setDesc] = useState('');
     const maxDesc = 120;
     const [file, setFile] = useState(null);

@@ -8,6 +8,9 @@ import Courses from './Course';
 import styles from './styles.module.scss';
 
 function FullViewDocument() {
+    useEffect(() => {
+        document.title = "Ulearn - Document";
+    }, []);
     const { id } = useParams();
     const [course, setCourse] = useState(null);
     const [activeLesson, setActiveLesson] = useState(0);

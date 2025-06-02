@@ -7,6 +7,9 @@ import { useNavigate } from 'react-router-dom';
 import MeoDiCho from '@images/MeoDiCho.png';
 
 export default function Cart() {
+    useEffect(() => {
+        document.title = "Ulearn - Cart";
+    }, []);
     const [cart, setCart] = useState({ items: [] });
     const navigate = useNavigate();
 

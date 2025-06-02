@@ -204,6 +204,9 @@ function Profile() {
     const currentAvatarUrl = avatarPreview || (profile.avatar ? `${profile.avatar}?t=${Date.now()}` : Background);
     const currentBannerUrl = bannerPreview || (profile.bannerUrl ? `${profile.bannerUrl}?t=${Date.now()}` : Background);
 
+    useEffect(() => {
+        document.title = `Ulearn - ${profile?.lastName} ${profile?.firstName}`;
+    }, []);
 
     return (
         <MainLayout>

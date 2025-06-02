@@ -6,6 +6,10 @@ import CourseTable from './CourseTable';
 import UserTable from './UserTable';
 
 export default function AdminDashboard() {
+    useEffect(() => {
+        document.title = "Ulearn - Admin DashBoard";
+    }, []);
+
     const [activeTab, setActiveTab] = useState('documents');
     const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
 

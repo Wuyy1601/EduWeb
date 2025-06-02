@@ -35,6 +35,10 @@ const paymentMethods = [
 ];
 
 export default function CheckOut() {
+    useEffect(() => {
+        document.title = "Ulearn - Check out";
+    }, []);
+
     const [cart, setCart] = useState([]);
     const [payment, setPayment] = useState('spay');
     const [country, setCountry] = useState(mockOrder.country);

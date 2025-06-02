@@ -1,3 +1,4 @@
+import { useEffect } from 'react';
 import MyFooter from '@components/Footer/Footer';
 import MyHeader from '@components/Header/Header';
 import MainLayout from '@components/Layout/Layout';
@@ -9,6 +10,9 @@ import UpDocument from '@pages/Document/components/UpDocument';
 import ChatBot from '@components/ChatBot/ChatBot';
 
 function Document() {
+    useEffect(() => {
+        document.title = "Ulearn - Document";
+    }, []);
     return (
         <MainLayout>
             <MyHeader />
