@@ -344,7 +344,7 @@
     cursor: help;
 
     &::before {
-        content: "🔍"; // Icon gợi ý hover
+        content: '🔍'; // Icon gợi ý hover
         position: absolute;
         right: 4px;
         top: 50%;
@@ -729,7 +729,7 @@
     gap: 8px;
     cursor: pointer;
 
-    input[type="checkbox"] {
+    input[type='checkbox'] {
         width: auto !important;
         margin: 0;
     }
@@ -966,23 +966,25 @@
         text-align: center;
 
         // Style khác nhau dựa trên số lượng video
-        &[data-count="0"] {
+        &[data-count='0'] {
             color: #9ca3af;
         }
 
-        &[data-count="1"],
-        &[data-count="2"],
-        &[data-count="3"] {
+        &[data-count='1'],
+        &[data-count='2'],
+        &[data-count='3'] {
             color: #059669;
         }
 
-        &[data-count="4"],
-        &[data-count="5"] {
+        &[data-count='4'],
+        &[data-count='5'] {
             color: #0891b2;
         }
 
         // Nhiều hơn 5 videos
-        &:not([data-count="0"]):not([data-count="1"]):not([data-count="2"]):not([data-count="3"]):not([data-count="4"]):not([data-count="5"]) {
+        &:not([data-count='0']):not([data-count='1']):not([data-count='2']):not([data-count='3']):not(
+                [data-count='4']
+            ):not([data-count='5']) {
             color: #7c3aed;
             font-weight: 700;
         }
@@ -1045,7 +1047,6 @@
 // Responsive cho cột Videos
 @media (max-width: 1200px) {
     .table {
-
         th:nth-child(7),
         // Cột Videos
         td:nth-child(7) {
@@ -1070,7 +1071,6 @@
 
 @media (max-width: 768px) {
     .table {
-
         th:nth-child(7),
         td:nth-child(7) {
             width: 40px;
@@ -1096,7 +1096,6 @@
     }
 
     .table {
-
         th:nth-child(1),
         td:nth-child(1) {
             width: 50px !important;
@@ -1136,7 +1135,6 @@
     }
 
     .table {
-
         th,
         td {
             padding: 8px 4px;
@@ -1371,5 +1369,19 @@
                 justify-content: center;
             }
         }
+    }
+}
+
+.idCell {
+    white-space: nowrap;
+    max-width: 90px;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    color: #2563eb;
+    font-weight: 500;
+    cursor: pointer;
+    transition: background 0.15s;
+    &:hover {
+        background: #e0edff;
     }
 }

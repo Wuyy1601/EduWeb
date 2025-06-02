@@ -1,68 +1,57 @@
-import { useState, useEffect } from 'react';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faAngleLeft, faAngleRight } from '@fortawesome/free-solid-svg-icons';
+import { faAngleLeft, faAngleRight, faEye } from '@fortawesome/free-solid-svg-icons';
 import styles from './styles.module.scss';
+import imgLaptop from '@images/laptop.jpg';
+import avatarLina from '@images/avatar.jpg';
 import Button from '@components/Button/Button';
-import CourseCard from './CourseCard'; // Đảm bảo đúng đường dẫn
-import { FaCaretDown } from 'react-icons/fa';
 
-function FeaturedContent() {
-    const [courses, setCourses] = useState([]);
-    const [loading, setLoading] = useState(true);
-
-    useEffect(() => {
-        const token = localStorage.getItem('token');
-        fetch('http://localhost:8888/api/v1/course/all?page=1&size=2', {
-            headers: {
-                'Content-Type': 'application/json',
-                ...(token && { Authorization: `Bearer ${token}` }),
-            },
-        })
-            .then((res) => res.json())
-            .then((data) => {
-                if (data.code === 1000 && data.result) {
-                    setCourses(data.result.data || []);
-                }
-                setLoading(false);
-            })
-            .catch((err) => setLoading(false));
-    }, []);
-
-    const { featuredContent, card, header, contentWrapper, sliderButtons, sliderButton } = styles;
-
+export default function FeaturedContent() {
     return (
-        <div className={featuredContent}>
-            <div className={card}>
-                <div className={header}>
-                    <h2>Nội dung nổi bật</h2>
-                    <a href="#">Xem tất cả</a>
-                </div>
-                <div className={contentWrapper}>
-                    {loading ? (
-                        <p>Đang tải nội dung nổi bật...</p>
-                    ) : (
-                        courses.map((course) => (
-                            <CourseCard
-                                key={course.id}
-                                id={course.id}
-                                thumbnail={course.thumbnailUrl}
-                                title={course.courseName}
-                                category={course.category}
-                                price={course.price}
-                                description={course.description}
-                                author={course.author}
-                                className={styles.card}
-                            />
-                        ))
-                    )}
-                </div>
-                <div className={sliderButtons}>
-                    <Button className={sliderButton} content={<FontAwesomeIcon icon={faAngleLeft} />}></Button>
-                    <Button className={sliderButton} content={<FontAwesomeIcon icon={faAngleRight} />}></Button>
-                </div>
+        <section className={styles.featuredSection}>
+            <div className={styles.headerRow}>
+                <h2 className={styles.sectionTitle}>Nội dung nổi bật</h2>
+                <a href="#" className={styles.viewAll}>
+                    Xem tất cả
+                </a>
             </div>
-        </div>
+            <div className={styles.cardRow}>
+                {[1, 2].map((_, idx) => (
+                    <div className={styles.card} key={idx}>
+                        <div className={styles.cardImageWrap}>
+                            <img src={imgLaptop} alt="Class event" className={styles.cardImage} />
+                        </div>
+                        <div className={styles.cardBody}>
+                            <a href="#" className={styles.cardTitle}>
+                                Class adds $30 million to its balance sheet for a Zoom-friendly edtech solution
+                            </a>
+                            <div className={styles.cardAuthor}>
+                                <img src={avatarLina} alt="Author Lina" className={styles.authorAvatar} />
+                                <span className={styles.authorName}>Lina</span>
+                            </div>
+                            <p className={styles.cardDescription}>
+                                Class, launched less than a year ago by Blackboard co-founder Michael Chasen, integrates
+                                exclusively...
+                            </p>
+                            <div className={styles.cardFooter}>
+                                <a href="#" className={styles.readMore}>
+                                    Read more
+                                </a>
+                                <span className={styles.cardViews}>
+                                    <FontAwesomeIcon icon={faEye} /> 251,232
+                                </span>
+                            </div>
+                        </div>
+                    </div>
+                ))}
+            </div>
+            <div className={styles.sliderControls}>
+                <Button className={styles.sliderButton}>
+                    <FontAwesomeIcon icon={faAngleLeft} />
+                </Button>
+                <Button className={styles.sliderButton}>
+                    <FontAwesomeIcon icon={faAngleRight} />
+                </Button>
+            </div>
+        </section>
     );
 }
-
-export default FeaturedContent;

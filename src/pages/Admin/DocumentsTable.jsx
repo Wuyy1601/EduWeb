@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useState } from 'react';
 import styles from './styles.module.scss';
 
 export default function DocumentsTable() {
@@ -26,8 +26,8 @@ export default function DocumentsTable() {
     }, []);
 
     const handleDelete = async (id) => {
-        if (!window.confirm("Bạn chắc chắn muốn xóa tài liệu này?")) return;
-        await fetch(`http://localhost:8000/api/documents/${id}`, { method: "DELETE" });
+        if (!window.confirm('Bạn chắc chắn muốn xóa tài liệu này?')) return;
+        await fetch(`http://localhost:8000/api/documents/${id}`, { method: 'DELETE' });
         fetchDocs();
     };
 
@@ -52,7 +52,9 @@ export default function DocumentsTable() {
             ) : error ? (
                 <div className={styles.errorContainer}>
                     <p className={styles.errorMessage}>{error}</p>
-                    <button onClick={fetchDocs} className={styles.retryButton}>Thử lại</button>
+                    <button onClick={fetchDocs} className={styles.retryButton}>
+                        Thử lại
+                    </button>
                 </div>
             ) : docs.length === 0 ? (
                 <div className={styles.emptyState}>
@@ -79,9 +81,19 @@ export default function DocumentsTable() {
                             </tr>
                         </thead>
                         <tbody>
-                            {docs.map(doc => (
+                            {docs.map((doc) => (
                                 <tr key={doc._id}>
-                                    <td>{doc._id}</td>
+                                    <td
+                                        className={styles.idCell}
+                                        title="Bấm để copy"
+                                        onClick={() => {
+                                            navigator.clipboard.writeText(doc._id);
+                                            alert('Đã copy ID: ' + doc._id);
+                                        }}
+                                        style={{ cursor: 'pointer', userSelect: 'text' }}
+                                    >
+                                        {doc._id.slice(0, 4) + '...' + doc._id.slice(-4)}
+                                    </td>
                                     <td>{doc.title}</td>
                                     <td>{doc.description}</td>
                                     <td>{doc.subject}</td>
