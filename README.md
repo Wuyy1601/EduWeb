@@ -76,6 +76,8 @@ MongoDB	Lưu trữ tài liệu, dữ liệu linh hoạt
 
 MySQL	Quản lý user, khóa học (dữ liệu quan hệ)
 
+NEO4J Quản lý profile
+
 TailwindCSS	UI/UX hiện đại, responsive
 
 JWT Authentication	Bảo mật đăng nhập
