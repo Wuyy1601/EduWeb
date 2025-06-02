@@ -35,7 +35,11 @@ const profileData = {
 function ProfileContent({ activeTab, profile }) {
     switch (activeTab) {
         case '':
-            return <div className={cx('profile-intro')}>Chào mừng đến trang cá nhân của {profile?.firstName}! Chọn một mục ở trên để xem chi tiết.</div>;
+            return (
+                <div className={cx('profile-intro')}>
+                    Chào mừng đến trang cá nhân của {profile?.firstName}! Chọn một mục ở trên để xem chi tiết.
+                </div>
+            );
         case 'posts':
             return <Posts />;
         case 'documents':
@@ -44,12 +48,10 @@ function ProfileContent({ activeTab, profile }) {
             return null;
     }
 }
-
 function Profile() {
     const [profile, setProfile] = useState(null);
     const [editMode, setEditMode] = useState(false);
     const [formData, setFormData] = useState({});
-
     const [avatarPreview, setAvatarPreview] = useState(null);
     const [bannerPreview, setBannerPreview] = useState(null);
 
@@ -61,15 +63,16 @@ function Profile() {
 
     const token = localStorage.getItem('token');
 
+    // Fetch profile function
     const fetchProfile = async () => {
         if (!token) {
-            console.error("Không tìm thấy token.");
+            console.error('Không tìm thấy token.');
             return;
         }
         try {
             const res = await fetch('http://localhost:8888/api/v1/profile/users/my-profile', {
                 headers: {
-                    'Authorization': `Bearer ${token}`,
+                    Authorization: `Bearer ${token}`,
                 },
             });
             if (!res.ok) {
@@ -87,18 +90,25 @@ function Profile() {
                     description: fetchedProfile.description || 'Chưa có mô tả',
                 });
             } else {
-                console.error("Không có dữ liệu profile:", apiResponse.message);
+                console.error('Không có dữ liệu profile:', apiResponse.message);
             }
         } catch (error) {
-            console.error("Không thể tải profile:", error);
+            console.error('Không thể tải profile:', error);
         }
     };
 
     useEffect(() => {
         fetchProfile();
+        // eslint-disable-next-line
     }, [token]);
 
-    const handleInputChange = e => {
+    useEffect(() => {
+        if (profile) {
+            document.title = `Ulearn - ${profile?.lastName} ${profile?.firstName}`;
+        }
+    }, [profile]);
+
+    const handleInputChange = (e) => {
         setFormData({ ...formData, [e.target.name]: e.target.value });
     };
 
@@ -109,25 +119,25 @@ function Profile() {
                 method: 'PUT',
                 headers: {
                     'Content-Type': 'application/json',
-                    'Authorization': `Bearer ${token}`,
+                    Authorization: `Bearer ${token}`,
                 },
                 body: JSON.stringify(formData),
             });
             if (res.ok) {
                 setEditMode(false);
                 fetchProfile();
-                alert("Cập nhật thông tin thành công!");
+                alert('Cập nhật thông tin thành công!');
             } else {
                 const errData = await res.json();
                 alert(`Lỗi khi cập nhật: ${errData.message || 'Vui lòng thử lại.'}`);
             }
         } catch (error) {
-            console.error("Lỗi khi lưu profile:", error);
-            alert("Đã xảy ra lỗi. Vui lòng thử lại.");
+            console.error('Lỗi khi lưu profile:', error);
+            alert('Đã xảy ra lỗi. Vui lòng thử lại.');
         }
     };
 
-    const handleAvatarChange = async e => {
+    const handleAvatarChange = async (e) => {
         const file = e.target.files[0];
         if (!file || !token) return;
 
@@ -138,25 +148,25 @@ function Profile() {
         try {
             const res = await fetch('http://localhost:8888/api/v1/profile/users/avatar', {
                 method: 'PUT',
-                headers: { 'Authorization': `Bearer ${token}` },
+                headers: { Authorization: `Bearer ${token}` },
                 body: uploadFormData,
             });
             if (res.ok) {
                 setAvatarPreview(null);
                 fetchProfile();
-                alert("Cập nhật ảnh đại diện thành công!");
+                alert('Cập nhật ảnh đại diện thành công!');
             } else {
                 setAvatarPreview(null);
-                alert("Cập nhật ảnh đại diện thất bại!");
+                alert('Cập nhật ảnh đại diện thất bại!');
             }
         } catch (error) {
             setAvatarPreview(null);
-            console.error("Lỗi upload avatar:", error);
-            alert("Lỗi khi upload ảnh đại diện.");
+            console.error('Lỗi upload avatar:', error);
+            alert('Lỗi khi upload ảnh đại diện.');
         }
     };
 
-    const handleBannerChange = async e => {
+    const handleBannerChange = async (e) => {
         const file = e.target.files[0];
         if (!file || !token) return;
 
@@ -167,29 +177,30 @@ function Profile() {
         try {
             const res = await fetch('http://localhost:8888/api/v1/profile/users/banner', {
                 method: 'PUT',
-                headers: { 'Authorization': `Bearer ${token}` },
+                headers: { Authorization: `Bearer ${token}` },
                 body: uploadFormData,
             });
             if (res.ok) {
                 setBannerPreview(null);
                 fetchProfile();
-                alert("Cập nhật ảnh bìa thành công!");
+                alert('Cập nhật ảnh bìa thành công!');
             } else {
                 setBannerPreview(null);
-                alert("Cập nhật ảnh bìa thất bại!");
+                alert('Cập nhật ảnh bìa thất bại!');
             }
         } catch (error) {
             setBannerPreview(null);
-            console.error("Lỗi upload banner:", error);
-            alert("Lỗi khi upload ảnh bìa.");
+            console.error('Lỗi upload banner:', error);
+            alert('Lỗi khi upload ảnh bìa.');
         }
     };
 
     const getFullName = () => {
-        if (!profile) return "Người dùng";
-        return `${profile.firstName || ''} ${profile.lastName || ''}`.trim() || "Chưa cập nhật tên";
+        if (!profile) return 'Người dùng';
+        return `${profile.firstName || ''} ${profile.lastName || ''}`.trim() || 'Chưa cập nhật tên';
     };
 
+    // Nếu chưa load xong profile, return UI loading
     if (!profile) {
         return (
             <MainLayout>
@@ -201,19 +212,19 @@ function Profile() {
         );
     }
 
+    // Chỉ tính toán biến phụ thuộc profile SAU khi đã có profile
     const currentAvatarUrl = avatarPreview || (profile.avatar ? `${profile.avatar}?t=${Date.now()}` : Background);
     const currentBannerUrl = bannerPreview || (profile.bannerUrl ? `${profile.bannerUrl}?t=${Date.now()}` : Background);
-
-    useEffect(() => {
-        document.title = `Ulearn - ${profile?.lastName} ${profile?.firstName}`;
-    }, []);
 
     return (
         <MainLayout>
             <MyHeader />
             <div id={cx('content')} className={cx('profile-page-container')}>
                 <div className={cx('profile-banner-container')} style={{ backgroundImage: `url(${currentBannerUrl})` }}>
-                    <button className={cx('change-banner-btn')} onClick={() => bannerFileInputRef.current && bannerFileInputRef.current.click()}>
+                    <button
+                        className={cx('change-banner-btn')}
+                        onClick={() => bannerFileInputRef.current && bannerFileInputRef.current.click()}
+                    >
                         <FontAwesomeIcon icon={faCamera} /> Đổi ảnh bìa
                     </button>
                     <input
@@ -233,7 +244,10 @@ function Profile() {
                             className={cx('profile-avatar-image')}
                             onClick={() => avatarFileInputRef.current && avatarFileInputRef.current.click()}
                         />
-                        <button className={cx('change-avatar-btn')} onClick={() => avatarFileInputRef.current && avatarFileInputRef.current.click()}>
+                        <button
+                            className={cx('change-avatar-btn')}
+                            onClick={() => avatarFileInputRef.current && avatarFileInputRef.current.click()}
+                        >
                             <FontAwesomeIcon icon={faCamera} />
                         </button>
                         <input
@@ -248,14 +262,47 @@ function Profile() {
                     <div className={cx('profile-info-card')}>
                         {editMode ? (
                             <div className={cx('profile-edit-form')}>
-                                <input type="text" name="firstName" value={formData.firstName} onChange={handleInputChange} placeholder="Tên" />
-                                <input type="text" name="lastName" value={formData.lastName} onChange={handleInputChange} placeholder="Họ" />
-                                <input type="text" name="title" value={formData.title} onChange={handleInputChange} placeholder="Chức danh/Nghề nghiệp" />
-                                <textarea name="description" value={formData.description} onChange={handleInputChange} placeholder="Mô tả bản thân..." />
-                                <input type="text" name="city" value={formData.city} onChange={handleInputChange} placeholder="Thành phố" />
+                                <input
+                                    type="text"
+                                    name="firstName"
+                                    value={formData.firstName}
+                                    onChange={handleInputChange}
+                                    placeholder="Tên"
+                                />
+                                <input
+                                    type="text"
+                                    name="lastName"
+                                    value={formData.lastName}
+                                    onChange={handleInputChange}
+                                    placeholder="Họ"
+                                />
+                                <input
+                                    type="text"
+                                    name="title"
+                                    value={formData.title}
+                                    onChange={handleInputChange}
+                                    placeholder="Chức danh/Nghề nghiệp"
+                                />
+                                <textarea
+                                    name="description"
+                                    value={formData.description}
+                                    onChange={handleInputChange}
+                                    placeholder="Mô tả bản thân..."
+                                />
+                                <input
+                                    type="text"
+                                    name="city"
+                                    value={formData.city}
+                                    onChange={handleInputChange}
+                                    placeholder="Thành phố"
+                                />
                                 <div className={cx('edit-actions')}>
-                                    <button onClick={handleSaveProfileText} className={cx('save-btn')}>Lưu</button>
-                                    <button onClick={() => setEditMode(false)} className={cx('cancel-btn')}>Hủy</button>
+                                    <button onClick={handleSaveProfileText} className={cx('save-btn')}>
+                                        Lưu
+                                    </button>
+                                    <button onClick={() => setEditMode(false)} className={cx('cancel-btn')}>
+                                        Hủy
+                                    </button>
                                 </div>
                             </div>
                         ) : (
@@ -267,7 +314,9 @@ function Profile() {
                                     </button>
                                 </div>
                                 <p className={cx('profile-title')}>{profile.title || formData.title}</p>
-                                <p className={cx('profile-description')}>{profile.description || formData.description}</p>
+                                <p className={cx('profile-description')}>
+                                    {profile.description || formData.description}
+                                </p>
                                 {profile.city && <p className={cx('profile-city')}>Sống tại: {profile.city}</p>}
                             </>
                         )}
@@ -282,9 +331,19 @@ function Profile() {
                                 </span>
                             </div>
                             <div className={cx('social-links')}>
-                                <a href={profile.socialLinks?.twitter || '#'} target="_blank" rel="noopener noreferrer"><FontAwesomeIcon icon={faTwitter} /></a>
-                                <a href={profile.socialLinks?.youtube || '#'} target="_blank" rel="noopener noreferrer"><FontAwesomeIcon icon={faYoutube} /></a>
-                                <a href={profile.socialLinks?.instagram || '#'} target="_blank" rel="noopener noreferrer"><FontAwesomeIcon icon={faInstagram} /></a>
+                                <a href={profile.socialLinks?.twitter || '#'} target="_blank" rel="noopener noreferrer">
+                                    <FontAwesomeIcon icon={faTwitter} />
+                                </a>
+                                <a href={profile.socialLinks?.youtube || '#'} target="_blank" rel="noopener noreferrer">
+                                    <FontAwesomeIcon icon={faYoutube} />
+                                </a>
+                                <a
+                                    href={profile.socialLinks?.instagram || '#'}
+                                    target="_blank"
+                                    rel="noopener noreferrer"
+                                >
+                                    <FontAwesomeIcon icon={faInstagram} />
+                                </a>
                             </div>
                         </div>
                     </div>
