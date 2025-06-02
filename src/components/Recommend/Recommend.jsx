@@ -1,51 +1,57 @@
+import { useState, useEffect } from 'react';
+import CourseCard from './CourseCard'; // import đúng đường dẫn tới CourseCard
 import styles from './styles.module.scss';
-import avatarLina from '@images/avatar.jpg';
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faClock } from '@fortawesome/free-solid-svg-icons';
-import { faTableCellsLarge } from '@fortawesome/free-solid-svg-icons';
-import { dataCourse } from '@components/Recommend/constant';
 
 function RecommendedDocuments() {
+    const [courses, setCourses] = useState([]);
+    const [loading, setLoading] = useState(true);
 
+    useEffect(() => {
+        // Fetch dữ liệu gợi ý, có thể thay đổi API endpoint nếu cần
+        const token = localStorage.getItem('token');
+        fetch('http://localhost:8888/api/v1/course/all?page=1&size=4', {
+            headers: {
+                'Content-Type': 'application/json',
+                ...(token && { Authorization: `Bearer ${token}` }),
+            },
+        })
+            .then((res) => res.json())
+            .then((data) => {
+                if (data.code === 1000 && data.result) {
+                    setCourses(data.result.data || []);
+                }
+                setLoading(false);
+            })
+            .catch((err) => setLoading(false));
+    }, []);
 
-  const { container, header, cardWrapper, card, img ,cardImage, cardBody, cardInfo, cardTitle, cardDesc, cardFooter, cardAuthor, cardPrice } = styles;
-
-  return (
-    <div className={container}>
-      <div className={header}>
-        <h2>Tài liệu gợi ý</h2>
-        <a href="#">Xem tất cả</a>
-      </div>
-
-      <div className={cardWrapper}>
-        {dataCourse.map((item) => (
-          <div key={item.id} className={card}>
-            <div className={img}>
-            <img src={item.img} alt="Document" className={cardImage} />
+    return (
+        <div className={styles.container}>
+            <div className={styles.header}>
+                <h2>Tài liệu gợi ý</h2>
+                <a href="#">Xem tất cả</a>
             </div>
-            <div className={cardBody}>
-              <div className={cardInfo}>
-                <span><FontAwesomeIcon icon={faTableCellsLarge} /> Design</span>
-                <span> <FontAwesomeIcon icon={faClock} /> 3 Month</span>
-              </div>
-              <h3 className={cardTitle}>{item.title}</h3>
-              <p className={cardDesc}>Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor</p>
-              <div className={cardFooter}>
-                <div className={cardAuthor}>
-                  <img src={avatarLina} alt="Author" />
-                  <span>Lina</span>
-                </div>
-                <div className={cardPrice}>
-                  <del>{item.priceOld}</del>
-                  <span>{item.priceNew}</span>
-                </div>
-              </div>
+            <div className={styles.cardWrapper}>
+                {loading ? (
+                    <p>Đang tải tài liệu...</p>
+                ) : (
+                    courses.map((course) => (
+                        <CourseCard
+                            key={course.id}
+                            id={course.id}
+                            thumbnail={course.thumbnailUrl}
+                            title={course.courseName}
+                            category={course.category}
+                            price={course.price}
+                            description={course.description}
+                            author={course.author}
+                            className={styles.card}
+                        />
+                    ))
+                )}
             </div>
-          </div>
-        ))}
-      </div>
-    </div>
-  );
+        </div>
+    );
 }
 
 export default RecommendedDocuments;

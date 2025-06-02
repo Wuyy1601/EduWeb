@@ -19,8 +19,8 @@ function CourseTable() {
 
     // File size limits (in bytes)
     const FILE_SIZE_LIMITS = {
-        thumbnail: 5 * 1024 * 1024,  // 5MB for images
-        video: 100 * 1024 * 1024     // 100MB for videos
+        thumbnail: 5 * 1024 * 1024, // 5MB for images
+        video: 100 * 1024 * 1024, // 100MB for videos
     };
 
     const [formData, setFormData] = useState({
@@ -30,8 +30,8 @@ function CourseTable() {
         category: '',
         level: '',
         duration: '',
-        price: '',            // ← để trống ban đầu
-        isPublished: false
+        price: '', // ← để trống ban đầu
+        isPublished: false,
     });
 
     const fetchCourses = async () => {
@@ -40,16 +40,13 @@ function CourseTable() {
         console.log(`Fetching courses for page: ${currentPage}`); // Log trang hiện tại
         try {
             const token = localStorage.getItem('token');
-            const response = await fetch(
-                `http://localhost:8888/api/v1/course/all?page=${currentPage}&size=10`,
-                {
-                    method: 'GET',
-                    headers: {
-                        'Authorization': `Bearer ${token}`,
-                        'Content-Type': 'application/json',
-                    },
-                }
-            );
+            const response = await fetch(`http://localhost:8888/api/v1/course/all?page=${currentPage}&size=10`, {
+                method: 'GET',
+                headers: {
+                    Authorization: `Bearer ${token}`,
+                    'Content-Type': 'application/json',
+                },
+            });
 
             console.log('API Response Status:', response.status); // Log status code
 
@@ -102,9 +99,9 @@ function CourseTable() {
                 method,
                 headers: {
                     'Content-Type': 'application/json',
-                    'Authorization': `Bearer ${token}`
+                    Authorization: `Bearer ${token}`,
                 },
-                body: JSON.stringify(payload)
+                body: JSON.stringify(payload),
             });
 
             if (!response.ok) {
@@ -136,8 +133,8 @@ function CourseTable() {
             const response = await fetch(`http://localhost:8888/api/v1/course/${courseId}`, {
                 method: 'DELETE',
                 headers: {
-                    'Authorization': `Bearer ${token}`
-                }
+                    Authorization: `Bearer ${token}`,
+                },
             });
 
             if (!response.ok) {
@@ -167,10 +164,10 @@ function CourseTable() {
         // Check file size
         if (fileSize > maxSize) {
             const maxSizeMB = Math.round(maxSize / (1024 * 1024));
-            const fileSizeMB = Math.round(fileSize / (1024 * 1024) * 100) / 100;
+            const fileSizeMB = Math.round((fileSize / (1024 * 1024)) * 100) / 100;
             return {
                 valid: false,
-                error: `File quá lớn! Kích thước hiện tại: ${fileSizeMB}MB. Giới hạn: ${maxSizeMB}MB`
+                error: `File quá lớn! Kích thước hiện tại: ${fileSizeMB}MB. Giới hạn: ${maxSizeMB}MB`,
             };
         }
 
@@ -180,7 +177,7 @@ function CourseTable() {
             if (!allowedTypes.includes(file.type)) {
                 return {
                     valid: false,
-                    error: 'Định dạng không hỗ trợ! Chỉ chấp nhận: JPG, PNG, GIF, WebP'
+                    error: 'Định dạng không hỗ trợ! Chỉ chấp nhận: JPG, PNG, GIF, WebP',
                 };
             }
         } else if (type === 'video') {
@@ -188,7 +185,7 @@ function CourseTable() {
             if (!allowedTypes.includes(file.type)) {
                 return {
                     valid: false,
-                    error: 'Định dạng không hỗ trợ! Chỉ chấp nhận: MP4, MPEG, MOV, AVI, WebM'
+                    error: 'Định dạng không hỗ trợ! Chỉ chấp nhận: MP4, MPEG, MOV, AVI, WebM',
                 };
             }
         }
@@ -275,7 +272,6 @@ function CourseTable() {
                 xhr.timeout = 5 * 60 * 1000; // 5 minutes timeout
                 xhr.send(formData);
             });
-
         } catch (error) {
             console.error(`Error uploading ${type}:`, error);
             alert('Lỗi: ' + error.message);
@@ -291,8 +287,8 @@ function CourseTable() {
             category: '',
             level: '',
             duration: '',
-            price: '',            // ← để trống ban đầu
-            isPublished: false
+            price: '', // ← để trống ban đầu
+            isPublished: false,
         });
     };
 
@@ -305,8 +301,8 @@ function CourseTable() {
             category: course.category || '',
             level: course.level || '',
             duration: course.duration?.toString() || '',
-            price: course.price != null ? course.price.toString() : '',  // ← map về chuỗi
-            isPublished: course.isPublished || false
+            price: course.price != null ? course.price.toString() : '', // ← map về chuỗi
+            isPublished: course.isPublished || false,
         });
         setShowModal(true);
     };
@@ -341,7 +337,11 @@ function CourseTable() {
 
     const handleConfirmUpload = async () => {
         if (selectedFile && fileValidation.valid) {
-            if (window.confirm(`Bạn có chắc muốn upload file "${selectedFile.name}" (${formatFileSize(selectedFile.size)})?`)) {
+            if (
+                window.confirm(
+                    `Bạn có chắc muốn upload file "${selectedFile.name}" (${formatFileSize(selectedFile.size)})?`,
+                )
+            ) {
                 await handleFileUpload(selectedFile, uploadModal.type, uploadModal.courseId);
             }
         }
@@ -368,7 +368,10 @@ function CourseTable() {
 
     if (error) {
         return (
-            <div className={styles.errorContainer} style={{ color: 'red', padding: '20px', border: '1px solid red', margin: '20px' }}>
+            <div
+                className={styles.errorContainer}
+                style={{ color: 'red', padding: '20px', border: '1px solid red', margin: '20px' }}
+            >
                 <p className={styles.errorMessage}>❌ Đã có lỗi xảy ra: {error}</p>
                 <button onClick={fetchCourses} className={styles.retryButton}>
                     Thử lại
@@ -382,11 +385,7 @@ function CourseTable() {
             <div className={styles.tableHeader}>
                 <h2>📚 Quản lý khóa học</h2>
                 <div className={styles.headerActions}>
-                    <button
-                        onClick={fetchCourses}
-                        className={styles.refreshButton}
-                        disabled={loading}
-                    >
+                    <button onClick={fetchCourses} className={styles.refreshButton} disabled={loading}>
                         🔄 Làm mới
                     </button>
                     <button onClick={openCreateModal} className={styles.addButton}>
@@ -403,7 +402,10 @@ function CourseTable() {
             )}
 
             {error && (
-                <div className={styles.errorContainer} style={{ color: 'red', padding: '20px', border: '1px solid red', margin: '20px' }}>
+                <div
+                    className={styles.errorContainer}
+                    style={{ color: 'red', padding: '20px', border: '1px solid red', margin: '20px' }}
+                >
                     <p className={styles.errorMessage}>❌ Đã có lỗi xảy ra: {error}</p>
                     <button onClick={fetchCourses} className={styles.retryButton}>
                         Thử lại
@@ -440,24 +442,79 @@ function CourseTable() {
                                             overflow: expandedId === course.id ? 'visible' : 'hidden',
                                             textOverflow: 'ellipsis',
                                             whiteSpace: 'nowrap',
-                                            cursor: 'pointer'
+                                            cursor: 'pointer',
                                         }}
                                     >
                                         {course.id
-                                            ? (expandedId === course.id
+                                            ? expandedId === course.id
                                                 ? course.id
-                                                : `${course.id.slice(0, 8)}…`)
+                                                : `${course.id.slice(0, 8)}…`
                                             : ''}
                                     </td>
                                     <td>
-                                        {course.thumbnailUrl
-                                            ? <img
-                                                src={course.thumbnailUrl}
-                                                alt={course.courseName}
-                                                className={styles.thumbnail}
-                                            />
-                                            : <FaImage style={{ fontSize: '1.5rem', color: '#ccc' }} />
-                                        }
+                                        {course.thumbnailUrl ? (
+                                            <div
+                                                style={{
+                                                    display: 'flex',
+                                                    flexDirection: 'column',
+                                                    alignItems: 'center',
+                                                }}
+                                            >
+                                                <img
+                                                    src={course.thumbnailUrl}
+                                                    alt={course.courseName}
+                                                    className={styles.thumbnail}
+                                                />
+                                                <button
+                                                    className={styles.changeThumbButton}
+                                                    style={{
+                                                        marginTop: 4,
+                                                        fontSize: 12,
+                                                        padding: '2px 8px',
+                                                        borderRadius: 4,
+                                                        border: '1px solid #ccc',
+                                                        background: '#f5f5f5',
+                                                        cursor: 'pointer',
+                                                    }}
+                                                    title="Đổi ảnh thumbnail"
+                                                    onClick={() =>
+                                                        setUploadModal({
+                                                            show: true,
+                                                            type: 'thumbnail',
+                                                            courseId: course.id,
+                                                        })
+                                                    }
+                                                    type="button"
+                                                >
+                                                    <FaUpload style={{ marginRight: 4 }} />
+                                                    Đổi ảnh
+                                                </button>
+                                            </div>
+                                        ) : (
+                                            <button
+                                                className={styles.changeThumbButton}
+                                                style={{
+                                                    fontSize: 12,
+                                                    padding: '2px 8px',
+                                                    borderRadius: 4,
+                                                    border: '1px solid #ccc',
+                                                    background: '#f5f5f5',
+                                                    cursor: 'pointer',
+                                                }}
+                                                title="Upload thumbnail"
+                                                onClick={() =>
+                                                    setUploadModal({
+                                                        show: true,
+                                                        type: 'thumbnail',
+                                                        courseId: course.id,
+                                                    })
+                                                }
+                                                type="button"
+                                            >
+                                                <FaImage style={{ marginRight: 4 }} />
+                                                Upload ảnh
+                                            </button>
+                                        )}
                                     </td>
                                     <td>{course.courseName}</td>
                                     <td>{course.author}</td>
@@ -495,7 +552,7 @@ function CourseTable() {
             {!loading && !error && totalPages > 1 && (
                 <div className={styles.pagination}>
                     <button
-                        onClick={() => setCurrentPage(prev => Math.max(prev - 1, 1))}
+                        onClick={() => setCurrentPage((prev) => Math.max(prev - 1, 1))}
                         disabled={currentPage === 1}
                         className={styles.pageButton}
                     >
@@ -507,7 +564,7 @@ function CourseTable() {
                     </span>
 
                     <button
-                        onClick={() => setCurrentPage(prev => Math.min(prev + 1, totalPages))}
+                        onClick={() => setCurrentPage((prev) => Math.min(prev + 1, totalPages))}
                         disabled={currentPage === totalPages}
                         className={styles.pageButton}
                     >
@@ -522,10 +579,7 @@ function CourseTable() {
                     <div className={styles.modal}>
                         <div className={styles.modalHeader}>
                             <h3>{editingCourse ? 'Chỉnh sửa khóa học' : 'Thêm khóa học mới'}</h3>
-                            <button
-                                onClick={() => setShowModal(false)}
-                                className={styles.closeButton}
-                            >
+                            <button onClick={() => setShowModal(false)} className={styles.closeButton}>
                                 ×
                             </button>
                         </div>
@@ -613,7 +667,7 @@ function CourseTable() {
                                     <input
                                         type="number"
                                         value={formData.price}
-                                        onChange={e => setFormData({ ...formData, price: e.target.value })}
+                                        onChange={(e) => setFormData({ ...formData, price: e.target.value })}
                                         min="0"
                                         placeholder="Nhập giá"
                                     />
@@ -653,9 +707,7 @@ function CourseTable() {
                 <div className={styles.modalOverlay}>
                     <div className={styles.modal}>
                         <div className={styles.modalHeader}>
-                            <h3>
-                                {uploadModal.type === 'thumbnail' ? '🖼️ Upload Thumbnail' : '🎥 Upload Video'}
-                            </h3>
+                            <h3>{uploadModal.type === 'thumbnail' ? '🖼️ Upload Thumbnail' : '🎥 Upload Video'}</h3>
                             <button
                                 onClick={resetUploadModal}
                                 className={styles.closeButton}
@@ -697,18 +749,15 @@ function CourseTable() {
                                     disabled={uploadProgress > 0 && uploadProgress < 100}
                                 />
                                 <label htmlFor="fileUploadInput" className={styles.fileInputLabel}>
-                                    {selectedFile ?
-                                        `📁 ${selectedFile.name}` :
-                                        `📂 Chọn ${uploadModal.type === 'thumbnail' ? 'ảnh' : 'video'}...`
-                                    }
+                                    {selectedFile
+                                        ? `📁 ${selectedFile.name}`
+                                        : `📂 Chọn ${uploadModal.type === 'thumbnail' ? 'ảnh' : 'video'}...`}
                                 </label>
                             </div>
 
                             {/* File validation error */}
                             {!fileValidation.valid && (
-                                <div className={styles.errorMessage}>
-                                    ❌ {fileValidation.error}
-                                </div>
+                                <div className={styles.errorMessage}>❌ {fileValidation.error}</div>
                             )}
 
                             {/* Selected file info */}
@@ -723,7 +772,9 @@ function CourseTable() {
                                             </div>
                                             <div className={styles.fileInfoItem}>
                                                 <span className={styles.label}>📏 Kích thước:</span>
-                                                <span className={styles.value}>{formatFileSize(selectedFile.size)}</span>
+                                                <span className={styles.value}>
+                                                    {formatFileSize(selectedFile.size)}
+                                                </span>
                                             </div>
                                             <div className={styles.fileInfoItem}>
                                                 <span className={styles.label}>🏷️ Loại:</span>
@@ -737,9 +788,7 @@ function CourseTable() {
                             {/* Progress bar */}
                             {uploadProgress > 0 && (
                                 <div className={styles.progressContainer}>
-                                    <div className={styles.progressLabel}>
-                                        Đang upload... {uploadProgress}%
-                                    </div>
+                                    <div className={styles.progressLabel}>Đang upload... {uploadProgress}%</div>
                                     <div className={styles.progressBar}>
                                         <div
                                             className={styles.progressFill}
@@ -747,9 +796,7 @@ function CourseTable() {
                                         ></div>
                                     </div>
                                     {uploadProgress === 100 && (
-                                        <div className={styles.successMessage}>
-                                            ✅ Upload thành công!
-                                        </div>
+                                        <div className={styles.successMessage}>✅ Upload thành công!</div>
                                     )}
                                 </div>
                             )}
@@ -757,8 +804,7 @@ function CourseTable() {
                             <p className={styles.uploadHint}>
                                 {uploadModal.type === 'thumbnail'
                                     ? '🖼️ Chọn ảnh thumbnail cho khóa học'
-                                    : '🎥 Chọn video cho khóa học'
-                                }
+                                    : '🎥 Chọn video cho khóa học'}
                             </p>
                         </div>
 
@@ -774,7 +820,11 @@ function CourseTable() {
                             <button
                                 onClick={handleConfirmUpload}
                                 className={styles.uploadConfirmButton}
-                                disabled={!selectedFile || !fileValidation.valid || (uploadProgress > 0 && uploadProgress < 100)}
+                                disabled={
+                                    !selectedFile ||
+                                    !fileValidation.valid ||
+                                    (uploadProgress > 0 && uploadProgress < 100)
+                                }
                             >
                                 {uploadProgress > 0 && uploadProgress < 100 ? (
                                     <>

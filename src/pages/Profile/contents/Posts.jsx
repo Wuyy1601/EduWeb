@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { useSearchParams } from 'react-router-dom';
 import Pagination from '../components/Pagination';
 import CourseCard from '../components/CourseCard';
@@ -8,42 +8,68 @@ import styles from '../styles.module.scss';
 
 const cx = classNames.bind(styles);
 
-const postData = [
-    { id: 1, title: 'Post 1', content: 'Content of Post 1' },
-    { id: 2, title: 'Post 2', content: 'Content of Post 2' },
-    { id: 3, title: 'Post 3', content: 'Content of Post 3' },
-    { id: 4, title: 'Post 4', content: 'Content of Post 4' },
-    { id: 5, title: 'Post 5', content: 'Content of Post 5' },
-    { id: 6, title: 'Post 6', content: 'Content of Post 6' },
-    { id: 7, title: 'Post 7', content: 'Content of Post 7' },
-    { id: 8, title: 'Post 8', content: 'Content of Post 8' },
-    { id: 9, title: 'Post 9', content: 'Content of Post 9' },
-    { id: 10, title: 'Post 10', content: 'Content of Post 10' },
-    { id: 11, title: 'Post 11', content: 'Content of Post 11' },
-    { id: 12, title: 'Post 12', content: 'Content of Post 12' },
-    { id: 13, title: 'Post 13', content: 'Content of Post 13' },
-];
-
-function RenderPosts({ posts, currentPage }) {
-    const startIndex = (currentPage - 1) * 8;
-    const endIndex = startIndex + 8;
-    return posts
-        .slice(startIndex, endIndex)
-        .map((post) => <CourseCard key={post.id} title={post.title} content={post.content} id={post.id} className={cx('card')} />);
-}
-
 function Posts() {
     const [searchParams, setSearchParams] = useSearchParams();
-    const currentPage = searchParams.get('page') || 1;
+    const [courses, setCourses] = useState([]);
+    const [loading, setLoading] = useState(true);
+    const [totalPages, setTotalPages] = useState(1);
+
+    const currentPage = parseInt(searchParams.get('page') || 1, 10);
+    const pageSize = 8;
+
+    useEffect(() => {
+        setLoading(true);
+        const token = localStorage.getItem('token');
+        fetch(`http://localhost:8888/api/v1/course/all?page=${currentPage}&size=${pageSize}`, {
+            headers: {
+                'Content-Type': 'application/json',
+                ...(token && { Authorization: `Bearer ${token}` }),
+            },
+        })
+            .then((res) => res.json())
+            .then((data) => {
+                if (data.code === 1000 && data.result) {
+                    setCourses(data.result.data || []);
+                    setTotalPages(data.result.totalPages || 1);
+                } else {
+                    setCourses([]);
+                    setTotalPages(1);
+                }
+                setLoading(false);
+            })
+            .catch(() => {
+                setCourses([]);
+                setTotalPages(1);
+                setLoading(false);
+            });
+    }, [currentPage]);
 
     return (
         <>
             <div id={cx('posts-container')}>
-                <RenderPosts posts={postData} currentPage={currentPage} />
+                {loading ? (
+                    <p>Đang tải bài viết...</p>
+                ) : courses.length === 0 ? (
+                    <p>Không có bài viết nào.</p>
+                ) : (
+                    courses.map((course) => (
+                        <CourseCard
+                            key={course.id}
+                            id={course.id}
+                            thumbnail={course.thumbnailUrl}
+                            title={course.courseName}
+                            category={course.category}
+                            price={course.price}
+                            description={course.description}
+                            author={course.author}
+                            className={cx('card')}
+                        />
+                    ))
+                )}
             </div>
             <Pagination
                 currentPage={currentPage}
-                totalPages={Math.ceil(postData.length / 8)}
+                totalPages={totalPages}
                 onPageChange={(page) => setSearchParams({ page })}
             />
         </>

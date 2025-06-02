@@ -14,13 +14,12 @@ function Document() {
             <MyHeader />
             <Banner />
             <Categories />
-            <Courses title="Gợi ý cho bạn" />
-            <Courses title="Tài liệu của bạn" />
+            <Courses title="Gợi ý cho bạn" size={4} /> {/* <-- chỉ lấy 4 khóa */}
+            <Courses title="Tài liệu của bạn" size={12} /> {/* <-- lấy 12 khóa */}
             <UpDocument />
             <ChatBot />
             <MyFooter />
         </MainLayout>
     );
 }
-
 export default Document;
