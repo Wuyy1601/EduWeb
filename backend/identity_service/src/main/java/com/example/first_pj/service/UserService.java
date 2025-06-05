@@ -1,11 +1,11 @@
 package com.example.first_pj.service;
 
-import com.example.first_pj.Entity.Role;
-import com.example.first_pj.Entity.User;
 import com.example.first_pj.constant.PredefinedRole;
 import com.example.first_pj.dto.request.UserCreationRequest;
 import com.example.first_pj.dto.request.UserUpdateRequest;
 import com.example.first_pj.dto.response.UserResponse;
+import com.example.first_pj.entity.Role;
+import com.example.first_pj.entity.User;
 import com.example.first_pj.exception.AppException;
 import com.example.first_pj.exception.ErrorCode;
 import com.example.first_pj.mapper.ProfileMapper;
@@ -60,7 +60,6 @@ public class UserService {
 
         return userMapper.toUserResponse(user);
     }
-
 
     public UserResponse getMyInfo() {
         var context = SecurityContextHolder.getContext();

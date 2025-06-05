@@ -4,9 +4,9 @@ import com.example.first_pj.dto.ApiResponse;
 import com.example.first_pj.dto.request.UserCreationRequest;
 import com.example.first_pj.dto.request.UserUpdateRequest;
 import com.example.first_pj.dto.response.UserResponse;
-
+import com.example.first_pj.entity.User;
 import com.example.first_pj.service.UserService;
-import com.example.first_pj.Entity.User;
+
 import jakarta.validation.Valid;
 
 import lombok.AccessLevel;

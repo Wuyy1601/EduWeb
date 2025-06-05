@@ -1,4 +1,4 @@
-package com.example.first_pj.Entity;
+package com.example.first_pj.entity;
 
 import jakarta.persistence.Entity;
 import jakarta.persistence.Id;
@@ -20,4 +20,3 @@ public class InvalidatedToken {
 
     Date expiryTime;
 }
-

@@ -16,6 +16,7 @@ import org.springframework.boot.test.context.SpringBootTest;
 
 
 import org.springframework.http.MediaType;
+import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.context.TestPropertySource;
 import org.springframework.test.context.bean.override.mockito.MockitoBean;
 import org.springframework.test.web.servlet.MockMvc;
@@ -26,6 +27,7 @@ import java.time.LocalDate;
 @Slf4j
 @AutoConfigureMockMvc
 @SpringBootTest
+@ActiveProfiles("test")
 @TestPropertySource("/test.properties")
 public class UserControlTest {
 
@@ -48,6 +50,7 @@ public class UserControlTest {
                 .password("12345678")
                 .username("Khai")
                 .birthday(dob)
+                .city("hcm")
                 .build();
         userResponse = UserResponse.builder()
                 .id("cf345b4630d")

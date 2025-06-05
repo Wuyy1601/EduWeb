@@ -179,7 +179,7 @@
     }
 
     span {
-        color: white;
+        padding: 5px;
         font-size: 18px;
         font-family: poppins;
     }
@@ -194,35 +194,35 @@ button {
     content: unset !important;
 }
 @media (max-width: 991px) {
-  .mobileMenu {
-    .mobile-auth-action {
-      padding-bottom: 24px;
-      .mobile-auth-link,
-      .mobile-logout-btn {
-        display: block;
-        width: 100%;
-        text-align: center;
-        padding: 14px 0;
-        margin-bottom: 10px;
-        font-size: 18px;
-        font-weight: 500;
-        border-radius: 12px;
-        background: #255f94;
-        color: #fff;
-        text-decoration: none;
-        transition: background 0.18s;
-        &:hover {
-          background: #3387ce;
+    .mobileMenu {
+        .mobile-auth-action {
+            padding-bottom: 24px;
+            .mobile-auth-link,
+            .mobile-logout-btn {
+                display: block;
+                width: 100%;
+                text-align: center;
+                padding: 14px 0;
+                margin-bottom: 10px;
+                font-size: 18px;
+                font-weight: 500;
+                border-radius: 12px;
+                background: #255f94;
+                color: #fff;
+                text-decoration: none;
+                transition: background 0.18s;
+                &:hover {
+                    background: #3387ce;
+                }
+            }
+            .mobile-logout-btn {
+                background: #21355b;
+                color: #ff7272;
+                &:hover {
+                    background: #2e466c;
+                    color: #ffb6b6;
+                }
+            }
         }
-      }
-      .mobile-logout-btn {
-        background: #21355b;
-        color: #ff7272;
-        &:hover {
-          background: #2e466c;
-          color: #ffb6b6;
-        }
-      }
     }
-  }
 }

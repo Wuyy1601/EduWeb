@@ -1,4 +1,4 @@
-package com.example.first_pj.Entity;
+package com.example.first_pj.entity;
 
 import jakarta.persistence.Entity;
 import jakarta.persistence.Id;
@@ -7,7 +7,6 @@ import lombok.*;
 import lombok.experimental.FieldDefaults;
 
 import java.util.Set;
-
 
 @Getter
 @Setter

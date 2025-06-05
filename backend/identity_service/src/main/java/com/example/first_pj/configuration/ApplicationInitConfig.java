@@ -1,8 +1,8 @@
 package com.example.first_pj.configuration;
 
-import com.example.first_pj.Entity.Role;
-import com.example.first_pj.Entity.User;
 import com.example.first_pj.constant.PredefinedRole;
+import com.example.first_pj.entity.Role;
+import com.example.first_pj.entity.User;
 import com.example.first_pj.repository.RoleRepository;
 import com.example.first_pj.repository.UserRepository;
 import lombok.AccessLevel;
@@ -18,9 +18,7 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.crypto.password.PasswordEncoder;
 
-
 import java.util.HashSet;
-
 
 @Configuration
 @RequiredArgsConstructor
@@ -37,10 +35,7 @@ public class ApplicationInitConfig {
     static final String ADMIN_PASSWORD = "admin";
 
     @Bean
-    @ConditionalOnProperty(
-            prefix = "spring",
-            value = "datasource.driverClassName",
-            havingValue = "com.mysql.cj.jdbc.Driver")
+    @ConditionalOnProperty(prefix = "spring", value = "datasource.driverClassName", havingValue = "com.mysql.cj.jdbc.Driver")
     ApplicationRunner applicationRunner(UserRepository userRepository, RoleRepository roleRepository) {
         log.info("admin haven't create yet");
         return args -> {
@@ -66,7 +61,7 @@ public class ApplicationInitConfig {
                             .password(passwordEncoder.encode(ADMIN_PASSWORD))
                             .roles(roles)
                             .build();
-                    log.info("Admin role dc tao" );
+                    log.info("Admin role dc tao");
 
                     userRepository.save(user);
                 }

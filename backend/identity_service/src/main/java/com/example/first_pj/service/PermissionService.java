@@ -1,8 +1,8 @@
 package com.example.first_pj.service;
 
-import com.example.first_pj.Entity.Permission;
 import com.example.first_pj.dto.request.PermissionRequest;
 import com.example.first_pj.dto.response.PermissionResponse;
+import com.example.first_pj.entity.Permission;
 import com.example.first_pj.mapper.PermissionMapper;
 import com.example.first_pj.repository.PermissionRepository;
 import lombok.AccessLevel;
@@ -21,18 +21,18 @@ public class PermissionService {
     PermissionRepository permissionRepository;
     PermissionMapper permissionMapper;
 
-    public PermissionResponse create(PermissionRequest request){
+    public PermissionResponse create(PermissionRequest request) {
         Permission permission = permissionMapper.toPermission(request);
         permission = permissionRepository.save(permission);
         return permissionMapper.toPermissionResponse(permission);
     }
 
-    public List<PermissionResponse> getAll(){
+    public List<PermissionResponse> getAll() {
         var permissions = permissionRepository.findAll();
         return permissions.stream().map(permissionMapper::toPermissionResponse).toList();
     }
 
-    public void delete(String permission){
+    public void delete(String permission) {
         permissionRepository.deleteById(permission);
     }
 }

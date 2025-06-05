@@ -1,9 +1,11 @@
 package com.example.first_pj.service;
 
-import com.example.first_pj.Entity.User;
 import com.example.first_pj.dto.request.UserCreationRequest;
 import com.example.first_pj.dto.response.UserResponse;
+import com.example.first_pj.entity.Role;
+import com.example.first_pj.entity.User;
 import com.example.first_pj.exception.AppException;
+import com.example.first_pj.repository.RoleRepository;
 import com.example.first_pj.repository.UserRepository;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
@@ -11,10 +13,14 @@ import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.context.TestConfiguration;
+
 import org.springframework.test.context.TestPropertySource;
 import org.springframework.test.context.bean.override.mockito.MockitoBean;
 
 import java.time.LocalDate;
+import java.util.HashSet;
+import java.util.Optional;
+
 import static org.assertj.core.api.Assertions.assertThat;
 
 import static org.junit.jupiter.api.Assertions.assertThrows;
@@ -31,8 +37,11 @@ public class UserServiceTest {
     private UserRepository userRepository;
     private UserCreationRequest request;
     private UserResponse userResponse;
+    @MockitoBean
+    private RoleRepository roleRepository;
     private User user;
     private LocalDate dob;
+
     @BeforeEach
     void init_Data() {
         dob = LocalDate.of(2005, 1, 6);
@@ -62,20 +71,21 @@ public class UserServiceTest {
 
     @Test
     void createUser_validRequest_success() {
-        //Given
+        // Given
         when(userRepository.existsByUsername(anyString())).thenReturn(false);
         when(userRepository.save(any())).thenReturn(user);
 
-        //When
+        // When
+        when(roleRepository.findByName(anyString()))
+                .thenReturn(Optional.of(new Role("00934dd","USER",new HashSet<>())));
         var response = userService.createUser(request);
 
         Assertions.assertEquals("cf345b4630d", response.getId());
         Assertions.assertEquals("Khai", response.getUsername());
 
-
     }
-    @Test
 
+    @Test
     void createUser_userExisted_fail() {
         // GIVEN
         when(userRepository.existsByUsername(anyString())).thenReturn(true);

@@ -1,5 +1,4 @@
-package com.example.first_pj.Entity;
-
+package com.example.first_pj.entity;
 
 import jakarta.persistence.*;
 
@@ -9,7 +8,6 @@ import lombok.experimental.FieldDefaults;
 import java.util.List;
 import java.util.Set;
 import java.time.LocalDate;
-
 
 @Getter
 @Setter
@@ -32,6 +30,5 @@ public class User {
 
     @ManyToMany
     Set<Role> roles;
-
 
 }
